@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+.my_card {
+	height: auto;
+	border-radius:0px;
+	box-sizing: border-box;
+	border : 1px solid grey;
+	
+}
+
+.box {
+	width: 180px;
+	height:180px;
+	border: 3px solid #829fb4;
+	border-radius: 70%;
+    overflow: hidden;
+    margin: 10px 0px;
+}
+.profile {
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+}
+
+.text {
+	text-align: center;
+}

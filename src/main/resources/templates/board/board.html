@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weasy Board</title>
+  
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="/img/svg/logo.svg" type="image/x-icon">
+  
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="/css/style.min.css">
+  <link rel="stylesheet" href="/css/weasy.css">
+  
+  <script src="https://unpkg.com/feather-icons"></script>
+  
+</head>
+
+<body class>
+
+<div class="layer"></div>
+
+<!-- ! Body -->
+<div class="page-flex">
+  
+  <!-- ! Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-start">
+    	
+    	<!-- 상단 로고 부분 -->
+        <div class="sidebar-head">
+        	<!-- 로고와 타이틀 -->
+            <a href="/" class="logo-wrapper" title="Home">
+                <span class="sr-only">Home</span>
+                <span class="icon logo" aria-hidden="true"></span>
+                <div class="logo-text">
+                    <span class="logo-title">wEasy</span>
+                    <span class="logo-subtitle">we work easy</span>
+                </div>
+            </a>
+            
+            <!-- 사이드 바 접히는 기능 버튼 -->
+            <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
+                <span class="sr-only">Toggle menu</span>
+                <span class="icon menu-toggle" aria-hidden="true"></span>
+            </button>
+        </div>
+        
+        <!-- 로그 아래에 사용자 이미지와 사용자 정보 표시 -->
+        <div class="sidebar-head" >
+        	<div class="box">
+        	<img class="profile" src="/img/avatar/avatar-face-03.png" alt="">
+        	</div>
+        	<span class="text">나의 프로필</span>
+        </div>
+        
+        <!-- 사이드바 메뉴 부분 -->
+        <div class="sidebar-body">
+            <ul class="sidebar-body-menu">
+            	<!-- 1. 대시보드 -->
+                <li>
+                    <a class="active" href="/test/board"><span class="icon home" aria-hidden="true"></span>Board</a>
+                </li>
+                
+				<!-- 2. 팀 -->
+                <li>
+                    <a class="show-cat-btn" href="##">
+                        <span class="icon user-3" aria-hidden="true"></span>
+                        Team / Project
+                        <span class="category__btn transparent-btn" title="Open list">
+                            <span class="sr-only">Open list</span>
+                            <span class="icon arrow-down" aria-hidden="true"></span>
+                        </span>
+                    </a>
+                    <!-- #### 수정 #### -->
+                    <ul class="cat-sub-menu">
+                        <li>
+                            <a href="#">Team1</a>
+                        </li>
+                        <li>
+                            <a href="#">Team2</a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <!-- 3. 팀 추가 메뉴 -->
+                <li>
+                    <a href="##"><span class="icon edit" aria-hidden="true"></span>add Team / Project</a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</aside>
+<!-- Sidebar -->
+
+
+<div class="main-wrapper">
+
+    <!-- 상단 바 -->
+    <nav class="main-nav--bg">
+  <div class="container main-nav">
+  
+  <!-- 상단바 - 왼쪽 검색 부분 -->
+    <div class="main-nav-start">
+      <div class="search-wrapper">
+        <i data-feather="search" aria-hidden="true"></i>
+        <input type="text" placeholder="Enter keywords ..." required>
+      </div>
+    </div>
+    
+    <!-- 상단바 - 오른쪽 부분 -->
+    <div class="main-nav-end">
+      <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
+        <span class="sr-only">Toggle menu</span>
+        <span class="icon menu-toggle--gray" aria-hidden="true"></span>
+      </button>
+	  
+	  <!-- 스위치 테마 버튼 -->
+      <button class="theme-switcher gray-circle-btn" type="button" title="Switch theme">
+        <span class="sr-only">Switch theme</span>
+        <i class="sun-icon" data-feather="sun" aria-hidden="true"></i>
+        <i class="moon-icon" data-feather="moon" aria-hidden="true"></i>
+      </button>
+      
+      <!-- 알림창 부분 -->
+      <div class="notification-wrapper">
+        <button class="gray-circle-btn dropdown-btn" title="To messages" type="button">
+          <span class="sr-only">To messages</span>
+          <span class="icon notification active" aria-hidden="true"></span>
+        </button>
+        
+        <!-- 알림창 드롭다운 바 부분 -->
+        <ul class="users-item-dropdown notification-dropdown dropdown">
+          <li>
+            <a href="##">
+              <div class="notification-dropdown-icon info"> <!-- 아이콘의 컬러 -->
+                <i data-feather="smile"></i> <!-- 아이콘 -->
+              </div>
+              <div class="notification-dropdown-text">
+                <span class="notification-dropdown__title">알림 타이틀</span>
+                <span class="notification-dropdown__subtitle">알림 서브 내용</span>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="##">
+              <div class="notification-dropdown-icon danger">
+                <i data-feather="info" aria-hidden="true"></i>
+              </div>
+              <div class="notification-dropdown-text">
+                <span class="notification-dropdown__title">The cache is full!</span>
+                <span class="notification-dropdown__subtitle">Unnecessary caches take up a lot of memory space and
+                  interfere ...</span>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="##">
+              <div class="notification-dropdown-icon info">
+                <i data-feather="check" aria-hidden="true"></i>
+              </div>
+              <div class="notification-dropdown-text">
+                <span class="notification-dropdown__title">New Subscriber here!</span>
+                <span class="notification-dropdown__subtitle">A new subscriber has subscribed.</span>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a class="link-to-page" href="##">Go to Notifications page</a>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- 상단 바 사용자 아이콘 -->
+      <div class="nav-user-wrapper">
+        <button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
+          <span class="sr-only">My profile</span>
+          <span class="nav-user-img">
+            <picture><source srcset="/img/avatar/avatar-illustrated-02.webp" type="image/webp"><img src="/img/avatar/avatar-illustrated-02.png" alt="User name"></picture>
+          </span>
+        </button>
+        <ul class="users-item-dropdown nav-user-dropdown dropdown">
+          <li><a href="##">
+              <i data-feather="user" aria-hidden="true"></i>
+              <span>Profile</span>
+            </a></li>
+          <li><a href="##">
+              <i data-feather="settings" aria-hidden="true"></i>
+              <span>Account settings</span>
+            </a></li>
+          <li><a class="danger" href="##">
+              <i data-feather="log-out" aria-hidden="true"></i>
+              <span>Log out</span>
+            </a></li>
+        </ul>
+      </div>
+      
+    </div>
+  </div>
+</nav>
+
+
+<!-- 보드 메인 부분 (working board) -->
+    <main class="main users chart-page" id="skip-target">
+      <div class="container">
+        <h2 class="main-title"># 어떤 팀의 Board인지 표시하면 좋을듯</h2>
+        <div class="row stat-cards">
+        
+        <!-- 박스 4개 -->
+        
+          <div class="col-4">
+            <article class="stat-cards-item my_card" >
+              <div class="stat-cards-icon warning">
+                <i data-feather="pause" aria-hidden="true"></i>
+              </div>
+              <div class="stat-cards-info">
+                <p class="stat-cards-info__num">진행전(ToDo)</p>
+              </div>
+            </article>
+            <div style="max-height: 800px; overflow: auto;">
+           		<article class="stat-cards-item my_card">
+              	<div class="stat-cards-info">
+                	<p class="stat-cards-info__num">카드 이름1</p>
+              	</div>
+            	</article>
+            	
+            	<article class="stat-cards-item my_card" >
+              	<div class="stat-cards-info">
+                	<p class="stat-cards-info__num">카드 이름1</p>
+              	</div>
+            	</article>
+            	
+            	<article class="stat-cards-item my_card" >
+              	<div class="stat-cards-info">
+                	<p class="stat-cards-info__num">카드 이름1</p>
+              	</div>
+            	</article>
+            	
+            	<article class="stat-cards-item my_card" >
+              	<div class="stat-cards-info">
+                	<p class="stat-cards-info__num">카드 이름1</p>
+              	</div>
+            	</article>
+            	
+            	<article class="stat-cards-item my_card" >
+              	<div class="stat-cards-info">
+                	<p class="stat-cards-info__num">카드 이름1</p>
+              	</div>
+            	</article>
+            	
+            	<article class="stat-cards-item my_card" >
+              	<div class="stat-cards-info">
+                	<p class="stat-cards-info__num">카드 이름1</p>
+              	</div>
+            	</article>
+            	
+            	<article class="stat-cards-item my_card" >
+              	<div class="stat-cards-info">
+                	<p class="stat-cards-info__num">카드 이름1</p>
+              	</div>
+            	</article>
+            	
+            	<article class="stat-cards-item my_card" >
+              	<div class="stat-cards-info">
+                	<p class="stat-cards-info__num">카드 이름1</p>
+              	</div>
+            	</article>
+            	
+            	<article class="stat-cards-item my_card" >
+              	<div class="stat-cards-info">
+                	<p class="stat-cards-info__num">카드 이름1</p>
+              	</div>
+            	</article>
+            	
+            	 	<article class="stat-cards-item my_card" >
+              	<div class="stat-cards-info">
+                	<p class="stat-cards-info__num">카드 이름1</p>
+              	</div>
+            	</article>
+            	
+            	 	<article class="stat-cards-item my_card" >
+              	<div class="stat-cards-info">
+                	<p class="stat-cards-info__num">카드 이름1</p>
+              	</div>
+            	</article>
+            	
+            	 	<article class="stat-cards-item my_card" >
+              	<div class="stat-cards-info">
+                	<p class="stat-cards-info__num">카드 이름1</p>
+              	</div>
+            	</article>
+            	
+            	 	<article class="stat-cards-item my_card" >
+              	<div class="stat-cards-info">
+                	<p class="stat-cards-info__num">카드 이름1</p>
+              	</div>
+            	</article>
+            </div>
+            
+
+            
+          </div>
+          
+          <div class="col-4">
+            <article class="stat-cards-item my_card">
+              <div class="stat-cards-icon primary">
+                <i data-feather="play" aria-hidden="true"></i>
+              </div>
+              <div class="stat-cards-info">
+                <p class="stat-cards-info__num">진행 중</p>
+              </div>
+            </article>
+          </div>
+          
+          <div class="col-4">
+            <article class="stat-cards-item my_card">
+              <div class="stat-cards-icon success">
+                <i data-feather="check-square" aria-hidden="true"></i>
+              </div>
+              <div class="stat-cards-info">
+                <p class="stat-cards-info__num">진행 완료</p>
+              </div>
+            </article>
+          </div>
+          
+          </div>
+        </div>
+     </main>
+          
+
+	<!-- 보드 메인 부분 (working board) -->
+	
+  </div>
+</div>
+
+<!-- Icons library -->
+<script src="/plugins/feather.min.js"></script>
+<!-- Custom scripts -->
+<script src="/js/script.js"></script>
+</body>
+
+</html>
