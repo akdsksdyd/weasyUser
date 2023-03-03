@@ -25,3 +25,11 @@
 .text {
 	text-align: center;
 }
+
+.doubleCheck_btn {
+	font-size: 15px;
+	padding: 5px 0px;
+	border-radius: 8px;
+	margin-bottom: 10px;
+}
+
