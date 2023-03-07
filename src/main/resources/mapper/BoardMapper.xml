@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.weasy.user.board.service.BoardMapper">
+  
+  	<insert id="insertTeam" parameterType="TeamVO">
+  	
+  		insert into team (teamRegdate,
+  						  endDate, 
+  						  teamName, 
+  						  teamGoal, 
+  						  userEmail,
+  						  teamStatus)
+  					values(#{teamRegdate},
+  						   #{endDate},
+  						   #{teamName},
+  						   #{teamGoal},
+  						   #{userEmail},
+  						   #{teamStatus})
+  	
+  	</insert>	
+  	
+  	<select id="getTeamList" resultType="TeamVO">
+  	
+  		select * from TEAM where userEmail = #{userEmail}
+  	
+  	</select>
+  	
+  	<insert id="addTask" parameterType="TaskVO">
+  	
+  		insert into task(userEmail,
+  						 title,
+  						 content,
+  						 startDate,
+  						 targetDate,
+  						 teamNo)
+  					values(#{userEmail},
+  						   #{title},
+  						   #{content},
+  						   #{startDate},
+  						   #{targetDate},
+  						   #{teamNo})
+  						   
+  	</insert>
+  	
+  	<select id="getTaskList" resultType="TaskVO">
+  	
+  		select * from TASK where teamNo = #{teamNo}
+  	
+  	</select>
+  	
+  </mapper>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

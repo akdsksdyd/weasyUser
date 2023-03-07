@@ -2,6 +2,9 @@ package com.weasy.user.command;
 
 import java.sql.Timestamp;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,9 +21,15 @@ public class TaskVO { //업무 VO
 	private String userEmail;
 	private String title;
 	private String content;
-	private Timestamp startDate;
-	private Timestamp progressDate;
-	private Timestamp targetDate;
+	
+	@NotBlank(message = "공백일 수 없습니다")
+	@Pattern(regexp = "[0-9]{4}-[0-9]{2}-[0-9]{2}")
+	private String startDate;
+	private Timestamp progressRate;
+	
+	@NotBlank(message = "공백일 수 없습니다")
+	@Pattern(regexp = "[0-9]{4}-[0-9]{2}-[0-9]{2}")
+	private String targetDate;
 	private Timestamp realEndDate;
 	private int status;
 
