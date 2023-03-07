@@ -33,3 +33,27 @@
 	margin-bottom: 10px;
 }
 
+/* 유효성검사css */
+.valid {
+	font-size: 15px;
+	color: red;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+/* 회원가입 필수요소css */
+.form-label > span {
+	color:red;
+}
+
+/* 성별체크박스 css */
+.gender-box{ margin-left: 10px;}
+.gender-label{ font-size: 14px;}
+.weasy-check{ margin-right: 30px;}
+
+
+/* 이메일 중복 */
+.id_ok{ display: none; color:green;}
+.id_already{display: none; color:red;}
+
+

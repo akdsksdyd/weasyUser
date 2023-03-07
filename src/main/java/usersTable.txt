@@ -1,0 +1,10 @@
+ CREATE TABLE users (
+     userEmail  VARCHAR(30) primary key NOT NULL,
+     userPw  VARCHAR(100) NOT NULL,
+     userName  VARCHAR(30) NOT NULL,
+     phoneNum  VARCHAR(30),
+     gender VARCHAR(10),
+     birth VARCHAR(10),
+     permission  CHAR(1) DEFAULT 'N' CHECK (permission IN ('Y' , 'N')),
+     nickname  VARCHAR(30) NOT NULL
+);
