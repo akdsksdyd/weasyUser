@@ -7,15 +7,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weasy Board</title>
   
+
+  
   <!-- Favicon -->
   <link rel="shortcut icon" href="/img/svg/logo.svg" type="image/x-icon">
-  
-  <!-- Custom styles -->
-  <link rel="stylesheet" href="/css/style.min.css">
-  <link rel="stylesheet" href="/css/weasy.css">
-  
+  <!-- feather icon -->
   <script src="https://unpkg.com/feather-icons"></script>
   
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/style.min.css">
+  
+  <!-- (기존 양식에서) weasy css로 덮어쓰기 -->
+  <link rel="stylesheet" href="/css/weasy.css">
+  
+  <!-- modal css -->
+  <link rel="stylesheet" href="/css/modal.css">
+
+  <!-- Datepicker -->  
+  <!-- JQuery -->
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <script src="/js/jquery-1.12.1.min.js"></script>
+  <script src="/js/jquery-ui.min.js"></script>
+  
+<!-- 팀/프로젝트 추가 date -->
+<script>
+	$(function() {
+		var dateFormat = "mm/dd/yy", from = $("#teamRegDate").datepicker({
+			defaultDate : "+1w",
+			changeMonth : true,
+			numberOfMonths : 2
+		}).on("change", function() {
+			to.datepicker("option", "minDate", getDate(this));
+		}), to = $("#teamEndDate").datepicker({
+			defaultDate : "+1w",
+			changeMonth : true,
+			numberOfMonths : 2
+		}).on("change", function() {
+			from.datepicker("option", "maxDate", getDate(this));
+		});
+
+		function getDate(element) {
+			var date;
+			try {
+				date = $.datepicker.parseDate(dateFormat, element.value);
+			} catch (error) {
+				date = null;
+			}
+
+			return date;
+		}
+	});
+</script>
+
+<!-- 보드 리스트의 카드 date -->
+<script>
+	$(function() {
+		var dateFormat = "mm/dd/yy", from = $("#startDate").datepicker({
+			defaultDate : "+1w",
+			changeMonth : true,
+			numberOfMonths : 2
+		}).on("change", function() {
+			to.datepicker("option", "minDate", getDate(this));
+		}), to = $("#targetDate").datepicker({
+			defaultDate : "+1w",
+			changeMonth : true,
+			numberOfMonths : 2
+		}).on("change", function() {
+			from.datepicker("option", "maxDate", getDate(this));
+		});
+
+		function getDate(element) {
+			var date;
+			try {
+				date = $.datepicker.parseDate(dateFormat, element.value);
+			} catch (error) {
+				date = null;
+			}
+
+			return date;
+		}
+	});
+</script>
 </head>
 
 <body class>
@@ -25,10 +99,10 @@
 <!-- ! Body -->
 <div class="page-flex">
   
-  <!-- ! Sidebar -->
-  <aside class="sidebar">
+<!-- Sidebar -->
+<aside class="sidebar">
     <div class="sidebar-start">
-    	
+    
     	<!-- 상단 로고 부분 -->
         <div class="sidebar-head">
         	<!-- 로고와 타이틀 -->
@@ -56,7 +130,7 @@
         	<span class="text">나의 프로필</span>
         </div>
         
-        <!-- 사이드바 메뉴 부분 -->
+<!-- 사이드바 메뉴 부분 -->
         <div class="sidebar-body">
             <ul class="sidebar-body-menu">
             	<!-- 1. 대시보드 -->
@@ -87,7 +161,7 @@
                 
                 <!-- 3. 팀 추가 메뉴 -->
                 <li>
-                    <a href="##"><span class="icon edit" aria-hidden="true"></span>add Team / Project</a>
+                    <a href="##" id="addTeamProject"><span class="icon edit" aria-hidden="true"></span>add Team / Project</a>
                 </li>
                 
             </ul>
@@ -96,250 +170,366 @@
 </aside>
 <!-- Sidebar -->
 
+<!-- 팀/프로젝트 추가 모달창 -->
+<form action="#" method="post"> 
+<div class="modal" id="modal">
+	<div class="modal_body">
+		<div class="m_head">
+			<div class="modal_title">
+				<strong>add Team / Project</strong>
+			</div>
+			<div class="close_btn close-area" onclick="closeAddModal()">X</div>
+		</div>
+	
+		<div class="m_body">
+			<!-- 팀생성일 ~ 팀 종료일 -->
+			<div class="m_date">
+				<p class="p">start date</p>
+				<input type="text" size="10" id="teamRegDate"></input>
+				<!-- db에서 endDate입니다.(참고) -->
+				<p class="pl30 p">due date</p>
+				<input type="text" size="10" id="teamEndDate"></input>
+			</div>
+			
+			<!-- 팀 이름 -->
+			<div class="modal_label">Team Name</div>
+			<input type="text" class="input_box" id="teamName"/>
+			<!-- 팀 목료 -->
+			<div class="modal_label">Team Goal</div>
+			<input type="text" class="input_box" id="teamGoal" />
+			<!-- 팀 생성자 (팀 리더) -->
+			<div class="modal_label">Team Leader</div>
+			<input type="text" class="input_box" id="userEmail" />
+			<!-- 팀 상태 -->
+			<div class="modal_label">Team status</div>
+			<select class="modal_selectBox" id="teamStatus">
+				<option>진행중</option>
+				<option>완료됨</option>
+			</select>
+		</div>
+	
+		<div class="m_footer">
+			<button type="button" class="modal_btn cancle" onclick="closeAddModal()">CANCLE</button>
+			<button type="submit" class="modal_btn save" id="save_btn">SAVE</button>
+		</div>
+	</div>
+</div>
+</form>
+<!-- 팀/프로젝트 추가 모달창 끝 -->
+
 
 <div class="main-wrapper">
-
-    <!-- 상단 바 -->
+	
+	<!-- 상단 바 -->
     <nav class="main-nav--bg">
-  <div class="container main-nav">
+  	<div class="container main-nav">
   
-  <!-- 상단바 - 왼쪽 검색 부분 -->
+  	<!-- 상단바 - 왼쪽 검색 부분 -->
     <div class="main-nav-start">
-      <div class="search-wrapper">
-        <i data-feather="search" aria-hidden="true"></i>
-        <input type="text" placeholder="Enter keywords ..." required>
-      </div>
+    	<div class="search-wrapper">
+        	<i data-feather="search" aria-hidden="true"></i>
+        	<input type="text" placeholder="Enter keywords ..." required>
+      	</div>
     </div>
     
     <!-- 상단바 - 오른쪽 부분 -->
     <div class="main-nav-end">
-      <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
-        <span class="sr-only">Toggle menu</span>
-        <span class="icon menu-toggle--gray" aria-hidden="true"></span>
-      </button>
+    	<!-- 삭제? -->
+    	<!-- <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
+        	<span class="sr-only">Toggle menu</span>
+        	<span class="icon menu-toggle--gray" aria-hidden="true"></span>
+    	</button> -->
 	  
-	  <!-- 스위치 테마 버튼 -->
-      <button class="theme-switcher gray-circle-btn" type="button" title="Switch theme">
-        <span class="sr-only">Switch theme</span>
-        <i class="sun-icon" data-feather="sun" aria-hidden="true"></i>
-        <i class="moon-icon" data-feather="moon" aria-hidden="true"></i>
-      </button>
+	  	<!-- 1. 스위치 테마 버튼 -->
+    	<button class="theme-switcher gray-circle-btn" type="button" title="Switch theme">
+        	<span class="sr-only">Switch theme</span>
+        	<i class="sun-icon" data-feather="sun" aria-hidden="true"></i>
+        	<i class="moon-icon" data-feather="moon" aria-hidden="true"></i>
+      	</button>
       
-      <!-- 알림창 부분 -->
-      <div class="notification-wrapper">
-        <button class="gray-circle-btn dropdown-btn" title="To messages" type="button">
-          <span class="sr-only">To messages</span>
-          <span class="icon notification active" aria-hidden="true"></span>
-        </button>
+      	<!-- 2. 알림창 부분 -->
+      	<div class="notification-wrapper">
+        	<button class="gray-circle-btn dropdown-btn" title="To messages" type="button">
+          		<span class="sr-only">To messages</span>
+          		<span class="icon notification active" aria-hidden="true"></span>
+        	</button>
         
-        <!-- 알림창 드롭다운 바 부분 -->
-        <ul class="users-item-dropdown notification-dropdown dropdown">
-          <li>
-            <a href="##">
-              <div class="notification-dropdown-icon info"> <!-- 아이콘의 컬러 -->
-                <i data-feather="smile"></i> <!-- 아이콘 -->
-              </div>
-              <div class="notification-dropdown-text">
-                <span class="notification-dropdown__title">알림 타이틀</span>
-                <span class="notification-dropdown__subtitle">알림 서브 내용</span>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="##">
-              <div class="notification-dropdown-icon danger">
-                <i data-feather="info" aria-hidden="true"></i>
-              </div>
-              <div class="notification-dropdown-text">
-                <span class="notification-dropdown__title">The cache is full!</span>
-                <span class="notification-dropdown__subtitle">Unnecessary caches take up a lot of memory space and
-                  interfere ...</span>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="##">
-              <div class="notification-dropdown-icon info">
-                <i data-feather="check" aria-hidden="true"></i>
-              </div>
-              <div class="notification-dropdown-text">
-                <span class="notification-dropdown__title">New Subscriber here!</span>
-                <span class="notification-dropdown__subtitle">A new subscriber has subscribed.</span>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a class="link-to-page" href="##">Go to Notifications page</a>
-          </li>
-        </ul>
-      </div>
+        	<!-- 알림창 드롭다운 바 부분 -->
+        	<ul class="users-item-dropdown notification-dropdown dropdown">
+          		<li>
+            		<a href="##">
+	              		<div class="notification-dropdown-icon info"> <!-- 아이콘의 컬러 -->
+	                		<i data-feather="smile"></i> <!-- 아이콘 -->
+	              		</div>
+	              		<div class="notification-dropdown-text">
+	                		<span class="notification-dropdown__title">알림 타이틀</span>
+	                		<span class="notification-dropdown__subtitle">알림 서브 내용</span>
+	              		</div>
+            		</a>
+          		</li>
+          		<li>
+            		<a href="##">
+              			<div class="notification-dropdown-icon danger">
+                			<i data-feather="info" aria-hidden="true"></i>
+              			</div>
+              			<div class="notification-dropdown-text">
+                			<span class="notification-dropdown__title">The cache is full!</span>
+               			 	<span class="notification-dropdown__subtitle">Unnecessary caches take up a lot of memory space and interfere ...</span>
+              			</div>
+            		</a>
+         		</li>
+          		<li>
+            		<a href="##">
+              			<div class="notification-dropdown-icon info">
+                			<i data-feather="check" aria-hidden="true"></i>
+              			</div>
+              			<div class="notification-dropdown-text">
+                			<span class="notification-dropdown__title">New Subscriber here!</span>
+                			<span class="notification-dropdown__subtitle">A new subscriber has subscribed.</span>
+              			</div>
+            		</a>
+          		</li>
+          		<li>
+            		<a class="link-to-page" href="##">Go to Notifications page</a>
+          		</li>
+        	</ul>
+      	</div>
+      	<!-- 알림창 끝 -->
       
-      <!-- 상단 바 사용자 아이콘 -->
-      <div class="nav-user-wrapper">
-        <button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
-          <span class="sr-only">My profile</span>
-          <span class="nav-user-img">
-            <picture><source srcset="/img/avatar/avatar-illustrated-02.webp" type="image/webp"><img src="/img/avatar/avatar-illustrated-02.png" alt="User name"></picture>
-          </span>
-        </button>
-        <ul class="users-item-dropdown nav-user-dropdown dropdown">
-          <li><a href="##">
-              <i data-feather="user" aria-hidden="true"></i>
-              <span>Profile</span>
-            </a></li>
-          <li><a href="##">
-              <i data-feather="settings" aria-hidden="true"></i>
-              <span>Account settings</span>
-            </a></li>
-          <li><a class="danger" href="##">
-              <i data-feather="log-out" aria-hidden="true"></i>
-              <span>Log out</span>
-            </a></li>
-        </ul>
-      </div>
+      	<!-- 3. 상단 바 사용자 아이콘 -->
+      	<div class="nav-user-wrapper">
+        	<button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
+          		<span class="sr-only">My profile</span>
+          		<span class="nav-user-img">
+            		<picture><source srcset="/img/avatar/avatar-illustrated-02.webp" type="image/webp"><img src="/img/avatar/avatar-illustrated-02.png" alt="User name"></picture>
+          		</span>
+        	</button>
+        	<ul class="users-item-dropdown nav-user-dropdown dropdown">
+          		<li>
+          			<a href="##">
+              			<i data-feather="user" aria-hidden="true"></i>
+              			<span>Profile</span>
+            		</a>
+            	</li>
+          		<li>
+          			<a href="##">
+              			<i data-feather="settings" aria-hidden="true"></i>
+              			<span>Account settings</span>
+            		</a>
+            	</li>
+          		<li>
+          			<a class="danger" href="##">
+              			<i data-feather="log-out" aria-hidden="true"></i>
+              			<span>Log out</span>
+            		</a>
+            	</li>
+        	</ul>
+      	</div>
+      	<!-- 상단 바 사용자 아이콘 끝 -->
       
     </div>
-  </div>
-</nav>
+    <!-- 상단바 - 오른쪽 부분 끝 -->
+    
+	</div>
+	</nav>
+	<!-- 상단바 끝 -->
 
 
 <!-- 보드 메인 부분 (working board) -->
-    <main class="main users chart-page" id="skip-target">
-      <div class="container">
-        <h2 class="main-title"># 어떤 팀의 Board인지 표시하면 좋을듯</h2>
-        <div class="row stat-cards">
-        
-        <!-- 박스 4개 -->
-        
-          <div class="col-4">
-            <article class="stat-cards-item my_card" >
-              <div class="stat-cards-icon warning">
-                <i data-feather="pause" aria-hidden="true"></i>
-              </div>
-              <div class="stat-cards-info">
-                <p class="stat-cards-info__num">진행전(ToDo)</p>
-              </div>
-            </article>
-            <div style="max-height: 800px; overflow: auto;">
-           		<article class="stat-cards-item my_card">
-              	<div class="stat-cards-info">
-                	<p class="stat-cards-info__num">카드 이름1</p>
-              	</div>
-            	</article>
-            	
-            	<article class="stat-cards-item my_card" >
-              	<div class="stat-cards-info">
-                	<p class="stat-cards-info__num">카드 이름1</p>
-              	</div>
-            	</article>
-            	
-            	<article class="stat-cards-item my_card" >
-              	<div class="stat-cards-info">
-                	<p class="stat-cards-info__num">카드 이름1</p>
-              	</div>
-            	</article>
-            	
-            	<article class="stat-cards-item my_card" >
-              	<div class="stat-cards-info">
-                	<p class="stat-cards-info__num">카드 이름1</p>
-              	</div>
-            	</article>
-            	
-            	<article class="stat-cards-item my_card" >
-              	<div class="stat-cards-info">
-                	<p class="stat-cards-info__num">카드 이름1</p>
-              	</div>
-            	</article>
-            	
-            	<article class="stat-cards-item my_card" >
-              	<div class="stat-cards-info">
-                	<p class="stat-cards-info__num">카드 이름1</p>
-              	</div>
-            	</article>
-            	
-            	<article class="stat-cards-item my_card" >
-              	<div class="stat-cards-info">
-                	<p class="stat-cards-info__num">카드 이름1</p>
-              	</div>
-            	</article>
-            	
-            	<article class="stat-cards-item my_card" >
-              	<div class="stat-cards-info">
-                	<p class="stat-cards-info__num">카드 이름1</p>
-              	</div>
-            	</article>
-            	
-            	<article class="stat-cards-item my_card" >
-              	<div class="stat-cards-info">
-                	<p class="stat-cards-info__num">카드 이름1</p>
-              	</div>
-            	</article>
-            	
-            	 	<article class="stat-cards-item my_card" >
-              	<div class="stat-cards-info">
-                	<p class="stat-cards-info__num">카드 이름1</p>
-              	</div>
-            	</article>
-            	
-            	 	<article class="stat-cards-item my_card" >
-              	<div class="stat-cards-info">
-                	<p class="stat-cards-info__num">카드 이름1</p>
-              	</div>
-            	</article>
-            	
-            	 	<article class="stat-cards-item my_card" >
-              	<div class="stat-cards-info">
-                	<p class="stat-cards-info__num">카드 이름1</p>
-              	</div>
-            	</article>
-            	
-            	 	<article class="stat-cards-item my_card" >
-              	<div class="stat-cards-info">
-                	<p class="stat-cards-info__num">카드 이름1</p>
-              	</div>
-            	</article>
-            </div>
-            
+	<main class="main users chart-page" id="skip-target">
+		<!-- 컨테이너 박스 -->
+    	<div class="container">
+      		
+      		<!-- 보드 상단 타이틀과 task 추가 기능 -->
+	      	<div class="main-title main-board">
+		    	<span># 어떤 팀의 Board인지 표시하면 좋을듯</span>
+		    	<div>
+		      	<input class="addTask" type="text" maxlength="12" id="taskText" placeholder="New Task...">
+		      	<button type="button" class="btn btn-outline-primary" onclick="addTask()">Add New Task</button>
+		      	</div>
+	      	</div>
+	      	<!-- 보드 상단 타이틀과 task 추가 기능 끝 -->
+      
+      		<!-- 보드 리스트 부분 -->
+      		<div class="listBox stat-cards ">
+      			<!-- todo section -->
+      			<section class="list col" id="to-do">
+      				<header>To Do</header>
+					<article class="card">
+						<header>Drag and Drop CSS</header>
+						<div class="detail">
+							<!-- 시작일과 종료일 표시 -->
+							<i data-feather="calendar" class="detail-icon"></i>
+							<span>23/03/06-24/01/01</span>
+							<br/>
+							<!-- 댓글 개수 표시 -->
+							<i data-feather="message-circle" class="detail-icon"></i>
+							<span>3</span>
+							<!-- 진척률 -->
+							<i data-feather="check-square" class="detail-icon"></i>
+							<span>45%</span>
+							<!-- 첨부파일 갯수 -->
+							<i data-feather="paperclip" class="detail-icon"></i>
+							<span>1</span>
+						</div>
+					</article>
+					<article class="card">
+						<header>Maybe something else ?</header>
+						<div class="detail">1/2</div>
+					</article>
+				</section>
+				
+				<!-- doing section -->
+				<section class="list col" id="doing">
+					<header>Doing</header>
+					<article class="card">
+						<header>Drag and Drop JS</header>
+						<div class="detail">1/2</div>
+					</article>
+				</section>
 
-            
-          </div>
-          
-          <div class="col-4">
-            <article class="stat-cards-item my_card">
-              <div class="stat-cards-icon primary">
-                <i data-feather="play" aria-hidden="true"></i>
-              </div>
-              <div class="stat-cards-info">
-                <p class="stat-cards-info__num">진행 중</p>
-              </div>
-            </article>
-          </div>
-          
-          <div class="col-4">
-            <article class="stat-cards-item my_card">
-              <div class="stat-cards-icon success">
-                <i data-feather="check-square" aria-hidden="true"></i>
-              </div>
-              <div class="stat-cards-info">
-                <p class="stat-cards-info__num">진행 완료</p>
-              </div>
-            </article>
-          </div>
-          
-          </div>
-        </div>
-     </main>
-          
-
-	<!-- 보드 메인 부분 (working board) -->
-	
+				<!-- done sction -->
+				<section class="list col" id="done">
+					<header>Done</header>
+					<article class="card">
+						<header>Global HTML</header>
+						<div class="detail">1/2</div>
+					</article>
+					<article class="card">
+						<header>Global CSS</header>
+						<div class="detail">1/2</div>
+					</article>
+				</section>
+      		</div>
+      		<!-- 보드 리스트 부분 끝 -->
+      		
+      	</div>
+	</main>
   </div>
 </div>
 
+<!-- 보드리스트의 카드 모달창 -->
+<form action="#" method="post"> 
+<div class="modal" id="card_modal">
+	<div class="cardmodal_body">
+		<div class="cardmodal-head">
+			<div class="close_btn close-area" onclick="closeCardModal()">X</div>
+		</div>
+	
+		<div class="m_body">
+		
+			<!-- 1. task title -->
+			<div class="card_content">
+				<i data-feather="clipboard" class="detail-icon" ></i>
+				<input placeholder="title" type="text" class="input_box input-prevent taskTitle" id="taskTitle"/>
+			</div>
+			
+			<!-- 2. member -->
+			<div class="card_content">
+				<i data-feather="users" class="detail-icon"></i>
+				<button type="button" class="button-prevent" title="add Member" id="addMember">
+					<i data-feather="plus-square" class="detail-icon"></i>
+				</button>
+				
+				<button type="button" class="button-prevent addMember">
+					<i data-feather="user" class="detail-icon"></i>
+					<span>member name</span>
+				</button>
+				
+			</div>
+			
+			<!-- 3. date 설정 -->
+			<i data-feather="calendar" class="detail-icon"></i>
+			<strong>Date</strong>
+			<div class="card_date">
+				<button type="button" class="button-prevent button-eventnone">start Date</button>
+				<input class="inputbox" type="text" id="startDate"></input>
+				<!-- db에서 endDate입니다.(참고) -->
+				<button type="button" class="button-prevent button-eventnone">due Date</button>
+				<input class="inputbox" type="text" id="targetDate"></input>
+			</div>
+			
+			<!-- 4. 업무 내용 -->
+			<div class="card_content">
+				<i data-feather="menu" class="detail-icon"></i>
+				<strong>Description</strong>
+				<button type="button" class="modal_btn cancle hidden" id="description_edit">EDIT</button>
+			</div>
+			<div id="description_content">
+				<!-- 쓴 description 내용이 들어간다. -->
+			</div>
+			<textarea class="hidden_scroll textbox" id="description" onkeyup="resize()" onkeydown="resize()"></textarea>
+			<button type="button" class="modal_btn cancle" id="description_cancle">CANCLE</button>
+			<button type="button" class="modal_btn save" id="description_save">SAVE</button>
+			
+			<!-- 5. 파일 업로드 -->
+			<div class="card_content">
+				<i data-feather="file" class="detail-icon"></i>
+				<strong>Attachments</strong>
+			</div>
+	<!-- 		<form action="uploadFile" method="post" enctype="multipart/form-data">
+        		<input type="file" id="input-file" style="display:none;"/>
+        		<label className="input-file-button" for="input-file">업로드</label>
+        		<input calss="modal_btn save" type="submit" value="파일업로드"></input>
+    		</form> -->
+			<div class="card_content filebox">
+				<input class="upload-name" value="첨부파일" placeholder="첨부파일">
+				<label for="file" class="save fileboxBtn" >파일찾기</label>
+				<input class="save fileboxBtn" type="file" id="file" style="display:none;">
+				<input class="save fileboxBtn" type="submit" value="업로드">
+			</div>
+			
+			<!-- 6. 체크 박스 -->
+			<div class="card_content">
+				<strong>CheckBox</strong>
+				<button class="button-prevent pl10" title="add CheckBox" id="card_checkbox">
+					<i data-feather="plus-square"></i>
+				</button>
+			</div>
+			<!-- 체크박스 컨텐츠 -->
+			<div id="checkbox_content">
+				
+			</div>
+			<!-- 체크박스 프로그래스바(진행율) -->
+			<div class="card_content">
+				<span class="pr10">20%</span>
+				<progress class="progressbar" value="20" max="100"></progress>
+			</div>
+			
+			<!-- 7. 댓글(1단) -->
+			<div class="card_content">
+				<i data-feather="message-circle" class="detail-icon"></i>
+				<strong>Comment</strong>
+			</div>
+			<div class="comment_box card_content">
+          		<div class="profile_box">
+            		<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">
+          		</div>
+        		<textarea class="hidden_scroll textbox" onkeyup="resize()" onkeydown="resize()"></textarea>
+        		<button id="commentBtn" type="button" title="write comment"><i class="bi bi-chat-square-quote-fill comment_icon"></i></button>
+			</div>
+			<div id="comment_list">
+				<div class="card_content">
+				</div>
+			</div>
+		</div>
+	
+		<div class="m_footer">
+			<button type="button" class="modal_btn cancle" onclick="closeCardModal()">CANCLE</button>
+			<button type="submit" class="modal_btn save" id="save_btn">SAVE</button>
+		</div>
+	</div>
+</div>
+</form>
+<!-- 보드리스트의 카드 모달창 끝 -->
+
 <!-- Icons library -->
-<script src="/plugins/feather.min.js"></script>
+<script src="/plugins/feather.js"></script>
 <!-- Custom scripts -->
 <script src="/js/script.js"></script>
+<!-- weasy custom js -->
+<script src="/js/weasy.js"></script>
+
 </body>
 
 </html>

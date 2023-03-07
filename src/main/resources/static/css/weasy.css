@@ -1,4 +1,4 @@
-@charset "UTF-8";
+*{box-sizing: border-box;}
 
 .my_card {
 	height: auto;
@@ -6,6 +6,18 @@
 	box-sizing: border-box;
 	border : 1px solid grey;
 	
+}
+
+.weasy-icon {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.weasy-logo {
+  background-image: url(../img/svg/Logo.svg);
+  width: 49px;
+  height: 49px;
 }
 
 .box {
@@ -56,4 +68,115 @@
 .id_ok{ display: none; color:green;}
 .id_already{display: none; color:red;}
 
+.addTask {
+  border-radius: 6px;
+  background-color: rgba(134, 182, 254, 0.5);
+  border-width: 0;
+  min-height: 40px;
+  border: solid transparent 2px !important;
+}
+
+.addTask:focus {
+  outline: none;
+  border: rgba(134, 182, 254, 0.5) solid !important;
+  -webkit-box-shadow: 0 0 0 2px rgba(134, 182, 254, 0.5);
+  box-shadow: 0 0 0 2px rgba(134, 182, 254, 0.5);
+}
+
+.main-board {
+	display: flex;
+	justify-content: space-between;
+}
+
+/* 보드 리스트 css */
+
+
+/* 추가 버튼 디자인 */
+.add-task-container {
+	background: #a8a8a8;
+	border: #000013 0.2rem solid;
+	border-radius: 0.2rem;
+	padding: 0.4rem;
+}
+
+.add-button {
+	background-color: #ffcb1e;
+	padding: 0 1rem;
+	height: 2.8rem;
+	width: 10rem;
+	margin-top: 0.6rem;
+}
+
+.add-button:hover {
+	background-color: #ffdd6e;
+}
+
+/* 보드 리스트 디자인 */
+[draggable] {
+	position: relative;
+	-moz-user-select: -moz-none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+
+.listBox {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+}
+
+.listBox2 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  align-items: flex-start;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.list {
+	background-color: #E3E3E3;
+	border-radius: 3px;
+	margin: 5px 5px;
+	padding: 10px;
+	width: 260px;
+	max-height: 800px;
+	overflow: auto;
+}
+
+.list>header {
+	font-weight: bold;
+	font-size: 15px;
+	line-height: 18px;
+	cursor: grab;
+}
+
+.list article {
+	border-radius: 3px;
+	margin-top: 5px;
+}
+
+.list .card {
+	background-color: #FFF;
+	border-bottom: 1px solid #CCC;
+	padding: 6px 8px;
+	cursor: pointer;
+}
+
+.list .card:hover {
+	background-color: #F0F0F0;
+}
+
+.detail {
+	font-size: 12px;
+	color: #939393;
+}
+
+[data-fakenode] {
+	background-color: gray;
+}
 
