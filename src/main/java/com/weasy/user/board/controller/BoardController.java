@@ -31,7 +31,7 @@ public class BoardController {
 		String userEmail = (String)session.getAttribute("userEmail");
 		ArrayList<TeamVO> teamList = boardService.getTeamList(userEmail);
 		model.addAttribute("teamList", teamList);
-		
+
 		return "board/board";
 	}
 	
