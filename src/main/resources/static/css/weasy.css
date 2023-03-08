@@ -71,8 +71,14 @@ html {
 
 
 /* 이메일 중복 */
-.id_ok{ display: none; color:green;}
-.id_already{display: none; color:red;}
+.id_ok{ display: none; color:green; font-size: 13px;}
+.id_already{display: none; color:red; font-size: 13px;}
+
+/* 로그인 경고문 */
+.failMessage > span{ font-size: 13px; color: red; margin-top: 18px; text-align: center; }
+/* 로그인창 - 회원가입 */
+.signup_a{font-size: 16px; font-weight:500; color: #2f49d1; padding: 13px 15px 0 0; text-align: right; font-style: italic;}
+.signup_a:hover{color:#002aff}
 
 .addTask {
   border-radius: 6px;

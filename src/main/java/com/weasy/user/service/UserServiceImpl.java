@@ -3,6 +3,7 @@ package com.weasy.user.service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.weasy.user.command.UserVO;
 
@@ -22,8 +23,18 @@ public class UserServiceImpl implements UserService {
 	//이메일 중복
 	@Override
 	public int doubleCheck(String email) {
-		// TODO Auto-generated method stub
-		return 0;
+		return userMapper.doubleCheck(email);
+	}
+	
+	//로그인
+	@Override
+	public UserVO login(UserVO vo) {		
+		return userMapper.login(vo);	
+	}
+	//승인여부
+	@Override
+	public int permissionId(UserVO vo) {
+		return userMapper.permissionId(vo);
 	}
 
 }

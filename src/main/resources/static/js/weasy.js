@@ -1,5 +1,5 @@
 "use strict";
-/* 성별 체크박스- 하나만 */
+/* gender 체크박스 - only one */
 $("input[name='gender']").on('click', function(){
     if(this.checked) {
         const checkboxes = $("input[name='gender']");
@@ -14,26 +14,26 @@ $("input[name='gender']").on('click', function(){
 
 /* 이메일 중복확인 기능 */
 $(".doubleCheck_btn").on('click', function(){
-
+   
 	var email = $("input[name='userEmail']").val();
-	
 	$.ajax({
-		url:'./checkEmail', //컨트롤러
-		type:'post',
-		data:{email, email},
-		success:function(cnt){
-			if(cnt == 0){
+		url:"../user/checkEmail", //컨트롤러
+		type:"post",
+		data:JSON.stringify({userEmail: email}),
+		contentType:"application/json",
+		success:function(result){
+			if(result == "0"){
 				$(".id_ok").css("display", "inline-block");
+				$(".id_already").css("display", "none");
 			}else{
-				$(".id_id_already").css("display", "inline-block");
+				$(".id_already").css("display", "inline-block");
+				$(".id_ok").css("display", "none");
 			}
 		}, 
 		error: function(){
 			alert("에러입니다");
 		}		
 	})
-	
-	
 	
 });
 

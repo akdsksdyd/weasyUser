@@ -33,6 +33,10 @@ public class UserVO { //유저 VO
 	
 	@Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{2,10}$", message = "닉네임은 특수문자를 제외한 2~10자리여야 합니다.")
 	private String nickname;
+	
+	
+	private String check_id;
+	private String check_pw;
 
 }
 //userEmail   VARCHAR(30) primary key NOT NULL,

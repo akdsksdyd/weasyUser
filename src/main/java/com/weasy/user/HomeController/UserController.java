@@ -1,21 +1,25 @@
 package com.weasy.user.HomeController;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.expression.MapAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.weasy.user.command.UserVO;
 import com.weasy.user.service.UserService;
@@ -23,18 +27,12 @@ import com.weasy.user.service.UserSha256;
 
 @Controller
 @RequestMapping("/user")
-public class TestController {
+public class UserController {
 	
 	//서비스 연결
 	@Autowired
 	@Qualifier("userService")
 	UserService userService;
-
-	//로그인
-	@GetMapping("/signin")
-	public String singin() {
-		return "user/signin";
-	}
 	
 	//회원가입 화면
 	@GetMapping("/signup")
@@ -45,15 +43,13 @@ public class TestController {
 	//이메일 중복 검사
 	@ResponseBody
 	@PostMapping("/checkEmail")
-	public String doubleCheck(@RequestParam("email") String email) {
-		userService.doubleCheck(email);
-		return "";
+	public int doubleCheck(@RequestBody UserVO vo) {
+		return userService.doubleCheck(vo.getUserEmail());
 	}
-	
-	
+		
 	//회원가입 유효성검사 
 	@PostMapping("/signup_valid")
-	public String signup(@Valid UserVO userVo, Errors error, Model model, HttpServletRequest request) {
+	public String signup(@Valid UserVO userVo, Errors error, Model model) {
 		//유효성검사 
 		if(error.hasErrors()) {
 			//에러 목록
@@ -84,4 +80,38 @@ public class TestController {
 		return "user/signin";
 	}
 	
+	
+	//로그인
+	@GetMapping("/signin")
+	public String singin() {
+		return "user/signin";
+	}
+	
+	//로그인 기능
+	@PostMapping("/login")
+	public String signin(UserVO vo, Model model, HttpSession session, RedirectAttributes ra){	
+			
+		//입력한 pw를 암호화 & UserVO에 checkPw로 저장
+		vo.setCheck_pw(UserSha256.encrypt(vo.getCheck_pw()));
+		//로그인 메소드 
+		UserVO result = userService.login(vo);
+		
+		if(userService.login(vo) == null) { //아이디 비번 오류
+			String failMessage = "아이디 혹은 비밀번호가 잘못 되었습니다.";
+			ra.addFlashAttribute("failMessage", failMessage);
+			return "redirect:/user/signin";
+			
+		} else if(userService.permissionId(vo) != 0){ //승인 안됨
+			String failMessage = "계정이 승인되지 않았습니다. 잠시만 기다료~~";
+			ra.addFlashAttribute("failMessage", failMessage);
+			return "redirect:/user/signin";
+		}
+		
+		session.setAttribute("Email", result.getUserEmail());
+		session.setAttribute("loginUser", result);
+		System.out.println("세션:"+session.getAttribute("Email"));
+		System.out.println("보드로 가기");
+		return "redirect:/board/board";
+		
+	}
 }
