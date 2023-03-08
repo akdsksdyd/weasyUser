@@ -25,7 +25,7 @@ public class TaskVO { //업무 VO
 	@NotBlank(message = "공백일 수 없습니다")
 	@Pattern(regexp = "[0-9]{4}-[0-9]{2}-[0-9]{2}")
 	private Timestamp startDate;
-	private Timestamp progressRate;
+	private int progressRate;
 	
 	@NotBlank(message = "공백일 수 없습니다")
 	@Pattern(regexp = "[0-9]{4}-[0-9]{2}-[0-9]{2}")

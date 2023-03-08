@@ -14,6 +14,7 @@ public interface BoardService {
 	
 	public int addTask(TaskVO vo);
 	
-	public ArrayList<TaskVO> getTaskList(TaskVO vo);
+	public ArrayList<TaskVO> getTaskList(int teamNo);
 	
+	public int getTeamNo(String teamName);
 }

@@ -1,5 +1,11 @@
 *{box-sizing: border-box;}
 
+html {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -ms-overflow-style: none;
+}
+
 .my_card {
 	height: auto;
 	border-radius:0px;
@@ -74,6 +80,8 @@
   border-width: 0;
   min-height: 40px;
   border: solid transparent 2px !important;
+  font-size: 15px;
+  width: 350px;
 }
 
 .addTask:focus {
@@ -112,6 +120,11 @@
 }
 
 /* 보드 리스트 디자인 */
+
+#teamProjectBoard {
+	display: none;
+}
+
 [draggable] {
 	position: relative;
 	-moz-user-select: -moz-none;
@@ -125,17 +138,7 @@
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
-}
-
-.listBox2 {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  align-items: flex-start;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
+	padding: 0px 50px; 
 }
 
 .list {
@@ -144,8 +147,6 @@
 	margin: 5px 5px;
 	padding: 10px;
 	width: 260px;
-	max-height: 800px;
-	overflow: auto;
 }
 
 .list>header {
@@ -179,4 +180,22 @@
 [data-fakenode] {
 	background-color: gray;
 }
+
+.sub-title {
+  font-weight: bold;
+  line-height: 1.42;
+  color: #171717;
+  margin-bottom: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
 

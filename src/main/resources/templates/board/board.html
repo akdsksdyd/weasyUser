@@ -42,7 +42,7 @@
 		}).on("change", function() {
 			to.datepicker("option", "minDate", getDate(this));
 		}), to = $("#teamEndDate").datepicker({
-			dateFormat : 'yy-mm-dd',
+			dateFormat: 'yy-mm-dd',
 			defaultDate : "+1w",
 			changeMonth : true,
 			numberOfMonths : 2
@@ -57,7 +57,6 @@
 			} catch (error) {
 				date = null;
 			}
-
 			return date;
 		}
 	});
@@ -66,7 +65,7 @@
 <!-- 보드 리스트의 카드 date -->
 <script>
 	$(function() {
-		var dateFormat = "mm/dd/yy", from = $("#startDate").datepicker({
+		var dateFormat = "mm-dd-yy", from = $("#startDate").datepicker({
 			dateFormat : 'yy-mm-dd',
 			defaultDate : "+1w",
 			changeMonth : true,
@@ -74,6 +73,7 @@
 		}).on("change", function() {
 			to.datepicker("option", "minDate", getDate(this));
 		}), to = $("#targetDate").datepicker({
+			dateFormat: 'yy-mm-dd',
 			defaultDate : "+1w",
 			changeMonth : true,
 			numberOfMonths : 2
@@ -88,7 +88,6 @@
 			} catch (error) {
 				date = null;
 			}
-
 			return date;
 		}
 	});
@@ -126,7 +125,7 @@
         </div>
         
         <!-- 로그 아래에 사용자 이미지와 사용자 정보 표시 -->
-        <div class="sidebar-head" >
+        <div class="sidebar-head">
         	<div class="box">
         	<img class="profile" src="/img/avatar/avatar-face-03.png" alt="">
         	</div>
@@ -138,7 +137,7 @@
             <ul class="sidebar-body-menu">
             	<!-- 1. 대시보드 -->
                 <li>
-                    <a class="active" href="/test/board"><span class="icon home" aria-hidden="true"></span>Board</a>
+                    <a class="active" href="#"  id="mainBoardSideBar"><span class="icon home" aria-hidden="true"></span>Board</a>
                 </li>
                 
 				<!-- 2. 팀 -->
@@ -153,18 +152,14 @@
                     </a>
                     <!-- #### 팀 목록 보여주는 아이콘#### -->
                     <ul class="cat-sub-menu">
-	
 						<th:block th:each="teamVo : ${teamList}">
 							<li>
 					        	<a href="#" class="stat-cards-info__num teamTask" th:text="${teamVo.teamName}"></a>
 							</li>
 				            <input type="hidden" class="teamNo" th:value="${teamVo.teamNo}">
 						</th:block>
-            	
                     </ul>
                 </li>
-                
-                
                 
                 <!-- 3. 팀 추가 메뉴 -->
                 <li>
@@ -343,18 +338,59 @@
 
 
 <!-- 보드 메인 부분 (working board) -->
-	<main class="main users chart-page" id="skip-target">
-		<!-- 컨테이너 박스 -->
-    	<div class="container">
+	<main class="main users chart-page " id="skip-target">
+		
+		<!-- (sideBar board) 보드 진입시 메인 보드 -->
+		<div class="container" id="mainBoardPage">
+			<div class="container">
+        		<h2 class="main-title">Your WorkSpace</h2>
+        		
+       			<div class="sub-title">
+       				<span>member권한</span>
+       			</div>
+        		<div class="row stat-cards" id="memberWorkspace">
+        			<!-- 보드 블럭 한개 -->
+          			<div class="col-md-6 col-xl-3">
+            			<article class="stat-cards-item">
+              				<div class="stat-cards-icon primary">
+                				<i data-feather="bar-chart-2" aria-hidden="true"></i>
+              				</div>
+		              		<div class="stat-cards-info">
+		                	<p class="stat-cards-info__num">1478 286</p>
+		                	<p class="stat-cards-info__title">Total visits</p>
+		                	<p class="stat-cards-info__progress">
+			                  	<span class="stat-cards-info__profit success">
+			                    	<i data-feather="trending-up" aria-hidden="true"></i>4.07%
+			                  	</span>
+			                  	Last month
+		                	</p>
+		              		</div>
+            			</article>
+          			</div>
+          			<!-- 보드 블럭 한개 끝 -->
+        		</div>
+        		
+       			<div class="sub-title">
+       				<span>read 권한</span>
+       			</div>
+       			<div class="row stat-cards" id="observerWorkspace">
+        			
+        		</div>
+        		
+			</div>
+		</div>
+	
+		<!-- (sideBar team/project) 팀/프로젝트 보드 리스트 -->
+    	<div class="container" id="teamProjectBoard">
       		
       		<!-- 보드 상단 타이틀과 task 추가 기능 -->
 	      	<div class="main-title main-board">
-		    	<span># 어떤 팀의 Board인지 표시하면 좋을듯</span>
-		    		<form action="addTask" method="post" class="addTaskBox">
-			      		<input class="addTask" type="text" maxlength="12" id="taskText" placeholder="New Task...">
-			      		<button type="submit" class="btn btn-outline-primary addTaskBtn">Add New Task</button>
-			      		<div class="addTaskValue"></div>
-		    		</form>
+		    	<span id="boardName"></span>
+		    	<form action="addTask" method="post" class="addTaskBox">
+			      	<input class="addTask" type="text" maxlength="12" id="taskText" placeholder="New Task...">
+			      	<button type="submit" class="btn btn-outline-primary addTaskBtn">Add New Task</button>
+			      	<div class="addTaskValue"></div>
+		    	</form>
 	      	</div>
 	      	<!-- 보드 상단 타이틀과 task 추가 기능 끝 -->
       
@@ -363,50 +399,43 @@
       			<!-- todo section -->
       			<section class="list col" id="to-do">
       				<header>To Do</header>
-					<article class="card">
+      				<span id="to-do-content">
+      				</span>
+      				<!-- 디테일 아이콘 예시로 주석처리하여 남겨놓았다.
+      				카드 추가시 디테일 부분까지 완성되면 지울것!
+ 					<article class="card">
 						<header>Drag and Drop CSS</header>
 						<div class="detail">
-							<!-- 시작일과 종료일 표시 -->
+							시작일과 종료일 표시
 							<i data-feather="calendar" class="detail-icon"></i>
 							<span>23/03/06-24/01/01</span>
 							<br/>
-							<!-- 댓글 개수 표시 -->
+							댓글 개수 표시
 							<i data-feather="message-circle" class="detail-icon"></i>
 							<span>3</span>
-							<!-- 진척률 -->
+							진척률
 							<i data-feather="check-square" class="detail-icon"></i>
 							<span>45%</span>
-							<!-- 첨부파일 갯수 -->
+							첨부파일 갯수
 							<i data-feather="paperclip" class="detail-icon"></i>
 							<span>1</span>
 						</div>
-					</article>
-					<article class="card">
-						<header>Maybe something else ?</header>
-						<div class="detail">1/2</div>
-					</article>
+					</article> 
+					-->
 				</section>
 				
 				<!-- doing section -->
 				<section class="list col" id="doing">
 					<header>Doing</header>
-					<article class="card">
-						<header>Drag and Drop JS</header>
-						<div class="detail">1/2</div>
-					</article>
+					<span id="doing-content">
+      				</span>
 				</section>
 
 				<!-- done sction -->
 				<section class="list col" id="done">
 					<header>Done</header>
-					<article class="card">
-						<header>Global HTML</header>
-						<div class="detail">1/2</div>
-					</article>
-					<article class="card">
-						<header>Global CSS</header>
-						<div class="detail">1/2</div>
-					</article>
+					<span id="done-content">
+      				</span>
 				</section>
       		</div>
       		<!-- 보드 리스트 부분 끝 -->
@@ -496,12 +525,6 @@
 			</div>
 			<!-- 체크박스 컨텐츠 -->
 			<div id="checkbox_content">
-				
-			</div>
-			<!-- 체크박스 프로그래스바(진행율) -->
-			<div class="card_content">
-				<span class="pr10">20%</span>
-				<progress class="progressbar" value="20" max="100"></progress>
 			</div>
 			
 			<!-- 7. 댓글(1단) -->
@@ -513,7 +536,7 @@
           		<div class="profile_box">
             		<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">
           		</div>
-        		<textarea class="hidden_scroll textbox" onkeyup="resize()" onkeydown="resize()"></textarea>
+        		<textarea class="hidden_scroll textbox" onkeyup="resize()" onkeydown="resize()" ></textarea>
         		<button id="commentBtn" type="button" title="write comment"><i class="bi bi-chat-square-quote-fill comment_icon"></i></button>
 			</div>
 			<div id="comment_list">
@@ -539,57 +562,13 @@
 <script src="/js/weasy.js"></script>
 
 <script th:inline="javascript">
-
 	var msg = JSON.parse('[[${msg}]]');
 	if(msg != null){
 		alert(msg);
 	}
 	
+	loadMainBoard();
 </script>
-
-<!-- <script>
-
-	$(".teamTask").click(function(e){
-		/* console.dir(e.target);*/
-		console.log(e.target.nextElementSibling.value);
-		var teamNo = $(e.target.nextElementSibling).val();
-		e.preventDefault();
-		
-		var task = "";
-		
-		$.ajax({
-
-			url: "../getTeamNo",
-			data: JSON.stringify({teamNo: teamNo}),
-			type: "post",
-			contentType: "application/json",
-			success: function(result){
-				console.log($(e.target).next().val());
-				
-				task += '<form action="addTask" method="post">';
-				
-				task += '<input type="text" value="userEmail" name="userEmail">';
-				task += '<input type="text" value="taskName" name="title">';
-				task += '<input type="text" value="taskContent" name="content">';
-				task += '<input type="date" value="startDate" name="startDate">';
-				task += '<input type="date" value="targetDate" name="targetDate">';
-				task += '<input type="submit" value="add">';
-				task += '<input type="hidden" name="teamNo" value="'+$(e.target).next().val()+'">';
-			
-				task += '</form>';
-				
-				$(".addTaskBox").html(task);
-				
-			},
-			error: function(err){
-				alert("조회에 실패했습니다.");
-			}
-			
-		});
-		
-	});
-
-</script> -->
 
 </body>
 

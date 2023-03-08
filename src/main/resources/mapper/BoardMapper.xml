@@ -47,8 +47,12 @@
   	
   	<select id="getTaskList" resultType="TaskVO">
   	
-  		select * from TASK where teamNo = #{teamNo}
+  		select * from TASK where teamNo = #{teamNo} order by taskNo desc;
   	
+  	</select>
+  	
+  	<select id="getTeamNo" resultType="int">
+  		select teamNo from TEAM where teamName = #{teamName}
   	</select>
   	
   </mapper>
