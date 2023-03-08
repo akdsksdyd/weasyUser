@@ -12,7 +12,7 @@ public interface BoardMapper {
 	
 	public int insertTeam(TeamVO vo);
 	
-	public ArrayList<TeamVO> getTeamList(String userEmail);
+	public ArrayList<TeamVO> getTeamList(String user_id);
 	
 	public int addTask(TaskVO vo);
 	

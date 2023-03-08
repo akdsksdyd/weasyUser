@@ -42,7 +42,7 @@ public class UserController {
 	
 	//이메일 중복 검사
 	@ResponseBody
-	@PostMapping("/checkEmail")
+	@PostMapping("/checkcheckEmail")
 	public int doubleCheck(@RequestBody UserVO vo) {
 		return userService.doubleCheck(vo.getUserEmail());
 	}
