@@ -26,11 +26,24 @@ public class BoardAjaxController {
 	@PostMapping("/getTeamNo")
 	@ResponseBody
 	public ResponseEntity<List<TaskVO>> getTeamNo(@RequestBody TaskVO vo,
-								  Model model) {
+								  				  Model model) {
 		
 		System.out.println(vo.getTeamNo());
+		System.out.println(vo.getTitle());
 		
 		return new ResponseEntity<>(boardService.getTaskList(vo), HttpStatus.OK);
+	}
+	
+	@PostMapping("/addTask")
+	@ResponseBody
+	public ResponseEntity<Integer> addTask(@RequestBody TaskVO vo){
+		
+		System.out.println(vo.getTeamNo());
+		System.out.println(vo.getTitle());
+		
+		vo.setUserEmail("user");
+		
+		return new ResponseEntity<>(boardService.addTask(vo), HttpStatus.OK);
 	}
 	
 }

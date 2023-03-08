@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
@@ -34,13 +34,15 @@
 <!-- 팀/프로젝트 추가 date -->
 <script>
 	$(function() {
-		var dateFormat = "mm/dd/yy", from = $("#teamRegDate").datepicker({
+		var dateFormat = "yy-mm-dd", from = $("#teamRegDate").datepicker({
+			dateFormat : 'yy-mm-dd',
 			defaultDate : "+1w",
 			changeMonth : true,
 			numberOfMonths : 2
 		}).on("change", function() {
 			to.datepicker("option", "minDate", getDate(this));
 		}), to = $("#teamEndDate").datepicker({
+			dateFormat : 'yy-mm-dd',
 			defaultDate : "+1w",
 			changeMonth : true,
 			numberOfMonths : 2
@@ -65,6 +67,7 @@
 <script>
 	$(function() {
 		var dateFormat = "mm/dd/yy", from = $("#startDate").datepicker({
+			dateFormat : 'yy-mm-dd',
 			defaultDate : "+1w",
 			changeMonth : true,
 			numberOfMonths : 2
@@ -148,16 +151,20 @@
                             <span class="icon arrow-down" aria-hidden="true"></span>
                         </span>
                     </a>
-                    <!-- #### 수정 #### -->
+                    <!-- #### 팀 목록 보여주는 아이콘#### -->
                     <ul class="cat-sub-menu">
-                        <li>
-                            <a href="#">Team1</a>
-                        </li>
-                        <li>
-                            <a href="#">Team2</a>
-                        </li>
+	
+						<th:block th:each="teamVo : ${teamList}">
+							<li>
+					        	<a href="#" class="stat-cards-info__num teamTask" th:text="${teamVo.teamName}"></a>
+							</li>
+				            <input type="hidden" class="teamNo" th:value="${teamVo.teamNo}">
+						</th:block>
+            	
                     </ul>
                 </li>
+                
+                
                 
                 <!-- 3. 팀 추가 메뉴 -->
                 <li>
@@ -171,7 +178,7 @@
 <!-- Sidebar -->
 
 <!-- 팀/프로젝트 추가 모달창 -->
-<form action="#" method="post"> 
+<form action="addTeam" method="post"> 
 <div class="modal" id="modal">
 	<div class="modal_body">
 		<div class="m_head">
@@ -185,26 +192,26 @@
 			<!-- 팀생성일 ~ 팀 종료일 -->
 			<div class="m_date">
 				<p class="p">start date</p>
-				<input type="text" size="10" id="teamRegDate"></input>
+				<input type="text" size="10" id="teamRegDate" name="teamRegdate"></input>
 				<!-- db에서 endDate입니다.(참고) -->
 				<p class="pl30 p">due date</p>
-				<input type="text" size="10" id="teamEndDate"></input>
+				<input type="text" size="10" id="teamEndDate" name="endDate"></input>
 			</div>
 			
 			<!-- 팀 이름 -->
 			<div class="modal_label">Team Name</div>
-			<input type="text" class="input_box" id="teamName"/>
+			<input type="text" class="input_box" id="teamName" name="teamName"/>
 			<!-- 팀 목료 -->
 			<div class="modal_label">Team Goal</div>
-			<input type="text" class="input_box" id="teamGoal" />
+			<input type="text" class="input_box" id="teamGoal" name="teamGoal"/>
 			<!-- 팀 생성자 (팀 리더) -->
 			<div class="modal_label">Team Leader</div>
-			<input type="text" class="input_box" id="userEmail" />
+			<input type="text" class="input_box" id="userEmail" name="userEmail"/>
 			<!-- 팀 상태 -->
 			<div class="modal_label">Team status</div>
-			<select class="modal_selectBox" id="teamStatus">
-				<option>진행중</option>
-				<option>완료됨</option>
+			<select class="modal_selectBox" id="teamStatus" name="teamStatus">
+				<option value="Y">진행중</option>
+				<option value="N">완료됨</option>
 			</select>
 		</div>
 	
@@ -343,10 +350,11 @@
       		<!-- 보드 상단 타이틀과 task 추가 기능 -->
 	      	<div class="main-title main-board">
 		    	<span># 어떤 팀의 Board인지 표시하면 좋을듯</span>
-		    	<div>
-		      	<input class="addTask" type="text" maxlength="12" id="taskText" placeholder="New Task...">
-		      	<button type="button" class="btn btn-outline-primary" onclick="addTask()">Add New Task</button>
-		      	</div>
+		    		<form action="addTask" method="post" class="addTaskBox">
+			      		<input class="addTask" type="text" maxlength="12" id="taskText" placeholder="New Task...">
+			      		<button type="submit" class="btn btn-outline-primary addTaskBtn">Add New Task</button>
+			      		<div class="addTaskValue"></div>
+		    		</form>
 	      	</div>
 	      	<!-- 보드 상단 타이틀과 task 추가 기능 끝 -->
       
@@ -529,6 +537,59 @@
 <script src="/js/script.js"></script>
 <!-- weasy custom js -->
 <script src="/js/weasy.js"></script>
+
+<script th:inline="javascript">
+
+	var msg = JSON.parse('[[${msg}]]');
+	if(msg != null){
+		alert(msg);
+	}
+	
+</script>
+
+<!-- <script>
+
+	$(".teamTask").click(function(e){
+		/* console.dir(e.target);*/
+		console.log(e.target.nextElementSibling.value);
+		var teamNo = $(e.target.nextElementSibling).val();
+		e.preventDefault();
+		
+		var task = "";
+		
+		$.ajax({
+
+			url: "../getTeamNo",
+			data: JSON.stringify({teamNo: teamNo}),
+			type: "post",
+			contentType: "application/json",
+			success: function(result){
+				console.log($(e.target).next().val());
+				
+				task += '<form action="addTask" method="post">';
+				
+				task += '<input type="text" value="userEmail" name="userEmail">';
+				task += '<input type="text" value="taskName" name="title">';
+				task += '<input type="text" value="taskContent" name="content">';
+				task += '<input type="date" value="startDate" name="startDate">';
+				task += '<input type="date" value="targetDate" name="targetDate">';
+				task += '<input type="submit" value="add">';
+				task += '<input type="hidden" name="teamNo" value="'+$(e.target).next().val()+'">';
+			
+				task += '</form>';
+				
+				$(".addTaskBox").html(task);
+				
+			},
+			error: function(err){
+				alert("조회에 실패했습니다.");
+			}
+			
+		});
+		
+	});
+
+</script> -->
 
 </body>
 
