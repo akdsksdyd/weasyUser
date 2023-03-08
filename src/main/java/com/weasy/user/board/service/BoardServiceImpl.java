@@ -32,9 +32,14 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	@Override
-	public ArrayList<TaskVO> getTaskList(TaskVO vo) {
+	public ArrayList<TaskVO> getTaskList(int teamNo) {
 		
-		return boardMapper.getTaskList(vo);
+		return boardMapper.getTaskList(teamNo);
+	}
+	
+	@Override
+	public int getTeamNo(String teamName) {
+		return boardMapper.getTeamNo(teamName);
 	}
 	
 }
