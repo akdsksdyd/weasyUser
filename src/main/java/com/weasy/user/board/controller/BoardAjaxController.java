@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,14 +58,15 @@ public class BoardAjaxController {
 	
 	@PostMapping("/addTask")
 	@ResponseBody
-	public ResponseEntity<Integer> addTask(@RequestBody TaskVO vo){
+	public ResponseEntity<Integer> addTask(@RequestBody TaskVO taskVo,
+										   TeamVO teamVo){
 		
-		System.out.println(vo.getTeamNo());
-		System.out.println(vo.getTitle());
+		System.out.println(taskVo.getTeamNo());
+		System.out.println(taskVo.getTitle());
+		System.out.println(teamVo.getUserEmail());
 		
-		vo.setUserEmail("user");
 		
-		return new ResponseEntity<>(boardService.addTask(vo), HttpStatus.OK);
+		return new ResponseEntity<>(boardService.addTask(taskVo), HttpStatus.OK);
 	}
 	
 }

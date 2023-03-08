@@ -24,7 +24,7 @@
   	
   	<select id="getTeamList" resultType="TeamVO">
   	
-  		select * from TEAM where userEmail = #{userEmail}
+  		select * from TEAM where userEmail = #{user_id}
   	
   	</select>
   	
@@ -52,7 +52,7 @@
   	</select>
   	
   	<select id="getTeamNo" resultType="int">
-  		select teamNo from TEAM where teamName = #{teamName}
+  		select teamNo, userEmail from TEAM where teamName = #{teamName}
   	</select>
   	
   </mapper>

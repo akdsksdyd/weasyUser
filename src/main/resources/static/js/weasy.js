@@ -16,12 +16,14 @@ $("input[name='gender']").on('click', function(){
 $(".doubleCheck_btn").on('click', function(){
    
 	var email = $("input[name='userEmail']").val();
+	console.log(email);
 	$.ajax({
-		url:"../user/checkEmail", //컨트롤러
+		url:"../user/checkcheckEmail", //컨트롤러
 		type:"post",
-		data:JSON.stringify({userEmail: email}),
+		data:JSON.stringify({"userEmail": email}),
 		contentType:"application/json",
 		success:function(result){
+			console.log("ajax반환값:" + result);
 			if(result == "0"){
 				$(".id_ok").css("display", "inline-block");
 				$(".id_already").css("display", "none");
@@ -42,6 +44,7 @@ $(".teamTask").click(function(e){
 	
 	console.log(e.target.parentElement.nextElementSibling.value);
 	var teamNo = $(e.target.parentElement.nextElementSibling).val();
+	var userEmail = $(e.target.parentElement.nextElementSibling.nextElementSibling).val();
 	
 	e.preventDefault();
 	
@@ -51,12 +54,13 @@ $(".teamTask").click(function(e){
 	$.ajax({
 		
 		url: "../getTeamNo",
-		data: JSON.stringify({teamNo: teamNo}),
+		data: JSON.stringify({teamNo: teamNo, userEmail: userEmail}),
 		type: "post",
 		contentType: "application/json",
 		success: function(result){
 			
 			taskValue += '<input type="hidden" name="teamNo" value="'+ teamNo +'">';
+			taskValue += '<input type="hidden" name="userEmail" value="'+ userEmail +'">';
 			
 			$(".addTaskValue").html(taskValue);
 			
@@ -85,20 +89,22 @@ $(".addTaskBtn").click(function(e){
 	//input창에서 입력받은값
 	var inputTask = $("#taskText").val();
 	console.log(inputTask);
-	var taskValue = $(e.target.nextElementSibling.lastChild).val();
-	console.log(taskValue);
+	console.log(e.target.nextElementSibling.firstChild);
+	var teamNoValue = $(e.target.nextElementSibling.firstChild).val();
+	var emailValue = $(e.target.nextElementSibling.lastChild).val();
+	console.log(teamNoValue);
 	e.preventDefault();
 		
 	$.ajax({
 			
 		url: "../addTask",
-		data: JSON.stringify({teamNo: taskValue, title: inputTask}),
+		data: JSON.stringify({teamNo: teamNoValue, title: inputTask, userEmail: emailValue}),
 		type: "post",
 		contentType: "application/json",
 		success: function(result){
 			
 			/* 해당 페이지 reload*/	
-			getTeamTask(taskValue);
+			getTeamTask(teamNoValue);
 
 			$("#taskText").val("");
 				

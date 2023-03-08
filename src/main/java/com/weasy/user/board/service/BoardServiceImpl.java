@@ -21,9 +21,9 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	@Override
-	public ArrayList<TeamVO> getTeamList(String userEmail) {
-		System.out.println(userEmail);
-		return boardMapper.getTeamList(userEmail);
+	public ArrayList<TeamVO> getTeamList(String user_id) {
+		System.out.println(user_id);
+		return boardMapper.getTeamList(user_id);
 	}
 	
 	@Override
