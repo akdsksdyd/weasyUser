@@ -37,19 +37,86 @@ $(".doubleCheck_btn").on('click', function(){
 	
 });
 
+/* 팀 클릭 시 teamNo전달 */
+$(".teamTask").click(function(e){
+	
+	console.log(e.target.parentElement.nextElementSibling.value);
+	var teamNo = $(e.target.parentElement.nextElementSibling).val();
+	
+	e.preventDefault();
+	
+	var taskValue = "";
+	var taskBox = "";
+	
+	$.ajax({
+		
+		url: "../getTeamNo",
+		data: JSON.stringify({teamNo: teamNo}),
+		type: "post",
+		contentType: "application/json",
+		success: function(result){
+			
+			taskValue += '<input type="hidden" name="teamNo" value="'+ teamNo +'">';
+			
+			$(".addTaskValue").html(taskValue);
+			
+			for(var i = 0; i < result.length; i++){
+				
+				taskBox += "<article class='card'>";
+				taskBox += "<header>" + result[i].title + "</header>";
+				taskBox += "<div class='detail'>detail 정보</div>";
+				taskBox += "</article>";
+				
+			}
+			
+			$("#to-do-content").html(taskBox);
+			
+		},
+		error: function(err){
+			alert("조회에 실패했습니다.")
+		}
+		
+	});
+	
+});
+
 /* task card 추가 function */
-function addTask() {
-		//input창에서 입력받은값
-		var inputTask = $("#taskText").val();
+$(".addTaskBtn").click(function(e){
+	
+	//input창에서 입력받은값
+	var inputTask = $("#taskText").val();
+	console.log(inputTask);
+	var taskValue = $(e.target.nextElementSibling.lastChild).val();
+	console.log(taskValue);
+	e.preventDefault();
 		
-		var str = "<article class='card'>";
-		str += "<header>" + inputTask + "</header>";
-		str += "<div class='detail'>detail 정보</div>";
-		str += "</article>";
+	var str = "";
 		
-		$("#to-do").append(str);
-		$("#taskText").val("");
-}
+	$.ajax({
+			
+		url: "../addTask",
+		data: JSON.stringify({teamNo: taskValue, title: inputTask}),
+		type: "post",
+		contentType: "application/json",
+		success: function(result){
+				
+				str += "<article class='card'>";
+				str += "<header>" + inputTask + "</header>";
+				str += "<div class='detail'>detail 정보</div>";
+				str += "</article>";
+				
+			$("#to-do").append(str);
+			$("#taskText").val("");
+				
+		},
+		error: function(err){
+			alert("조회에 실패했습니다.")
+		}
+			
+		});
+		
+});
+
 
 /* 팀 / 프로젝트 추가 - 모달창 */
 /* 특정 버튼을 누르면 모달창이 켜지게 하기 */

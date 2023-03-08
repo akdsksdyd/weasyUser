@@ -24,7 +24,13 @@ public class BoardController {
 	private BoardService boardService;
 
 	@GetMapping("/board")
-	public String board() {
+	public String board(Model model,
+						HttpSession session) {
+
+		session.setAttribute("userEmail", "user");
+		String userEmail = (String)session.getAttribute("userEmail");
+		ArrayList<TeamVO> teamList = boardService.getTeamList(userEmail);
+		model.addAttribute("teamList", teamList);
 		
 		return "board/board";
 	}
@@ -49,19 +55,17 @@ public class BoardController {
 		String msg = result == 1 ? "정상 입력되었습니다" : "등록에 실패했습니다";
 		ra.addFlashAttribute("msg", msg);
 		
-		return "redirect:/board/boardTest";
+		return "redirect:/board/board";
 	}
 	
-	@PostMapping("/addTask")
-	public String addTask(TaskVO vo,
-						  RedirectAttributes ra) {
-		
-		int result = boardService.addTask(vo);
-		String msg = result == 1 ? "정상 입력되었습니다" : "등록에 실패했습니다";
-		ra.addFlashAttribute("msg", msg);
-		
-		return "redirect:/board/boardTest";
-	}
+//	@PostMapping("/addTask")
+//	public String addTask(TaskVO vo,
+//						  RedirectAttributes ra) {
+//		
+//		int result = boardService.addTask(vo);
+//		
+//		return "redirect:/board/board";
+//	}
 	
 }
 
