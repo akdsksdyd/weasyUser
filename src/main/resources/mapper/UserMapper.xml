@@ -25,5 +25,12 @@
 	<select id="permissionId" resultType="int">
 		SELECT COUNT(*) FROM users WHERE userEmail = #{check_id} and userPw = #{check_pw} and permission = 'N' ;
 	</select>
+	
+	<!-- 검색어로 직원찾기 (승인받은 직원들 중..) -->
+	<select id="searchUser" resultType="UserVO">
+		SELECT userEmail, userName, nickname, permission FROM users 
+		WHERE (userEmail like concat('%', #{keyword}, '%') or nickName like concat('%', #{keyword}, '%')) 
+		and permission = 'Y';
+	</select>
 
   </mapper>

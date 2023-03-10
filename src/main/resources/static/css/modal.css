@@ -18,12 +18,8 @@
 
 .modal_body {
 	position: absolute;
-	top: 50%;
+	top: 45%;
 	left: 50%;
-/* 	width: 800px;
-	height: 600px; */
-	/* padding: 40px; */
-	/* text-align: center; */
 	background-color: rgba(227, 227, 227, 0.8);
 	border-radius: 10px;
 	box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
@@ -43,6 +39,16 @@
 	transform: translateX(-50%) translateY(-50%);
 	max-height: 900px;
 	overflow: auto;
+}
+
+.add_team_modal_body {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	background-color: rgba(227, 227, 227, 0.8);
+	border-radius: 10px;
+	box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+	transform: translateX(-50%) translateY(-50%);
 }
 
 .m_head {
@@ -174,7 +180,7 @@
 	font-weight: 800;
 }
 
-.addMember {
+.addTaskMember {
 	border: 3px solid rgba(134, 182, 254);
 	border-radius: 5px;
 	padding: 4px;
@@ -320,16 +326,191 @@
 	background-color: white;
 }
 
+/* team member add modal */
 
+.searchBox{
+	display: flex;
+	width: 800px;
+	height: 500px;
+	justify-content: space-around;
+	align-content: flex-start;	
+}
 
+.horizontal{
+	display: flex;
+	justify-content: center;
+	padding: 0px 10px;	
+}
 
+.searchBtn {
+	background: none;
+	
+	width: 50px;
+	height: 40px;
+  	color: #fff;
+  	border-radius: 5px;
+  	padding: 5px 5px;
+  	font-family: 'Lato', sans-serif;
+  	font-size: 16px;
+  	font-weight: 900;
+  	font-style: normal;
+  	text-shadow: 0px -1px 0px rgba(0,0,0,0.4);
+    text-decoration: none;
+  	background: transparent;
+  	cursor: pointer;
+  	position: relative;
+  	display: inline-block;
+  	box-shadow: inset 0px 1px 0px rgba(255,255,255,1),0px 1px 3px rgba(0,0,0,0.3);
+  	outline: none;
+  	border: 1px solid #ba6;
+	
+	border-color: #7c7c7c;
+  	background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.25)), to(#e6e6e6));
+}
 
+/* 검색창 테스트 */
 
+@import "https://fonts.googleapis.com/css?family=Open+Sans";
 
+* {
+	box-sizing: border-box;
+}
 
+.searchModal {
+	background: #181818;
+	color: #fff;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+}
 
+.searchModal .content {
+	/*   max-width: 1200px;
+  margin:  30px auto; */
+	
+}
 
+.searchModal input {
+	color: #000;
+}
 
+.searchModal .title {
+	margin-bottom: 8px;
+	text-align: center;
+	font-size: 18px;
+	color: #CFD8DC;
+}
 
+.searchModal .searchtitle {
+	text-align: center;
+	font-size: 18px;
+	color: #CFD8DC;
+}
 
+.searchModal .searchtitle span {
+	color: #039BE5;
+}
 
+.searchModal .searchtitle .subtitle {
+	color: white;
+	font-size: 10px;
+}
+
+.searchModal .title span {
+	color: #039BE5;
+}
+
+.searchModal .title .smalltitle {
+	color: white;
+	font-size: 10px;
+}
+
+.searchModal .search {
+	text-align: center;
+}
+
+.searchModal .search-component {
+	display: inline-block;
+	max-height: 400px;
+	overflow: auto;
+}
+
+.searchModal .search-component::-webkit-scrollbar {
+    display: none;
+}
+
+.searchModal .search input {
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border: 1px solid transparent;
+	outline: none;
+	background: #283747;
+	color: #5DADE2;
+	font-size: 16px;
+	text-align: center;
+	border-bottom: 1px solid #90A4AE;
+	font-family: 'Open Sans';
+	width: 300px;
+}
+
+.searchModal .search input:focus {
+	border: 1px solid #3498DB;
+}
+
+.searchModal .search .search-list li {
+	padding: 10px 8px;
+	background: #283747;
+	color: #ABB2B9;
+	cursor: pointer;
+	transition: background .2s ease, color .2s ease;
+	width: 300px;
+}
+
+.searchModal .search .search-list li:hover {
+	background: #212F3C;
+	color: #D6DBDF;
+}
+
+.chooseMemberList{
+	max-height: 450px;
+	overflow: auto;
+}
+
+.chooseMemberList::-webkit-scrollbar {
+    display: none;
+}
+
+.chooseMemberList li {
+	padding: 10px 8px;
+	background: #283747;
+	color: #ABB2B9;
+	cursor: pointer;
+	transition: background .2s ease, color .2s ease;
+	width: 300px;
+}
+
+.selectUser{
+	display: flex;
+	justify-content: space-between;
+	margin: 5px;
+}
+
+.chooseMemberList li:hover {
+	background: #212F3C;
+	color: #D6DBDF;
+}
+
+.chooseMemberList select {
+	border-radius: 4px;
+    border: 2px solid #0061f7;
+    background: url(https://freepikpsd.com/media/2019/10/down-arrow-icon-png-7-Transparent-Images.png) calc(100% - 7px) center no-repeat;
+    color:white;
+    font-size: 13px;
+}
+
+::-webkit-input-placeholder {
+	color: #85C1E9;
+}
+
+::-moz-placeholder {
+	color: #85C1E9;
+}

@@ -150,11 +150,14 @@
                             <span class="icon arrow-down" aria-hidden="true"></span>
                         </span>
                     </a>
-                    <!-- #### 팀 목록 보여주는 아이콘#### -->
+                    <!-- 팀 목록 보여주는 아이콘 -->
                     <ul class="cat-sub-menu">
 						<th:block th:each="teamVo : ${teamList}">
-							<li>
-					        	<a href="#" class="stat-cards-info__num teamTask" th:text="${teamVo.teamName}"></a>
+							<li class="stat-cards-info__num">
+					        	<button type="button" class="teamTask" th:text="${teamVo.teamName}"></button>
+					        	<button type="button" class="teamContextMenu" id="teamContextMenu">
+					        		<img class="teamContextMenu" src="/img/svg/more-vertical-white.svg" alt="">
+					        	</button>
 							</li>
 				            <input type="hidden" class="teamNo" th:value="${teamVo.teamNo}">
 				            <input type="hidden" class="userEmail" th:value="${teamVo.userEmail}">
@@ -172,6 +175,74 @@
     </div>
 </aside>
 <!-- Sidebar -->
+
+<!-- 팀 목록에 대한 context menu  -->
+<menu type="context" class="contextMenu" id="menu">
+  <menuitem label="add Team/Project Member"></menuitem>
+  <hr>
+  <menuitem label="Delete Team/Project"></menuitem>
+</menu>
+<!-- 팀 목록에 대한 context menu 끝 -->
+
+<!-- 팀에 팀멤버 추가 모달창 -->
+<div class="modal" id="add_team_modal">
+	<div class="add_team_modal_body">
+		<div class="m_head">
+			<div class="modal_title">
+				<strong>add Member</strong>
+			</div>
+			<div class="close_btn close-area" onclick="closeAddMemberModal()">X</div>
+		</div>
+	
+		<div class="m_body searchModal">
+			<div class="searchBox">
+				<div class="horizontal searchPart">
+					<!-- 검색창 테스트 -->
+					<div class="content">
+						<!-- 타이틀 -->
+	  					<div class="title">
+	  						<span>[searchMember]</span>
+	  						<br/> 
+	  						<span class="smalltitle">search nickname or email</span>
+	  					</div>
+	  					<!-- 검색창 -->
+	  					<div class="search">
+	  						<div class="search-input">
+                				<input ref="input" type="text" placeholder="Type something..." id="searchMember"/>
+                			</div>
+                			<!-- 검색결과 -->
+	  						<div class="search-component">
+	    						<ul class="search-list">
+	    							<!-- 검색된 멤버 리스트 뿌려주기 -->
+	    						</ul>
+							</div>
+	  					</div>
+
+					</div>
+				</div>
+				<div class="horizontal addMemberList">
+					<div class="content">
+	  					<div class="title">
+	  						<span>[add Team/Project Member]</span>
+	  					</div>
+	  					<div class="addMemeberList">
+						<!-- 클릭하여 추가한 멤버 블럭 추가 -->
+							<ul class="chooseMemberList">
+								
+							</ul>
+						</div>
+	  				</div>
+				</div>
+			</div>
+		</div>
+	
+		<div class="m_footer">
+			<button type="button" class="modal_btn cancle" onclick="closeAddMemberModal()">CANCLE</button>
+			<button type="button" class="modal_btn save" id="addMemberSaveBtn">SAVE</button>
+		</div>
+	</div>
+</div>
+<!-- 팀에 팀멤버 추가 모달끝 -->
 
 <!-- 팀/프로젝트 추가 모달창 -->
 <form action="addTeam" method="post"> 
@@ -350,25 +421,7 @@
        				<span>member권한</span>
        			</div>
         		<div class="row stat-cards" id="memberWorkspace">
-        			<!-- 보드 블럭 한개 -->
-          			<div class="col-md-6 col-xl-3">
-            			<article class="stat-cards-item">
-              				<div class="stat-cards-icon primary">
-                				<i data-feather="bar-chart-2" aria-hidden="true"></i>
-              				</div>
-		              		<div class="stat-cards-info">
-		                	<p class="stat-cards-info__num">1478 286</p>
-		                	<p class="stat-cards-info__title">Total visits</p>
-		                	<p class="stat-cards-info__progress">
-			                  	<span class="stat-cards-info__profit success">
-			                    	<i data-feather="trending-up" aria-hidden="true"></i>4.07%
-			                  	</span>
-			                  	Last month
-		                	</p>
-		              		</div>
-            			</article>
-          			</div>
-          			<!-- 보드 블럭 한개 끝 -->
+        			<!-- workspace 블럭 들어감 -->
         		</div>
         		
        			<div class="sub-title">
@@ -386,12 +439,17 @@
       		
       		<!-- 보드 상단 타이틀과 task 추가 기능 -->
 	      	<div class="main-title main-board">
-		    	<span id="boardName"></span>
+		    	<div class="boardTitle">
+		    		<!-- 보드의 이름 (팀이나 프로젝트 명) -->
+			    	<span id="boardName"></span>
+		    	</div>
+		    	
 		    	<form action="addTask" method="post" class="addTaskBox">
-			      	<input class="addTask" type="text" maxlength="12" id="taskText" placeholder="New Task...">
+			      	<input class="addTask" type="text" id="taskText" placeholder="New Task..." required>
 			      	<button type="submit" class="btn btn-outline-primary addTaskBtn">Add New Task</button>
 			      	<div class="addTaskValue"></div>
 		    	</form>
+		    	
 	      	</div>
 	      	<!-- 보드 상단 타이틀과 task 추가 기능 끝 -->
       
@@ -465,7 +523,7 @@
 			<!-- 2. member -->
 			<div class="card_content">
 				<i data-feather="users" class="detail-icon"></i>
-				<button type="button" class="button-prevent" title="add Member" id="addMember">
+				<button type="button" class="button-prevent" title="add Member" id="addTaskMember">
 					<i data-feather="plus-square" class="detail-icon"></i>
 				</button>
 				
@@ -555,6 +613,8 @@
 </form>
 <!-- 보드리스트의 카드 모달창 끝 -->
 
+
+
 <!-- Icons library -->
 <script src="/plugins/feather.js"></script>
 <!-- Custom scripts -->
@@ -568,6 +628,7 @@
 		alert(msg);
 	}
 	
+	/* 화면이 로드 되는 제일 마지막에 내가 속한 팀리스트를 가지고와서 workspace에 뿌려준다. */
 	loadMainBoard();
 </script>
 

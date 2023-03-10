@@ -21,6 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.weasy.user.command.UserVO;
 import com.weasy.user.service.UserService;
 import com.weasy.user.service.UserSha256;
@@ -112,6 +116,15 @@ public class UserController {
 		System.out.println("세션:"+session.getAttribute("Email"));
 		System.out.println("보드로 가기");
 		return "redirect:/board/board";
+	}
+
+	//검색어로 회원 검색
+	@ResponseBody
+	@PostMapping("/searchUserList")
+	public List<UserVO> searchUserList(@RequestBody Map<String, Object> param) {
+		JsonParser parser = new JsonParser();
+		String keyword = param.get("searchKeyWord").toString();
 		
+		return userService.searchUser(keyword);
 	}
 }

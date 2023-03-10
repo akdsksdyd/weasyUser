@@ -10,12 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.weasy.user.board.service.BoardService;
+import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.UserVO;
@@ -47,13 +50,13 @@ public class BoardAjaxController {
 		return list;
 	}
 	
-	@PostMapping("/getWorkspace")
+	@GetMapping("/getWorkspace")
 	@ResponseBody
-	public List<TeamVO> getWorkspace(@RequestBody UserVO vo) {
+	public List<TeamVO> getWorkspace(HttpSession session) {
 		//세션에 연결된 이메일의 user가 들어가 있는 team전부 읽어오기
-		/* List<TeamVO> list = boardService.getWorkspace(vo.getUserEmail()); */
-		
-		return null;
+		String userEmail = (String)session.getAttribute("Email");
+		List<TeamVO> teamList = boardService.getTeamList(userEmail);
+		return teamList;
 	}
 	
 	@PostMapping("/addTask")
@@ -65,8 +68,36 @@ public class BoardAjaxController {
 		System.out.println(taskVo.getTitle());
 		System.out.println(teamVo.getUserEmail());
 		
-		
 		return new ResponseEntity<>(boardService.addTask(taskVo), HttpStatus.OK);
+	}
+	
+	@PostMapping("/getTeamMember")
+	@ResponseBody
+	public List<AuthorityVO> getTeamMember(@RequestBody TeamVO vo){
+		return boardService.getTeamMember(vo);
+	}
+	
+	@PostMapping("/addAuthority")
+	@ResponseBody
+	public int addAuthority(@RequestBody AuthorityVO vo){
+		//기존에 존재하던 권한이라면 update
+		if(boardService.checkAuthority(vo) != 0) { //기존회원 있음
+			//업데이트 진행
+			return boardService.updateAuthority(vo);
+		}
+		//아니라면 insert 해주도록 변경
+		return boardService.addAuthority(vo);
+	}
+	
+	@PostMapping("/deleteAuthority")
+	@ResponseBody
+	public int deleteAuthority(@RequestBody AuthorityVO vo){
+		//기존에 존재하던 권한이라면 삭제
+		if(boardService.checkAuthority(vo) != 0) { //기존회원 있음
+			return boardService.deleteAuthority(vo);
+		}
+		//아니라면 유지
+		return 0;
 	}
 	
 }

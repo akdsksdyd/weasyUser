@@ -46,6 +46,9 @@ dependencies {
 	
 	//sha256라이브러리(암호화)
 	implementation 'commons-codec:commons-codec:1.10'
+	
+	//제이슨파서
+	implementation 'com.google.code.gson:gson:2.8.5'
 }
 
 tasks.named('test') {

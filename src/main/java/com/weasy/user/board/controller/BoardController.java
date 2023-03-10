@@ -29,26 +29,13 @@ public class BoardController {
 						HttpSession session,
 						UserVO userVo) {
 
-		session.setAttribute("userEmail", userVo);
-		String user_id = (String)session.getAttribute("Email");
-		ArrayList<TeamVO> teamList = boardService.getTeamList(user_id);
+		String userEmail = (String)session.getAttribute("Email");
+		ArrayList<TeamVO> teamList = boardService.getTeamList(userEmail);
 		model.addAttribute("teamList", teamList);
 
 		return "board/board";
 	}
-	
-//	@GetMapping("/boardTest")
-//	public String boardTest(Model model,
-//							HttpSession session) {
-//		
-//		session.setAttribute("userEmail", "user");
-//		String userEmail = (String)session.getAttribute("userEmail");
-//		ArrayList<TeamVO> teamList = boardService.getTeamList(userEmail);
-//		model.addAttribute("teamList", teamList);
-//		
-//		return "board/boardTest";
-//	}
-	
+
 	@PostMapping("/addTeam")
 	public String addTeam(TeamVO vo,
 						  RedirectAttributes ra) {
@@ -59,15 +46,6 @@ public class BoardController {
 		
 		return "redirect:/board/board";
 	}
-	
-//	@PostMapping("/addTask")
-//	public String addTask(TaskVO vo,
-//						  RedirectAttributes ra) {
-//		
-//		int result = boardService.addTask(vo);
-//		
-//		return "redirect:/board/board";
-//	}
 	
 }
 
