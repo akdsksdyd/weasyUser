@@ -144,7 +144,6 @@ html {
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
-	padding: 0px 50px; 
 }
 
 .list {
@@ -194,14 +193,192 @@ html {
   margin-bottom: 20px;
 }
 
+.workspaceBtn{
+	background: rgba(134, 182, 254, 0.5);
+}
 
+.workspaceBtn:hover{
+	background: white;
+}
 
+.boardTitle {
+	display: flex;
+	justify-content: center;
+}
 
+/* add member 버튼 css */
+.round {
+	background: #fff;
+	color: #0069eb;
+	border-radius: 30px;
+	border: none;
+	padding: 5px 10px;
+	text-decoration: none;
+}
 
+.round:hover {
+	background: #0069eb;
+	color: #fff;
+}
 
+.round-icon {
+	background: #0069eb;
+	border-radius: 30px;
+	border: none;
+	color: #fff;
+	font-size: 16px;
+	padding: 15px 30px;
+	text-decoration: none;
+}
 
+.round-icon .vl {
+	width: 1px;
+	border-right: 1px solid #fff;
+	height: 16px;
+	margin: 0 0 0 10px;
+}
 
+.round-icon i {
+	font-size: 16px;
+	padding-left: 10px;
+	vertical-align: baseline;
+}
 
+/* 팀 sidebar 메뉴 디자인 vertical 버튼때문에 추가.. */
 
+.cat-sub-menu {
+  padding-left: 34px;
+  height: 0;
+}
 
+.cat-sub-menu.visible {
+  height: auto;
+}
+
+.stat-cards-info__num{
+  display: flex;
+  justify-content: space-between;
+}
+
+.cat-sub-menu a {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.cat-sub-menu.visible a {
+  opacity: 0.6;
+  visibility: visible;
+}
+
+.cat-sub-menu.visible a:hover {
+  opacity: 1;
+}
+
+.cat-sub-menu button {
+  opacity: 0;
+  visibility: hidden;
+  background: none;
+  color: #fff;
+  
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: 8px 0;
+  opacity: 0.6;
+  color: #fff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 2.43;
+  
+}
+
+.cat-sub-menu.visible button {
+  opacity: 0.6;
+  visibility: visible;
+}
+
+.cat-sub-menu.visible button:hover {
+  opacity: 1;
+}
+
+.cat-sub-menu button {
+  cursor: pointer;
+  -webkit-transition: 0.3s all;
+  -o-transition: 0.3s all;
+  transition: 0.3s all;
+  border: none transparent;
+}
+
+.cat-sub-menu button:focus {
+  outline: none;
+  border: none !important;
+}
+
+/* 메뉴 컨텍스트 (사이드바에서 메뉴 옆에 점세개 누르면 나오는 컨텍스트 메뉴) */
+menu {
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+  padding: 3px 0 4px;
+
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+
+  font-family: Lucida Grande;
+  font-size: 14px;
+  line-height: 15px;
+  display: none;
+}
+
+menu::before {
+  display: block;
+  position: absolute;
+  content: "";
+  top: -1px;
+  left: -1px;
+  bottom: -1px;
+  right: -1px;
+  
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  z-index: -1;
+}
+
+menu hr {
+  border: none;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.10);
+  margin: 6px 1px 5px;
+  padding: 0;
+}
+
+menu menuitem {
+  display: block;
+  padding: 0 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0);
+  border-bottom: 1px solid rgba(0, 0, 0, 0);
+}
+
+menu menuitem::after {
+  vertical-align: 2px;
+  content: attr(label);
+}
+
+menu menuitem:hover {
+  background: -webkit-linear-gradient(top, #648bf5, #2866f2);
+  background: linear-gradient(to bottom, #648bf5 0%, #2866f2 100%);
+  border-top: 1px solid #5a82eb;
+  border-bottom: 1px solid #1758e7;
+}
+
+menu menuitem:hover::after {
+  color: #fff;
+}
 

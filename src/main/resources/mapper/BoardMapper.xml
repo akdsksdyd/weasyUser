@@ -23,9 +23,7 @@
   	</insert>	
   	
   	<select id="getTeamList" resultType="TeamVO">
-  	
-  		select * from TEAM where userEmail = #{user_id}
-  	
+  		select * from TEAM where teamNo IN (select teamNo from authority where userEmail=#{userEmail});
   	</select>
   	
   	<insert id="addTask" parameterType="TaskVO">
@@ -54,6 +52,36 @@
   	<select id="getTeamNo" resultType="int">
   		select teamNo, userEmail from TEAM where teamName = #{teamName}
   	</select>
+  	
+  	<select id="getTeamMember" resultType="AuthorityVO">
+  		select userEmail, teamNo, role,
+		(select nickname from users where userEmail=a.userEmail) as nickName
+		from authority a where teamNo = #{teamNo};
+  	</select>
+  	
+  	<select id="checkAuthority" resultType="int">
+  		select count(*) from authority where userEmail = #{userEmail} and teamNo = #{teamNo};
+  	</select>
+  	
+  	<select id="getAuthNo" resultType="int">
+  		select authNo from authority where userEmail=#{userEmail} and teamNo=#{teamNo}
+  	</select>
+  	
+  	<update id="updateAuthority">
+  		<selectKey resultType="int" keyProperty="authNo" order="BEFORE">
+  			select authNo from authority where userEmail=#{userEmail} and teamNo=#{teamNo}
+  		</selectKey>
+  		update authority set userEmail=#{userEmail}, role=#{role} where authNo=#{authNo};
+  	</update>
+  	
+  	<insert id="addAuthority" parameterType="AuthorityVO">
+  		insert into authority (userEmail, teamNo, role) 
+  		values (#{userEmail}, #{teamNo}, #{role});
+  	</insert>
+  	
+  	<delete id="deleteAuthority" parameterType="int">
+  		delete from authority where authNo=#{deletekey};
+  	</delete>
   	
   </mapper>
   

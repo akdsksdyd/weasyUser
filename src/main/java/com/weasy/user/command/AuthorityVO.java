@@ -15,7 +15,7 @@ public class AuthorityVO { //권한 VO
 	private String userEmail;
 	private int teamNo;
 	private int role;
-
+	private String nickName;
 }
 //authNo   INT primary key auto_increment,
 //userEmail   VARCHAR(30) NOT NULL,

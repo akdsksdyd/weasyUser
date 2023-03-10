@@ -36,7 +36,6 @@ $(".doubleCheck_btn").on('click', function(){
 			alert("에러입니다");
 		}		
 	})
-	
 });
 
 /* 팀 클릭 시 teamNo전달 */
@@ -48,51 +47,31 @@ $(".teamTask").click(function(e){
 	
 	e.preventDefault();
 	
-	var taskValue = "";
-	var taskBox = "";
+	/* 팀보드의 addTask버튼부분에 hidden 태그로 팀no 추가 */
+	var taskValue = '<input type="hidden" name="teamNo" value="'+ teamNo +'">';
+	$(".addTaskValue").html(taskValue);
 	
-	$.ajax({
-		
-		url: "../getTeamNo",
-		data: JSON.stringify({teamNo: teamNo, userEmail: userEmail}),
-		type: "post",
-		contentType: "application/json",
-		success: function(result){
-			
-			taskValue += '<input type="hidden" name="teamNo" value="'+ teamNo +'">';
-			taskValue += '<input type="hidden" name="userEmail" value="'+ userEmail +'">';
-			
-			$(".addTaskValue").html(taskValue);
-			
-			for(var i = 0; i < result.length; i++){
-				
-				taskBox += "<article class='card'>";
-				taskBox += "<header>" + result[i].title + "</header>";
-				taskBox += "<div class='detail'>detail 정보</div>";
-				taskBox += "</article>";
-				
-			}
-			$("#to-do-content").html(taskBox);
-			
-		},
-		error: function(err){
-			alert("조회에 실패했습니다.")
-		}
-		
-	});
+	/* 보드 상단에 해당 보드 이름 표시 */
+	$("#boardName").html("# "+ $(e.target).html());
 	
+	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
+	getTeamTask(teamNo);
 });
 
 /* task card 추가 function */
 $(".addTaskBtn").click(function(e){
-	
 	//input창에서 입력받은값
 	var inputTask = $("#taskText").val();
-	console.log(inputTask);
+	/*입력안하면 입력안되도록*/
+	if(inputTask == ''){
+		return;
+	}
+
 	console.log(e.target.nextElementSibling.firstChild);
 	var teamNoValue = $(e.target.nextElementSibling.firstChild).val();
 	var emailValue = $(e.target.nextElementSibling.lastChild).val();
 	console.log(teamNoValue);
+
 	e.preventDefault();
 		
 	$.ajax({
@@ -126,9 +105,10 @@ $("#addTeamProject").click(function(){
 
 /* 팀 프로젝트 모달창 닫기 */
 function closeAddModal() {
-	modal.style.display = "none"
+	$("#modal").css("display", "none");
 	$("html").css("overflow", "auto");
 }
+
 
 /* 보드리스트의 카드 모달창 */
 
@@ -141,7 +121,7 @@ $(".listBox").on('click', 'article', function(e){
 
 /* 보드 리스트 카드 모달창 닫기 */
 function closeCardModal() {
-	card_modal.style.display = "none"
+	$("#card_modal").css("display", "none");
 	$("html").css("overflow", "auto");
 }
 
@@ -244,6 +224,7 @@ $("#checkbox_content").on('click', 'button', function(e){
 	}
 });
 
+/* task card 모달창에서 댓글 등록하기 버튼 눌렀을 때 동작 */
 $("#commentBtn").click(function(e){
 	var write_comment = $(".comment_box>textarea").val(); 
 	var comment = '';
@@ -274,7 +255,7 @@ $("#mainBoardSideBar").click(function(e){
 */
 $(".cat-sub-menu").on('click', 'a', function(e){
 	e.preventDefault();
-
+	
 	/* 보드의 상단에 타이틀을 팀명으로 변경 */
 	var teamName = $(e.target).html();
 	$("#boardName").html("# "+teamName);
@@ -282,9 +263,9 @@ $(".cat-sub-menu").on('click', 'a', function(e){
 	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
 	var teamNo = $(e.target).parent().next().val();
 	getTeamTask(teamNo);
-	
 })
 
+/* team no에 따른 task 읽어와서 level 별로 배치하여 태그 넣어주기 */
 function getTeamTask(teamNo){
 	var todo_task = "";
 	var doing_task = "";
@@ -305,7 +286,7 @@ function getTeamTask(teamNo){
 				
 				/* todo에 넣을것 */
 				if(result[i].status == 0){
-					todo_task += '<article class="card">';
+					todo_task += '<article class="card" data-taskno="'+result[i].taskNo+'">';
 					todo_task += '<header>'+ result[i].title +'</header>';
 					todo_task += '<div class="detail">'+ '디테일 추후에 넣어줘' +'</div>';
 					todo_task += '</article>';
@@ -313,7 +294,7 @@ function getTeamTask(teamNo){
 				
 				/* doing에 넣을것 */
 				else if(result[i].status == 1){
-					doing_task += '<article class="card">';
+					doing_task += '<article class="card" data-taskno="'+result[i].taskNo+'">';
 					doing_task += '<header>'+ result[i].title +'</header>';
 					doing_task += '<div class="detail">'+ '디테일 추후에 넣어줘' +'</div>';
 					doing_task += '</article>';
@@ -321,7 +302,7 @@ function getTeamTask(teamNo){
 				
 				/* done에 넣을것 */
 				else if(result[i].status == 2){
-					done_task += '<article class="card">';
+					done_task += '<article class="card" data-taskno="'+result[i].taskNo+'">';
 					done_task += '<header>'+ result[i].title +'</header>';
 					done_task += '<div class="detail">'+ '디테일 추후에 넣어줘' +'</div>';
 					done_task += '</article>';
@@ -339,16 +320,36 @@ function getTeamTask(teamNo){
 	});
 }
 
+/* 메인 페이지 로딩 후 바로 user가 속한 팀과 프로젝트 리스트를 가져와서 화면에 버튼으로 뿌려준다.*/
 function loadMainBoard(){
+	
 	$(document).ready(function(){
-		var email = "koal@naver.com";
+		var workspace = '';
 		$.ajax({
 			url: "../getWorkspace",
-			type: "post",
-			data: JSON.stringify({"Email" : email}), //데이터
+			type: "get",
 			contentType: "application/json", //보내는 데이터 타입
 			success: function(result){
-				console.log(result);
+				
+				for(var i = 0; i < result.length; i++){
+					workspace += '<div class="col-md-6 col-xl-3 workspace" data-teamNo='+result[i].teamNo+'>';
+					workspace += '<article class="stat-cards-item workspaceBtn" type="button">';
+					workspace += '<div class="stat-cards-info">';
+					workspace += '<p class="stat-cards-info__num">'+result[i].teamName+'</p>';
+					workspace += '<p class="stat-cards-info__title">'+result[i].teamGoal+'</p>';
+					
+					var teamRegdate =  new Date(result[i].teamRegdate);
+					var startdate = teamRegdate.getFullYear() + "-" + (teamRegdate.getMonth()+1) + "-" + teamRegdate.getDate();
+					var teamendDate = new Date(result[i].endDate);
+					var enddate = teamendDate.getFullYear() + "-" + (teamendDate.getMonth()+1) + "-" + teamendDate.getDate();
+					
+				 	workspace += '<p class="stat-cards-info__progress">'+ startdate + "  to  " + enddate +'</p>';
+					workspace += '</div>';
+					workspace += '</article>';
+					workspace += '</div>';
+				}
+				$("#memberWorkspace").html(workspace);
+				
 			},
 			error: function(err){
 				
@@ -357,8 +358,234 @@ function loadMainBoard(){
 	})
 }
 
+/* 메인 보드 페이지에서 workspace 버튼 클릭시 해당 보드 task불러오기 */
+$("#mainBoardPage").on('click', 'article', function(e){
+	e.preventDefault();
 
+	var teamNo = $(e.target).closest(".workspace").attr("data-teamNo");
+	var teamName = $(e.target).closest(".stat-cards-info").children(".stat-cards-info__num").html();
+	/* 만약 제일 바깥 div를 눌러서 teamName이 undefined라면 다시 teamName을 구한다.*/
+	if(teamName == undefined){
+		teamName = $(e.target).children().children(".stat-cards-info__num").html();
+	}
+	
+	/* 보드의 상단에 타이틀을 팀명으로 변경 */
+	$("#boardName").html("# "+teamName);
+	
+	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
+	getTeamTask(teamNo);
+})
 
+/* sideMenubar에서 team의 ...버튼 클릭시 */
+$(".cat-sub-menu").on('click', 'button', function(e){
+	if($(e.target).hasClass("teamTask")){
+		$("#menu").css("display", "none");
+		return;
+	}
+	var teamNo = $(e.target.parentElement.parentElement.nextElementSibling).val();
+	
+	$("#menu").attr("data-teamNo", teamNo);
+	$("#menu").css("top", e.pageY);
+	$("#menu").css("left", e.pageX);
+	$("#menu").css("display", "block");
+})
+
+/* 컨텍스트 메뉴에서 메뉴아이템을 선택시 */
+$('menuitem').on('click', function(e){
+	/* 일단 컨텍스트 메뉴창 안보이게 처리 */
+	$("#menu").css("display", "none");
+	/* 팀원 추가 버튼*/
+	if($(e.target).attr("label") == "add Team/Project Member"){
+		
+		/* 기존에 팀에 추가되어있던 팀원과 권한설정 리스트 불러오기 */
+		var teamNo = $("#menu").attr("data-teamNo");
+		loadTeamMemeberState(teamNo);
+		
+		/* add member 모달창 켜짐 */
+		$("#add_team_modal").css("display", "flex");
+		$("#add_team_modal").attr("data-teamNo", teamNo);
+		$("html").css("overflow", "hidden");
+	}
+})
+
+/* 선택한 팀의 멤버와 권한 불러오기 */
+function loadTeamMemeberState(teamNo){
+	$.ajax({
+		url:"../getTeamMember", //컨트롤러
+		type:"post",
+		data:JSON.stringify({"teamNo": teamNo}),
+		contentType:"application/json; charset=utf-8",
+		success:function(result){
+			
+			var memberState = '';
+			for(var i = 0; i < result.length; i++){
+				memberState += '<li class="searchtitle selectUser">';
+				memberState += '<div>';
+				memberState += '<span>'+result[i].nickName+'</span>';
+				memberState += '<span class="subtitle">'+result[i].userEmail+'</span>';
+				memberState += '</div>';
+				memberState += '<select class="selectPossible">';
+				if(result[i].role == 0){ //멤버 권한
+					memberState += '<option value="0" selected>Member멤버</option>';
+					memberState += '<option value="1">Observer옵저버</option>';
+				}else{ //옵저버 권한
+					memberState += '<option value="0">Member멤버</option>';
+					memberState += '<option value="1" selected>Observer옵저버</option>';
+				}
+				memberState += '</select>';
+				memberState += '</li>';
+			}
+			/* 태그만들어서 memberList부분에 넣어주기 */
+			$(".chooseMemberList").html(memberState);
+		}, 
+		error: function(){
+		}		
+	})
+}
+
+/* 컨텍스트 메뉴이외의 것을 클릭시 메뉴 닫히도록 처리 */
+$('html').click(function(e) {   
+	/* 컨텍스트 메뉴가 활성화 되어있고, class이름에 contextMenu가 아닌것을 클린한 경우 */
+	if($("#menu").css("display") == 'block'){
+		if(!$(e.target).hasClass("contextMenu") && !$(e.target).hasClass("teamContextMenu")){
+			$("#menu").css("display", "none");
+		}
+	} 
+});
+
+/* 팀원 추가 모달창 닫기 */
+function closeAddMemberModal() {
+	$("#add_team_modal").css("display", "none");
+	$("html").css("overflow", "auto");
+	/* 검색어 초기화 */
+	$("#searchMember").val("");
+	/* 찾은 userlist 초기화 */
+	$(".search-list").html("");
+	/* 멤버 추가 리스트 초기화 */
+	$(".chooseMemberList").html("");
+}
+
+/* 
+멤버 이메일이나 닉네임 검색시 
+입력한 검색어에 따라 해당하는 닉네임이나 이메일을 가진 user를 리스트로 보여준다. 
+*/
+$("#searchMember").keyup(function(e){
+	
+	var searchKeyword = $(e.target).val();
+	var findUserList = '';
+	
+	$.ajax({
+		url:"../user/searchUserList", //컨트롤러
+		type:"post",
+		data:JSON.stringify({"searchKeyWord": searchKeyword}),
+		contentType:"application/json; charset=utf-8",
+		success:function(result){
+			for(var i = 0; i < result.length; i++){
+				findUserList += '<li class="searchtitle chooseUser">';
+				findUserList += '<span>'+result[i].nickname+'</span><br/>';
+				findUserList += '<span class="subtitle">'+result[i].userEmail+'</span>';
+			}
+			
+			$(".search-list").html(findUserList);
+		}, 
+		error: function(){
+		}		
+	})
+})
+
+$(".search-list").on("click", function() {
+	$("span").off("click");
+})
+
+/* 검색한 멤버의 이름을 클릭하면 */
+$(".search-list").on('click', 'li', function(e){
+	/* 검색어 초기화 */
+	$("#searchMember").val("");
+	/* 찾은 userlist 초기화 */
+	$(".search-list").html("");
+	
+	/* nickname과 email을 구한다. */
+	var nickname = $(this).children().first().html();
+	var email = $(this).children().last().html();
+	
+	/* 이미 chooseMemberList에 등록된 이메일이라면 중복 방지 */
+	var emailList = $(".chooseMemberList").text();
+	if(emailList.indexOf(email) != -1){
+		alert("이미 추가된 멤버입니다.");
+		return;
+	}
+
+	var chooseUser = '';
+	chooseUser += '<li class="searchtitle selectUser">';
+	chooseUser += '<div>';
+	chooseUser += '<span>'+nickname+'</span>';
+	chooseUser += '<span class="subtitle">'+email+'</span>';
+	chooseUser += '</div>';
+	chooseUser += '<select class="selectPossible">';
+	chooseUser += '<option value="0" selected>Member멤버</option>';
+	chooseUser += '<option value="1">Observer옵저버</option>';
+	chooseUser += '</select>';
+	chooseUser += '</li>';
+	
+	/* 태그만들어서 memberList부분에 넣어주기 */
+	$(".chooseMemberList").append(chooseUser);
+})
+
+/* 모달창에서 추가된 멤버 더블 클릭시 삭제 되는 기능 추가 */
+$(".chooseMemberList").on('dblclick', 'li', function(e){
+	$(this).remove();
+	
+	var email = $(this).children().first().children().last().html();
+	var role = $(this).children().last().val();
+	var teamNo = $("#add_team_modal").attr("data-teamNo");
+	
+	/* 권한 테이블에 등록된 사람이었는지 체크 후 등록되었었다면 삭제 */
+	$.ajax({
+		url:"../deleteAuthority",
+		type:"post",
+		data:JSON.stringify({"userEmail" : email, "teamNo" : teamNo, "role" : role}),
+		contentType:"application/json; charset=utf-8",
+		success:function(result){
+		}, 
+		error: function(){
+		}		
+	})
+})
+
+/* 팀원 추가 모달창에서 save 버튼 클릭시 DB에 insert */
+$("#add_team_modal").on('click', 'button', function(e){
+	/* save버튼이 아닌 경우 예외처리 */
+	if($(this).attr("id") != "addMemberSaveBtn"){
+		return;
+	}
+	
+	var emailList = $(".chooseMemberList li .subtitle").get();
+	var roleList = $(".chooseMemberList li .selectPossible option:selected").get();
+	for(var i = 0; i < emailList.length; i++){
+		var email = emailList[i].innerHTML;
+		var role = roleList[i].value;
+		var teamNo = $("#add_team_modal").attr("data-teamNo");
+		
+		$.ajax({
+			url:"../addAuthority",
+			type:"post",
+			data:JSON.stringify({"userEmail" : email, "teamNo" : teamNo, "role" : role}),
+			contentType:"application/json; charset=utf-8",
+			success:function(result){
+				$("#add_team_modal").css("display", "none");
+				$("html").css("overflow", "auto");
+				/* 검색어 초기화 */
+				$("#searchMember").val("");
+				/* 찾은 userlist 초기화 */
+				$(".search-list").html("");
+				/* 멤버 추가 리스트 초기화 */
+				$(".chooseMemberList").html("");
+			}, 
+			error: function(){
+			}		
+		})
+	}
+})
 
 
 
