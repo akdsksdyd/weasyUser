@@ -45,7 +45,7 @@
   	
   	<select id="getTaskList" resultType="TaskVO">
   	
-  		select * from TASK where teamNo = #{teamNo} order by taskNo desc;
+  		select teamNo, userEmail, title, taskNo from TASK where teamNo = #{teamNo} order by taskNo desc;
   	
   	</select>
   	
@@ -82,6 +82,42 @@
   	<delete id="deleteAuthority" parameterType="int">
   		delete from authority where authNo=#{deletekey};
   	</delete>
+  	
+  	<update id="updateTask">
+  		update task set title = #{title},
+  						content = #{content},
+  						startDate = #{startDate},
+  						targetDate = #{targetDate},
+  						progressRate = #{progressRate}
+  					where taskNo = #{taskNo}
+  	</update>
+  	
+  	<insert id="insertReply" parameterType="ReplyVO">
+  	
+  		insert into REPLY (taskNo,
+  						   teamNo,
+  						   userEmail,
+  						   comment)
+  					values(#{taskNo},
+  						   #{teamNo},
+  						   #{userEmail},
+  						   #{comment})
+  	
+  	</insert>
+  	
+  	<select id="putTask" resultType="TaskVO">
+  	
+  		select title, content, startDate, targetDate
+  		from TASK
+  		where taskNo = #{taskNo}
+  	
+  	</select>
+  	
+  	<select id="putReply" resultType="ReplyVO">
+  	
+  		select replyNo, taskNo, comment from REPLY where taskNo = #{taskNo}
+  	
+  	</select>
   	
   </mapper>
   

@@ -51,9 +51,6 @@ $(".teamTask").click(function(e){
 	var taskValue = '<input type="hidden" name="teamNo" value="'+ teamNo +'">';
 	$(".addTaskValue").html(taskValue);
 	
-	/* 보드 상단에 해당 보드 이름 표시 */
-	$("#boardName").html("# "+ $(e.target).html());
-	
 	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
 	getTeamTask(teamNo);
 });
@@ -83,7 +80,7 @@ $(".addTaskBtn").click(function(e){
 		success: function(result){
 			
 			/* 해당 페이지 reload*/	
-			getTeamTask(teamNoValue);
+			getTeamTask(teamNoValue, emailValue);
 
 			$("#taskText").val("");
 				
@@ -117,12 +114,92 @@ function closeAddModal() {
 $(".listBox").on('click', 'article', function(e){
 	$("#card_modal").css("display", "flex");
 	$("html").css("overflow", "hidden");
-})
+	
+	/* taskNo을 히든태그로 숨겨서 전달하기 위한 구문 */
+	var taskNo = $(e.target).closest('article').attr("data-taskno");
+	var taskNoHid = "";
+	
+	taskNoHid += '<input type="hidden" class="taskNo" name="taskNo" value="'+ taskNo +'">';
+	
+	$(".taskNoHid").html(taskNoHid);
+	
+	
+	/* 상세페이지에 값을 전달 */
+	$.ajax({
+		
+		url: "../putTask",
+		type: "post",
+		contentType: "application/json",
+		data: JSON.stringify({"taskNo": taskNo}),
+		success: function(result){
+			$("#taskTitle").val(result.title);
+			$("#startDate").val(result.startDate.substring(0, 11));
+			$("#targetDate").val(result.targetDate.substring(0, 11));
+			
+			/* content가 업데이트 시 제대로 안뜨는 부분 수정 */
+			$('#description').hide();
+			$('#description_cancle').hide();
+			$('#description_save').hide();
+			$('#description_edit').show();
+			$('#description_content').show();
+			$('#description_content').html(result.content);
+			
+		},
+		error: function(err){
+			alert("조회에 실패 했습니다.");
+		}
+		
+	});
+	
+	var replyList = "";
+	var userEmail = $(".userEmail").val();
+	var teamNo= $(".teamNo").val();
+	
+	$.ajax({
+		
+		url: "../putReply",
+		type: "post",
+		contentType: "application/json",
+		data: JSON.stringify({taskNo: taskNo,
+							  userEmail: userEmail,
+							  teamNo: teamNo}),
+		success: function(result){
+			
+			for(var i = 0; i < result.length; i++){
+				
+				replyList += '<div class="card_content">'; 
+				replyList += '<div class="profile_box">';
+				replyList += '<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">';
+				replyList += '</div>';
+				replyList += '<span class="comment_box">'+ result[i].comment +'</span>'; 
+				replyList += '</div>'; 
+			
+				$("#comment_list").html(replyList);
+
+			}
+			
+		},
+		error: function(err){
+			alert("댓글 조회 실패!");
+		}
+		
+	})
+	
+});
 
 /* 보드 리스트 카드 모달창 닫기 */
 function closeCardModal() {
 	$("#card_modal").css("display", "none");
 	$("html").css("overflow", "auto");
+	
+	/* 상세페이지에서 x버튼 눌렀을 시 입력 했던 값 공백으로 치환 */
+	$("#taskTitle").val("");
+	$("#startDate").val("");
+	$("#targetDate").val("");
+	$("#description_content").val("");
+	
+	$("#comment_list").empty();
+	
 }
 
 /* task card의 description 글자 크기만큼 자동 늘리기 */
@@ -225,18 +302,44 @@ $("#checkbox_content").on('click', 'button', function(e){
 });
 
 /* task card 모달창에서 댓글 등록하기 버튼 눌렀을 때 동작 */
+/* 댓글 추가 버튼 누르면 댓글 업로드 */
 $("#commentBtn").click(function(e){
+	console.log($(".userEmail").val());
+	console.log($(".teamNo").val());
+	console.log($(".taskNo").val());
+	var userEmail = $(".userEmail").val();
+	var teamNo= $(".teamNo").val();
+	var taskNo= $(".taskNo").val();
+	
 	var write_comment = $(".comment_box>textarea").val(); 
 	var comment = '';
-	comment += '<div class="card_content">'; 
-	comment += '<div class="profile_box">';
-	comment += '<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">';
-	comment += '</div>';
-	comment += '<span>'+write_comment+'</span>'; 
-	comment += '</div>'; 
 	
-	$("#comment_list").append(comment);
-	$(".comment_box>textarea").val("");
+	$.ajax({
+		url: "../insertReply",
+		type: "post",
+		data: JSON.stringify({"userEmail": userEmail,
+							  "teamNo": teamNo,
+							  "taskNo": taskNo,
+							  "comment": write_comment}),
+		contentType: "application/json",
+		success: function(result){
+			
+			comment += '<div class="card_content">'; 
+			comment += '<div class="profile_box">';
+			comment += '<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">';
+			comment += '</div>';
+			comment += '<span class="comment_box">'+write_comment+'</span>'; 
+			comment += '</div>'; 
+			
+			$("#comment_list").append(comment);
+			$(".comment_box>textarea").val("");
+			
+		},
+		error: function(err){
+			alert("댓글 입력 실패 !");
+		}
+	})	
+	
 });
 
 /* board side bar 클릭시 메인 보드 보여주고 */
@@ -262,11 +365,13 @@ $(".cat-sub-menu").on('click', 'a', function(e){
 	
 	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
 	var teamNo = $(e.target).parent().next().val();
-	getTeamTask(teamNo);
+	var userEmail = $(e.target).parent().next().next().val();
+	console.log(userEmail);
+	getTeamTask(teamNo, userEmail);
+	
 })
 
-/* team no에 따른 task 읽어와서 level 별로 배치하여 태그 넣어주기 */
-function getTeamTask(teamNo){
+function getTeamTask(teamNo, userEmail){
 	var todo_task = "";
 	var doing_task = "";
 	var done_task = "";
@@ -275,7 +380,7 @@ function getTeamTask(teamNo){
 	$.ajax({
 		url: "../getTeamTask",
 		type: "post",
-		data: JSON.stringify({"teamNo": teamNo}), //데이터
+		data: JSON.stringify({"teamNo": teamNo, "userEmail": userEmail}), //데이터
 		contentType: "application/json", //보내는 데이터 타입
 		success: function(result){
 			$("#mainBoardPage").css("display","none");
@@ -283,7 +388,6 @@ function getTeamTask(teamNo){
 			
 				/* 요청으로 받아온 리스트 들을 화면에 task 단게에 맞게 뿌려준다. */
 			for(var i = 0; i < result.length; i++){
-				
 				/* todo에 넣을것 */
 				if(result[i].status == 0){
 					todo_task += '<article class="card" data-taskno="'+result[i].taskNo+'">';
@@ -308,6 +412,8 @@ function getTeamTask(teamNo){
 					done_task += '</article>';
 				}
 			} //for문의 끝
+			
+			console.dir($("#taskTitle").attr("placeholder"));
 			
 			$("#to-do-content").html(todo_task);
 			$("#doing-content").html(doing_task);
@@ -586,10 +692,66 @@ $("#add_team_modal").on('click', 'button', function(e){
 		})
 	}
 })
+/*$(".listBox").on('click', 'article', function(e){
+	
+   	var taskNo = $(e.target).closest('article').attr("data-taskno");
+   	
+   	$(".save").click(function(e){
+		e.preventDefault();
+   		console.log(taskNo);
+		   
+	})
+})*/
 
 
-
-
-
-
-
+/* task 상세 페이지에서 제일 하단부에 있는 save버튼을 눌렀을 시 task테이블 update */
+$(".m_footer").on('click', $(".save"), function(e){
+	
+	console.dir($(e.target).next().children());
+	console.log($(e.target).next().children().val());
+	e.preventDefault();
+	var taskTitle = $("#taskTitle").val();
+	var startDate = $("#startDate").val();
+	var targetDate = $("#targetDate").val();
+	var content = $("#description").val();
+	var taskNo = $(e.target).next().children().val();
+	console.log(taskTitle);
+	console.log(startDate);
+	console.log(targetDate);
+	console.log(content);
+	var teamNo = $("#teamNo").val();
+	var userEmail = $(".userEmail").val();
+	console.log(teamNo);
+	console.log(userEmail);
+	
+	$.ajax({
+		
+		url: "../updateTask",
+		type: "post",
+		data: JSON.stringify({"title": taskTitle, 
+							  "startDate": startDate, 
+							  "targetDate": targetDate, 
+							  "content": content,
+							  "taskNo": taskNo}),
+		contentType: "application/json",
+		success: function(result){
+			
+			getTeamTask(teamNo, userEmail);
+			/* 상세페이지에서 save버튼 눌렀을 시 입력 했던 값 공백으로 치환 */
+			/*$("#taskTitle").val("");
+			$("#startDate").val("");
+			$("#targetDate").val("");
+			$("#description_content").val("");*/
+			
+		},
+		error: function(err){
+			if(startDate == "" && targetDate == ""){
+				alert("날짜를 꼭 선택 해 주세요");
+			}else{
+				alert("저장에 실패 했습니다");
+			}
+		}
+		
+	});
+	
+});

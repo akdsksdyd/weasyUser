@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.weasy.user.command.AuthorityVO;
+import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 
@@ -33,9 +34,9 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	@Override
-	public ArrayList<TaskVO> getTaskList(int teamNo) {
+	public ArrayList<TaskVO> getTaskList(TaskVO taskVo) {
 		
-		return boardMapper.getTaskList(teamNo);
+		return boardMapper.getTaskList(taskVo);
 	}
 	
 	@Override
@@ -69,4 +70,38 @@ public class BoardServiceImpl implements BoardService{
 		System.out.println("삭제할 authNo" + deletekey);
 		return boardMapper.deleteAuthority(deletekey);
 	}
+
+	public void updateTask(TaskVO taskVo) {
+		
+		boardMapper.updateTask(taskVo);
+	}
+	
+	@Override
+	public void insertReply(ReplyVO replyVo) {
+		
+		boardMapper.insertReply(replyVo);
+	}
+	
+	@Override
+	public TaskVO putTask(int taskNo) {
+		
+		return boardMapper.putTask(taskNo);
+	}
+	
+	@Override
+	public ArrayList<ReplyVO> putReply(int taskNo) {
+		
+		return boardMapper.putReply(taskNo);
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+

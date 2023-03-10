@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,10 +22,12 @@ public class TeamVO { //팀 VO
 	private int teamNo;
 	@NotBlank(message = "공백일 수 없습니다")
 	@Pattern(regexp = "[0-9]{4}-[0-9]{2}-[0-9]{2}")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private String teamRegdate;
 	
 	@NotBlank(message = "공백일 수 없습니다")
 	@Pattern(regexp = "[0-9]{4}-[0-9]{2}-[0-9]{2}")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private String endDate;
 	private String teamName;
 	private String teamGoal;
