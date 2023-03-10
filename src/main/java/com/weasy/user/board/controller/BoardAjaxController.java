@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.weasy.user.board.service.BoardService;
 import com.weasy.user.command.AuthorityVO;
+import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.UserVO;
@@ -29,6 +30,7 @@ public class BoardAjaxController {
 	@Autowired
 	BoardService boardService;
 	
+	//teamNo, userEmail 가져오기
 	@PostMapping("/getTeamNo")
 	@ResponseBody
 	public ResponseEntity<List<TaskVO>> getTeamNo(@RequestBody TaskVO vo,
@@ -36,16 +38,18 @@ public class BoardAjaxController {
 		
 		System.out.println(vo.getTeamNo());
 		System.out.println(vo.getTitle());
+		System.out.println(vo.getTaskNo());
 		
-//		return new ResponseEntity<>(boardService.getTaskList(vo), HttpStatus.OK);
-		return null;
+		return new ResponseEntity<>(boardService.getTaskList(vo), HttpStatus.OK);
+//		return null;
 	}
 	
+	//팀 선택 시 그 해당하는 팀의 task불러오기
 	@PostMapping("/getTeamTask")
 	@ResponseBody
-	public List<TaskVO> getTeamTask(@RequestBody TeamVO vo) {
+	public List<TaskVO> getTeamTask(@RequestBody TaskVO taskVo) {
 		//팀번호로 해당 팀의 task들 리스트 가져오기
-		List<TaskVO> list = boardService.getTaskList(vo.getTeamNo());
+		List<TaskVO> list = boardService.getTaskList(taskVo);
 		
 		return list;
 	}
@@ -59,6 +63,7 @@ public class BoardAjaxController {
 		return teamList;
 	}
 	
+	//업무 추가
 	@PostMapping("/addTask")
 	@ResponseBody
 	public ResponseEntity<Integer> addTask(@RequestBody TaskVO taskVo,
@@ -98,6 +103,42 @@ public class BoardAjaxController {
 		}
 		//아니라면 유지
 		return 0;
+	}
+
+	//업무 update
+	@PostMapping("/updateTask")
+	@ResponseBody
+	public void updateTask(@RequestBody TaskVO taskVo){
+		
+		System.out.println(taskVo.getTitle());
+		System.out.println(taskVo.getTaskNo());
+		
+		boardService.updateTask(taskVo);
+	}
+	
+	//댓글 추가
+	@PostMapping("/insertReply")
+	@ResponseBody
+	public void insertReply(@RequestBody ReplyVO replyVo) {
+		
+		boardService.insertReply(replyVo);
+		
+	}
+	
+	//상세페이지에 값 넣기
+	@PostMapping("/putTask")
+	@ResponseBody
+	public TaskVO putTask(@RequestBody TaskVO taskVo) {
+		
+		return boardService.putTask(taskVo.getTaskNo());
+	}
+	
+	//상세페이지에 댓글 넣기
+	@PostMapping("/putReply")
+	@ResponseBody
+	public List<ReplyVO> putReply(@RequestBody ReplyVO replyVo) {
+		
+		return boardService.putReply(replyVo.getTaskNo());
 	}
 	
 }

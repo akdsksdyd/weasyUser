@@ -65,7 +65,7 @@
 <!-- 보드 리스트의 카드 date -->
 <script>
 	$(function() {
-		var dateFormat = "mm-dd-yy", from = $("#startDate").datepicker({
+		var dateFormat = "yy-mm-dd", from = $("#startDate").datepicker({
 			dateFormat : 'yy-mm-dd',
 			defaultDate : "+1w",
 			changeMonth : true,
@@ -505,7 +505,7 @@
 </div>
 
 <!-- 보드리스트의 카드 모달창 -->
-<form action="#" method="post"> 
+<form action="updateTask" method="post"> 
 <div class="modal" id="card_modal">
 	<div class="cardmodal_body">
 		<div class="cardmodal-head">
@@ -513,7 +513,6 @@
 		</div>
 	
 		<div class="m_body">
-		
 			<!-- 1. task title -->
 			<div class="card_content">
 				<i data-feather="clipboard" class="detail-icon" ></i>
@@ -606,7 +605,9 @@
 	
 		<div class="m_footer">
 			<button type="button" class="modal_btn cancle" onclick="closeCardModal()">CANCLE</button>
-			<button type="submit" class="modal_btn save" id="save_btn">SAVE</button>
+			<button type="button" class="modal_btn save" id="save_btn">SAVE</button>
+			<!-- taskNo 실어 줄 태그 -->
+			<div class="taskNoHid"></div>
 		</div>
 	</div>
 </div>

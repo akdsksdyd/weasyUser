@@ -27,12 +27,15 @@ public class BoardController {
 	@GetMapping("/board")
 	public String board(Model model,
 						HttpSession session,
-						UserVO userVo) {
+						UserVO userVo,
+						TaskVO taskVo) {
 
 		String userEmail = (String)session.getAttribute("Email");
 		ArrayList<TeamVO> teamList = boardService.getTeamList(userEmail);
 		model.addAttribute("teamList", teamList);
-
+		ArrayList<TaskVO> taskList = boardService.getTaskList(taskVo);
+		model.addAttribute("taskList", taskList);
+		
 		return "board/board";
 	}
 

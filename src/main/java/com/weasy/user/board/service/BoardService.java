@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import com.weasy.user.command.AuthorityVO;
+import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 
@@ -15,7 +16,7 @@ public interface BoardService {
 	
 	public int addTask(TaskVO vo);
 	
-	public ArrayList<TaskVO> getTaskList(int teamNo);
+	public ArrayList<TaskVO> getTaskList(TaskVO taskVo);
 	
 	public int getTeamNo(String teamName);
 	
@@ -33,4 +34,25 @@ public interface BoardService {
 	
 	//기존 팀원 정보 delete
 	public int deleteAuthority(AuthorityVO vo);
+
+	public void updateTask(TaskVO taskVo);
+	
+	public void insertReply(ReplyVO replyVo);
+	
+	public TaskVO putTask(int taskNo);
+	
+	public ArrayList<ReplyVO> putReply(int taskNo);
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.weasy.user.command.AuthorityVO;
+import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
-import com.weasy.user.command.UserVO;
 
 @Mapper
 public interface BoardMapper {
@@ -18,7 +18,7 @@ public interface BoardMapper {
 	
 	public int addTask(TaskVO vo);
 	
-	public ArrayList<TaskVO> getTaskList(int teamNo);
+	public ArrayList<TaskVO> getTaskList(TaskVO taskVo);
 	
 	public int getTeamNo(String teamName);
 	
@@ -40,4 +40,22 @@ public interface BoardMapper {
 	//권한 authno얻기 (pk)
 	public int getAuthNo(AuthorityVO vo);
 
+	public void updateTask(TaskVO taskVo);
+	
+	public void insertReply(ReplyVO replyVo);
+	
+	public TaskVO putTask(int taskNo);
+	
+	public ArrayList<ReplyVO> putReply(int taskNo);
 }
+
+
+
+
+
+
+
+
+
+
+

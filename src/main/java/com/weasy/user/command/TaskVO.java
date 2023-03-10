@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,12 +26,14 @@ public class TaskVO { //업무 VO
 	
 	@NotBlank(message = "공백일 수 없습니다")
 	@Pattern(regexp = "[0-9]{4}-[0-9]{2}-[0-9]{2}")
-	private Timestamp startDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	private String startDate;
 	private int progressRate;
 	
 	@NotBlank(message = "공백일 수 없습니다")
 	@Pattern(regexp = "[0-9]{4}-[0-9]{2}-[0-9]{2}")
-	private Timestamp targetDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	private String targetDate;
 	private Timestamp realEndDate;
 	private int status;
 
