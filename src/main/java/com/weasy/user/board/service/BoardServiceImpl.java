@@ -19,6 +19,8 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int insertTeam(TeamVO vo) {
 		
+		System.out.println("서비스" + vo.toString());
+		
 		return boardMapper.insertTeam(vo);
 	}
 	
