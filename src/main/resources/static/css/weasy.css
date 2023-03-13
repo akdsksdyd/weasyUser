@@ -264,23 +264,7 @@ html {
   justify-content: space-between;
 }
 
-.cat-sub-menu a {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.cat-sub-menu.visible a {
-  opacity: 0.6;
-  visibility: visible;
-}
-
-.cat-sub-menu.visible a:hover {
-  opacity: 1;
-}
-
 .cat-sub-menu button {
-  opacity: 0;
-  visibility: hidden;
   background: none;
   color: #fff;
   
@@ -300,23 +284,26 @@ html {
   font-size: 14px;
   line-height: 2.43;
   
+  cursor: pointer;
+  -webkit-transition: 0.3s all;
+  -o-transition: 0.3s all;
+  transition: 0.3s all;
+  border: none transparent;
+  
 }
 
-.cat-sub-menu.visible button {
+.cat-sub-menu{
+	opacity: 0;
+  	visibility: hidden;
+}
+
+.cat-sub-menu.visible {
   opacity: 0.6;
   visibility: visible;
 }
 
 .cat-sub-menu.visible button:hover {
   opacity: 1;
-}
-
-.cat-sub-menu button {
-  cursor: pointer;
-  -webkit-transition: 0.3s all;
-  -o-transition: 0.3s all;
-  transition: 0.3s all;
-  border: none transparent;
 }
 
 .cat-sub-menu button:focus {
