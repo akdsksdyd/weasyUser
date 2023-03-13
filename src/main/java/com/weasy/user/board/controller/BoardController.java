@@ -31,8 +31,8 @@ public class BoardController {
 						UserVO userVo,
 						TaskVO taskVo) {
 
-		String userEmail = (String)session.getAttribute("Email");
-		ArrayList<TeamVO> teamList = boardService.getTeamList(userEmail);
+		String user_id = (String)session.getAttribute("Email");
+		ArrayList<TeamVO> teamList = boardService.getTeamList(user_id);
 		model.addAttribute("teamList", teamList);
 		ArrayList<TaskVO> taskList = boardService.getTaskList(taskVo);
 		model.addAttribute("taskList", taskList);

@@ -9,7 +9,7 @@ $(".teamTask").click(function(e){
 	e.preventDefault();
 	
 	/* 팀보드의 addTask버튼부분에 hidden 태그로 팀no 추가 */
-	var taskValue = '<input type="hidden" name="teamNo" value="'+ teamNo +'">';
+	var taskValue = '<input type="hidden" id="teamNo" name="teamNo" value="'+ teamNo +'">';
 	$(".addTaskValue").html(taskValue);
 	
 	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
@@ -80,7 +80,7 @@ $(".listBox").on('click', 'article', function(e){
 	var taskNo = $(e.target).closest('article').attr("data-taskno");
 	var taskNoHid = "";
 	
-	taskNoHid += '<input type="hidden" class="taskNo" name="taskNo" value="'+ taskNo +'">';
+	taskNoHid += '<input type="hidden" id="taskNo" name="taskNo" value="'+ taskNo +'">';
 	
 	$(".taskNoHid").html(taskNoHid);
 	
@@ -94,16 +94,13 @@ $(".listBox").on('click', 'article', function(e){
 		data: JSON.stringify({"taskNo": taskNo}),
 		success: function(result){
 			$("#taskTitle").val(result.title);
-			$("#startDate").val(result.startDate.substring(0, 11));
-			$("#targetDate").val(result.targetDate.substring(0, 11));
+			if(result.startDate != null){
+				$("#startDate").val(result.startDate.substring(0, 11));
+				$("#targetDate").val(result.targetDate.substring(0, 11));
+			}
 			
 			/* content가 업데이트 시 제대로 안뜨는 부분 수정 */
-			$('#description').hide();
-			$('#description_cancle').hide();
-			$('#description_save').hide();
-			$('#description_edit').show();
-			$('#description_content').show();
-			$('#description_content').html(result.content);
+				$('#description').val(result.content);
 			
 		},
 		error: function(err){
@@ -149,7 +146,7 @@ $(".listBox").on('click', 'article', function(e){
 });
 
 /* 보드 리스트 카드 모달창 닫기 */
-function closeCardModal() {
+function closeCardModal(){
 	$("#card_modal").css("display", "none");
 	$("html").css("overflow", "auto");
 	
@@ -158,7 +155,6 @@ function closeCardModal() {
 	$("#startDate").val("");
 	$("#targetDate").val("");
 	$("#description_content").val("");
-	
 	$("#comment_list").empty();
 	
 }
@@ -193,6 +189,7 @@ $('#description_save').click(function(){
 	
 	var description = '<p>' + $('#description').val() + '</p>';
 	$('#description_content').html(description);
+	$("#description").val(description);
 });
 
 /*
@@ -383,6 +380,7 @@ function getTeamTask(teamNo, userEmail){
 		},
 		error: function(err){
 			alert("보드 조회에 실패했습니다. 관리자에게 문의 부탁드립니다.🙏");
+			console.log(err);
 		}
 	});
 }
@@ -666,24 +664,19 @@ $("#add_team_modal").on('click', 'button', function(e){
 
 
 /* task 상세 페이지에서 제일 하단부에 있는 save버튼을 눌렀을 시 task테이블 update */
-$(".m_footer").on('click', $(".save"), function(e){
+$(".taskSaveBtn").on('click', 'button', function(e){
 	
-	console.dir($(e.target).next().children());
-	console.log($(e.target).next().children().val());
-	e.preventDefault();
+	/* 부모태그에 기능을 줘서 cancle 을 눌렀을 떄 같이 먹는 거 방지. */
+	if($(this).hasClass("cancle"))return;
+	
+	console.log("!!!!!!!!!!!!!!!!!!");
 	var taskTitle = $("#taskTitle").val();
 	var startDate = $("#startDate").val();
 	var targetDate = $("#targetDate").val();
 	var content = $("#description").val();
 	var taskNo = $(e.target).next().children().val();
-	console.log(taskTitle);
-	console.log(startDate);
-	console.log(targetDate);
-	console.log(content);
 	var teamNo = $("#teamNo").val();
 	var userEmail = $(".userEmail").val();
-	console.log(teamNo);
-	console.log(userEmail);
 	
 	$.ajax({
 		
@@ -697,12 +690,16 @@ $(".m_footer").on('click', $(".save"), function(e){
 		contentType: "application/json",
 		success: function(result){
 			
-			getTeamTask(teamNo, userEmail);
 			/* 상세페이지에서 save버튼 눌렀을 시 입력 했던 값 공백으로 치환 */
-			/*$("#taskTitle").val("");
+			$("#taskTitle").val("");
 			$("#startDate").val("");
 			$("#targetDate").val("");
-			$("#description_content").val("");*/
+			$("#description").val("");
+			//$("#description_contetn").val("");
+			console.log("팀넘버:"+teamNo);
+			console.log("이메일:"+userEmail);
+			getTeamTask(teamNo, userEmail);
+			closeCardModal();
 			
 		},
 		error: function(err){
