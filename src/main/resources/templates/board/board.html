@@ -223,7 +223,7 @@
 				<div class="horizontal addMemberList">
 					<div class="content">
 	  					<div class="title">
-	  						<span>[add Team/Project Member]</span>
+	  						<span>[Team Member List]</span>
 	  					</div>
 	  					<div class="addMemeberList">
 						<!-- 클릭하여 추가한 멤버 블럭 추가 -->
@@ -273,7 +273,12 @@
 			<input type="text" class="input_box" id="teamGoal" name="teamGoal"/>
 			<!-- 팀 생성자 (팀 리더) -->
 			<div class="modal_label">Team Leader</div>
-			<input type="text" class="input_box" id="userEmail" name="userEmail"/>
+			<input type="text" class="input_box searchTeamLeader" id="userEmail" name="userEmail" required/>
+			<div class="searchTeamLeaderList">
+				<ul class="search-component">
+					<!-- 검색된 팀 리더들 결과 리스트 -->
+				</ul>
+			</div>
 			<!-- 팀 상태 -->
 			<div class="modal_label">Team status</div>
 			<select class="modal_selectBox" id="teamStatus" name="teamStatus">
@@ -284,7 +289,7 @@
 	
 		<div class="m_footer">
 			<button type="button" class="modal_btn cancle" onclick="closeAddModal()">CANCLE</button>
-			<button type="submit" class="modal_btn save" id="save_btn">SAVE</button>
+			<button type="submit" class="modal_btn save" id="teamAddSaveBtn">SAVE</button>
 		</div>
 	</div>
 </div>

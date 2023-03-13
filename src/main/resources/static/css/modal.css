@@ -326,6 +326,41 @@
 	background-color: white;
 }
 
+/* 팀 생성시 검색창 css */
+
+.searchTeamLeaderList{
+	width: 475px;
+	height: 30px;
+	position: absolute;
+	z-index: 1;
+}
+
+.searchTeamLeaderList .search-component {
+	/* display: inline-block; */
+	max-height: 100px;
+	overflow: auto;
+}
+
+.searchTeamLeaderList .search-component::-webkit-scrollbar {
+    display: none;
+}
+
+.searchTeamLeaderList .search-component li {
+	padding: 10px 8px;
+	background: #9fc5e8;
+	color: #7d8083;
+	cursor: pointer;
+	transition: background .2s ease, color .2s ease;
+	display: flex;
+	justify-content: center;
+}
+
+.searchTeamLeaderList .search-component li:hover {
+	background: #0061F7;
+	color: #D6DBDF;
+}
+
+
 /* team member add modal */
 
 .searchBox{
@@ -342,34 +377,6 @@
 	padding: 0px 10px;	
 }
 
-.searchBtn {
-	background: none;
-	
-	width: 50px;
-	height: 40px;
-  	color: #fff;
-  	border-radius: 5px;
-  	padding: 5px 5px;
-  	font-family: 'Lato', sans-serif;
-  	font-size: 16px;
-  	font-weight: 900;
-  	font-style: normal;
-  	text-shadow: 0px -1px 0px rgba(0,0,0,0.4);
-    text-decoration: none;
-  	background: transparent;
-  	cursor: pointer;
-  	position: relative;
-  	display: inline-block;
-  	box-shadow: inset 0px 1px 0px rgba(255,255,255,1),0px 1px 3px rgba(0,0,0,0.3);
-  	outline: none;
-  	border: 1px solid #ba6;
-	
-	border-color: #7c7c7c;
-  	background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.25)), to(#e6e6e6));
-}
-
-/* 검색창 테스트 */
-
 @import "https://fonts.googleapis.com/css?family=Open+Sans";
 
 * {
@@ -377,7 +384,8 @@
 }
 
 .searchModal {
-	background: #181818;
+	/* background: #181818; */
+	background: rgba(227, 227, 227);
 	color: #fff;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 14px;
@@ -420,7 +428,7 @@
 }
 
 .searchModal .title .smalltitle {
-	color: white;
+	color: black;
 	font-size: 10px;
 }
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.weasy.user.board.service.BoardService;
+import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.UserVO;
@@ -44,6 +45,15 @@ public class BoardController {
 						  RedirectAttributes ra) {
 		
 		int result = boardService.insertTeam(vo);
+		int teamNo = boardService.getTeamNo(vo.getTeamName());
+		
+		//해당 팀no로 지정한 teamLeader 권한 주기
+		AuthorityVO authVO = AuthorityVO.builder().userEmail(vo.getUserEmail())
+							 .teamNo(teamNo)
+							 .role(0)
+							 .build();
+		boardService.addAuthority(authVO);
+		
 		String msg = result == 1 ? "정상 입력되었습니다" : "등록에 실패했습니다";
 		ra.addFlashAttribute("msg", msg);
 		

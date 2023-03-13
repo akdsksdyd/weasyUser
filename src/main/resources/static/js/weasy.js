@@ -1,46 +1,4 @@
 "use strict";
-<<<<<<< Updated upstream
-/* gender 체크박스 - only one */
-$("input[name='gender']").on('click', function(){
-    if(this.checked) {
-        const checkboxes = $("input[name='gender']");
-        for(let ind = 0; ind < checkboxes.length; ind++){
-            checkboxes[ind].checked = false;
-        }
-        this.checked = true;
-    } else {
-        this.checked = false;
-    }
-});
-
-/* 이메일 중복확인 기능 */
-$(".doubleCheck_btn").on('click', function(){
-   
-	var email = $("input[name='userEmail']").val();
-	console.log(email);
-	$.ajax({
-		url:"../user/checkcheckEmail", //컨트롤러
-		type:"post",
-		data:JSON.stringify({"userEmail": email}),
-		contentType:"application/json",
-		success:function(result){
-			console.log("ajax반환값:" + result);
-			if(result == "0"){
-				$(".id_ok").css("display", "inline-block");
-				$(".id_already").css("display", "none");
-			}else{
-				$(".id_already").css("display", "inline-block");
-				$(".id_ok").css("display", "none");
-			}
-		}, 
-		error: function(){
-			alert("에러입니다");
-		}		
-	})
-});
-=======
->>>>>>> Stashed changes
-
 /* 팀 클릭 시 teamNo전달 */
 $(".teamTask").click(function(e){
 	
@@ -758,3 +716,39 @@ $(".m_footer").on('click', $(".save"), function(e){
 	});
 	
 });
+
+/* 
+팀 생성에서 팀리더 검색시 검색 리스트 뽑아서 넣어준다.
+*/
+$(".searchTeamLeader").keyup(function(e){
+	
+	var searchKeyword = $(e.target).val();
+	var findUserList = '';
+	
+	$.ajax({
+		url:"../user/searchUserList", //컨트롤러
+		type:"post",
+		data:JSON.stringify({"searchKeyWord": searchKeyword}),
+		contentType:"application/json; charset=utf-8",
+		success:function(result){
+			for(var i = 0; i < result.length; i++){
+				findUserList += '<li>';
+				findUserList += '<span>' + result[i].userEmail + '</span>';
+				findUserList += '<span>' + '(' + result[i].nickname + ')</span>';
+				findUserList += '</li>';
+			}
+			$(".searchTeamLeaderList .search-component").html(findUserList);
+		}, 
+		error: function(){
+		}		
+	})
+})
+
+/* 팀생성 - 검색한 멤버의 이름을 클릭하면  */
+$(".searchTeamLeaderList").on('click', 'li', function(e){
+	/* 찾은 userlist 초기화 */
+	$(".search-component").html("");
+	
+	var email = $(this).children().first().html();
+	$(".searchTeamLeader").val(email)
+})
