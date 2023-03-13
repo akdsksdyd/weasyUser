@@ -140,7 +140,12 @@
                     <a class="active" href="#"  id="mainBoardSideBar"><span class="icon home" aria-hidden="true"></span>Board</a>
                 </li>
                 
-				<!-- 2. 팀 -->
+                <!-- 2. 공지사항 목록 -->
+                <li>
+                    <a class="notice" href="##"><span class="icon bell" id="hey" aria-hidden="true"></span>notice list</a>
+                </li>
+                
+				<!-- 3. 팀 -->
                 <li>
                     <a class="show-cat-btn" href="##">
                         <span class="icon user-3" aria-hidden="true"></span>
@@ -165,10 +170,11 @@
                     </ul>
                 </li>
                 
-                <!-- 3. 팀 추가 메뉴 -->
+                <!-- 4. 팀 추가 메뉴 -->
                 <li>
                     <a href="##" id="addTeamProject"><span class="icon edit" aria-hidden="true"></span>add Team / Project</a>
                 </li>
+                
                 
             </ul>
         </div>
@@ -268,7 +274,7 @@
 			<!-- 팀 이름 -->
 			<div class="modal_label">Team Name</div>
 			<input type="text" class="input_box" id="teamName" name="teamName"/>
-			<!-- 팀 목료 -->
+			<!-- 팀 목록 -->
 			<div class="modal_label">Team Goal</div>
 			<input type="text" class="input_box" id="teamGoal" name="teamGoal"/>
 			<!-- 팀 생성자 (팀 리더) -->
@@ -397,7 +403,7 @@
             		</a>
             	</li>
           		<li>
-          			<a class="danger" href="##">
+          			<a class="danger" href="/user/logOut">
               			<i data-feather="log-out" aria-hidden="true"></i>
               			<span>Log out</span>
             		</a>
@@ -625,6 +631,7 @@
 <script src="/js/script.js"></script>
 <!-- weasy custom js -->
 <script src="/js/weasy.js"></script>
+<script src="/js/notice.js"></script>
 
 <script th:inline="javascript">
 	var msg = JSON.parse('[[${msg}]]');

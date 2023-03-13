@@ -60,6 +60,12 @@ public class BoardController {
 		return "redirect:/board/board";
 	}
 	
+	
+	@GetMapping("/test")
+	public String test() {
+		return "board/test";
+	}
+	
 }
 
 

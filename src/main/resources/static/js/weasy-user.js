@@ -37,13 +37,16 @@ $(document).ready(function(){
    
    
 	/* gender 체크박스 - only one */
-	const checkboxes = $("input[name='gender']");
-	$("input[name='gender']").on('click', function(e){
+	const checkboxes = $("input[name='genderCheck']");
+	$("input[name='genderCheck']").on('click', function(e){
 	    if(this.checked) {
 	        for(let ind = 0; ind < checkboxes.length; ind++){
 				if(checkboxes[ind].checked){ genderInd = ind; }
 	            checkboxes[ind].checked = false;
 	        }
+	        console.log(checkboxes[genderInd].value);
+	        $("input[name='gender']").attr('value', checkboxes[genderInd].value);
+	       	console.log("제발: "+$("input[name='gender']").val());
 	        this.checked = true;
 	    } else {
 	        this.checked = false;
@@ -64,7 +67,7 @@ $(document).ready(function(){
       	var birthVal = $("input[name='birth']");
       	var nickNameVal = $("input[name='nickname']");
 
-      	let userName = RegExp(/^[가-힣]{2,4}$/);
+      	let userName = RegExp(/^[가-힣]{2,5}$/);
       	let userEmail = RegExp(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i);
       	let userPw = RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/);
       	let phoneNum = RegExp(/^[0-9]{3}-[0-9]{4}-[0-9]{4}/);

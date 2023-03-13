@@ -23,6 +23,7 @@ import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.UserVO;
+import com.weasy.user.command.noticeListVO;
 
 @RestController
 public class BoardAjaxController {
@@ -140,6 +141,15 @@ public class BoardAjaxController {
 		
 		return boardService.putReply(replyVo.getTaskNo());
 	}
+	
+	
+	
+	//공지사항
+	@PostMapping("/notice")
+	public List<noticeListVO> putoticeList(){
+		return boardService.getNoticeList();
+	}
+	
 	
 }
 
