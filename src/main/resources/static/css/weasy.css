@@ -44,6 +44,15 @@ html {
 	text-align: center;
 }
 
+.up{
+	margin-bottom: 35px;
+}
+
+.form-label{
+	font-size: 15px;
+}
+
+/* 이메일 중복 확인 버튼 */
 .doubleCheck_btn {
 	font-size: 15px;
 	padding: 5px 0px;
@@ -51,12 +60,11 @@ html {
 	margin-bottom: 10px;
 }
 
-/* 유효성검사css */
-.valid {
-	font-size: 15px;
+/* 유효성검사 경고메시지 css */
+.userWarningCss {
+	font-size: 13px;
 	color: red;
 	text-align: center;
-	margin-bottom: 20px;
 }
 
 /* 회원가입 필수요소css */
@@ -65,18 +73,14 @@ html {
 }
 
 /* 성별체크박스 css */
-.gender-box{ margin-left: 10px;}
+.gender-box{ text-align: center; }
 .gender-label{ font-size: 14px;}
 .weasy-check{ margin-right: 30px;}
 
 
-/* 이메일 중복 */
-.id_ok{ display: none; color:green; font-size: 13px;}
-.id_already{display: none; color:red; font-size: 13px;}
-
 /* 로그인 경고문 */
 .failMessage > span{ font-size: 13px; color: red; margin-top: 18px; text-align: center; }
-/* 로그인창 - 회원가입 */
+/* 로그인창 -> 회원가입 버튼 */
 .signup_a{font-size: 16px; font-weight:500; color: #2f49d1; padding: 13px 15px 0 0; text-align: right; font-style: italic;}
 .signup_a:hover{color:#002aff}
 

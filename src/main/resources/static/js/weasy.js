@@ -1,4 +1,5 @@
 "use strict";
+<<<<<<< Updated upstream
 /* gender 체크박스 - only one */
 $("input[name='gender']").on('click', function(){
     if(this.checked) {
@@ -37,6 +38,8 @@ $(".doubleCheck_btn").on('click', function(){
 		}		
 	})
 });
+=======
+>>>>>>> Stashed changes
 
 /* 팀 클릭 시 teamNo전달 */
 $(".teamTask").click(function(e){

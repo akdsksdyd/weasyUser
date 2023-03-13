@@ -3,15 +3,19 @@ package com.weasy.user.HomeController;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.expression.MapAccessor;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.weasy.user.command.UserLogVO;
 import com.weasy.user.command.UserVO;
 import com.weasy.user.service.UserService;
 import com.weasy.user.service.UserSha256;
@@ -44,9 +49,10 @@ public class UserController {
 		return "user/signup";
 	}
 	
+	int num = 0;
 	//이메일 중복 검사
 	@ResponseBody
-	@PostMapping("/checkcheckEmail")
+	@PostMapping("/checkEmail")
 	public int doubleCheck(@RequestBody UserVO vo) {
 		return userService.doubleCheck(vo.getUserEmail());
 	}
@@ -71,19 +77,17 @@ public class UserController {
 			return "user/signup";
 		}
 		
-		//비밀번호 확인
-		System.out.println("첫번째:" + userVo.getUserPw() );
-		//비밀번호 암호화
-		String encryptPassword = UserSha256.encrypt(userVo.getUserPw());
-		userVo.setUserPw(encryptPassword);
-		System.out.println("두번째:" + userVo.getUserPw());
+			//비밀번호 암호화
+			String encryptPassword = UserSha256.encrypt(userVo.getUserPw());
+			userVo.setUserPw(encryptPassword);
+			//회원가입 메소드 호출
+			userService.userSignup(userVo);
 		
-		//회원가입 메소드 호출
-		userService.userSignup(userVo);
-		
-		return "user/signin";
+		return "user/signin"; //회원가입 성공
 	}
 	
+	
+		
 	
 	//로그인
 	@GetMapping("/signin")
@@ -93,28 +97,36 @@ public class UserController {
 	
 	//로그인 기능
 	@PostMapping("/login")
-	public String signin(UserVO vo, Model model, HttpSession session, RedirectAttributes ra){	
+	public String signin(UserVO Uservo, HttpSession session, RedirectAttributes ra, HttpServletResponse response){	
 			
 		//입력한 pw를 암호화 & UserVO에 checkPw로 저장
-		vo.setCheck_pw(UserSha256.encrypt(vo.getCheck_pw()));
+		Uservo.setCheck_pw(UserSha256.encrypt(Uservo.getCheck_pw()));
 		//로그인 메소드 
-		UserVO result = userService.login(vo);
-		
-		if(userService.login(vo) == null) { //아이디 비번 오류
+		UserVO result = userService.login(Uservo);
+		System.out.println(result);
+		//로그인 실패
+		if(userService.login(Uservo) == null) { //아이디 비번 오류
 			String failMessage = "아이디 혹은 비밀번호가 잘못 되었습니다.";
 			ra.addFlashAttribute("failMessage", failMessage);
 			return "redirect:/user/signin";
 			
-		} else if(userService.permissionId(vo) != 0){ //승인 안됨
+		} else if(userService.permissionId(Uservo) != 0){ //승인 안됨
 			String failMessage = "계정이 승인되지 않았습니다. 잠시만 기다료~~";
 			ra.addFlashAttribute("failMessage", failMessage);
 			return "redirect:/user/signin";
 		}
 		
+		//로그인 성공
+		Cookie cookie = new Cookie("lastlogin", result.getUserEmail());
+		cookie.setMaxAge(1800);
+		response.addCookie(cookie);
+		
+		//세션 저장
 		session.setAttribute("Email", result.getUserEmail());
-		session.setAttribute("loginUser", result);
-		System.out.println("세션:"+session.getAttribute("Email"));
-		System.out.println("보드로 가기");
+		
+		//로그인 일자 insert
+		userService.addLoginDate(result.getUserEmail());
+				
 		return "redirect:/board/board";
 	}
 

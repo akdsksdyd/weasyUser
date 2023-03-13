@@ -32,5 +32,8 @@
 		WHERE (userEmail like concat('%', #{keyword}, '%') or nickName like concat('%', #{keyword}, '%')) 
 		and permission = 'Y';
 	</select>
+	<insert id="addLoginDate" parameterType="UserVO">
+		INSERT INTO loginlog (userEmail, loginDate) VALUES(#{userEmail}, date_format(now(), '%Y%m%d%H%i%s'));
+	</insert>
 
   </mapper>

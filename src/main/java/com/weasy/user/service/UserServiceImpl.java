@@ -19,12 +19,14 @@ public class UserServiceImpl implements UserService {
 	//회원가입
 	@Override
 	public void userSignup(UserVO userVo) {
+		
+		
 		userMapper.userSignup(userVo);
 	}
 	
 	//이메일 중복
 	@Override
-	public int doubleCheck(String email) {
+	public int doubleCheck(String email) {	
 		return userMapper.doubleCheck(email);
 	}
 	
@@ -37,6 +39,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int permissionId(UserVO vo) {
 		return userMapper.permissionId(vo);
+	}
+	//로그인 날짜 저장
+	@Override
+	public int addLoginDate(String email) {
+		return userMapper.addLoginDate(email);
 	}
 
 	//검색키워드로 직원찾기
