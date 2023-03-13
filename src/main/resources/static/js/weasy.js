@@ -1,4 +1,16 @@
 "use strict";
+/* 로그인창에서 쿠키값이 있으면 이메일에 띄우기(내가 만든 쿠키~~) */
+$(document).ready(function(){	
+	/*console.log("쿠기값" + document.cookie.replace("lastlogin=", ""));*/
+	$("input[name=check_id]").attr('value', document.cookie.replace("lastlogin=", ""));
+	/* 쿠키 값이 있으면 체크박스 checked */
+	if(document.cookie.replace("lastlogin=", "") !== ""){
+		$('input:checkbox[name="rememberId"]').attr("checked", true);
+	}
+	
+})
+
+
 /* 팀 클릭 시 teamNo전달 */
 $(".teamTask").click(function(e){
 	

@@ -38,12 +38,6 @@ dependencies {
 	//sql로그
 	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 	
-	//security 암호화
-	//implementation 'org.springframework.boot:spring-boot-starter-security:2.6.7'
-	
-	//
-	//implementation 'org.springframework.security.crypto.factory.PasswordEncoderFactories'
-	
 	//sha256라이브러리(암호화)
 	implementation 'commons-codec:commons-codec:1.10'
 	

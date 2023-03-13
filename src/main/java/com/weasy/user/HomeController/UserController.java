@@ -43,6 +43,9 @@ public class UserController {
 	@Qualifier("userService")
 	UserService userService;
 	
+	//로그인, 아이디 기억하기
+	String rememberId;
+	
 	//회원가입 화면
 	@GetMapping("/signup")
 	public String signup() {
@@ -77,6 +80,9 @@ public class UserController {
 			return "user/signup";
 		}
 		
+			System.out.println("성별:"+userVo.getGender());
+			
+		
 			//비밀번호 암호화
 			String encryptPassword = UserSha256.encrypt(userVo.getUserPw());
 			userVo.setUserPw(encryptPassword);
@@ -86,8 +92,7 @@ public class UserController {
 		return "user/signin"; //회원가입 성공
 	}
 	
-	
-		
+
 	
 	//로그인
 	@GetMapping("/signin")
@@ -97,29 +102,33 @@ public class UserController {
 	
 	//로그인 기능
 	@PostMapping("/login")
-	public String signin(UserVO Uservo, HttpSession session, RedirectAttributes ra, HttpServletResponse response){	
+	public String login(UserVO userVo, HttpSession session, RedirectAttributes ra, HttpServletResponse response, HttpServletRequest request){	
 			
 		//입력한 pw를 암호화 & UserVO에 checkPw로 저장
-		Uservo.setCheck_pw(UserSha256.encrypt(Uservo.getCheck_pw()));
+		userVo.setCheck_pw(UserSha256.encrypt(userVo.getCheck_pw()));
 		//로그인 메소드 
-		UserVO result = userService.login(Uservo);
-		System.out.println(result);
-		//로그인 실패
-		if(userService.login(Uservo) == null) { //아이디 비번 오류
+		UserVO result = userService.login(userVo);
+		System.out.println("로그인 값:"+result);
+		/* 로그인 실패 */
+		if(userService.login(userVo) == null) { //아이디 비번 오류
 			String failMessage = "아이디 혹은 비밀번호가 잘못 되었습니다.";
 			ra.addFlashAttribute("failMessage", failMessage);
 			return "redirect:/user/signin";
 			
-		} else if(userService.permissionId(Uservo) != 0){ //승인 안됨
+		} else if(userService.permissionId(userVo) != 0){ //승인 안됨
 			String failMessage = "계정이 승인되지 않았습니다. 잠시만 기다료~~";
 			ra.addFlashAttribute("failMessage", failMessage);
 			return "redirect:/user/signin";
 		}
 		
-		//로그인 성공
-		Cookie cookie = new Cookie("lastlogin", result.getUserEmail());
-		cookie.setMaxAge(1800);
-		response.addCookie(cookie);
+		/* 로그인 성공 */
+		//쿠키 생성
+		if(request.getParameter("rememberId") != null) {
+			Cookie cookie = new Cookie("lastlogin", result.getUserEmail());
+			cookie.setMaxAge(300); //테스트를 위해 5분으로 설정, 추후에 시간 변경
+			response.addCookie(cookie);
+		}
+		
 		
 		//세션 저장
 		session.setAttribute("Email", result.getUserEmail());
@@ -129,6 +138,14 @@ public class UserController {
 				
 		return "redirect:/board/board";
 	}
+	
+	//로그아웃 
+	@RequestMapping("logOut")
+	public String logOut(HttpSession session) {
+		session.removeAttribute("Email");
+		return "redirect:/user/signin";
+	}
+
 
 	//검색어로 회원 검색
 	@ResponseBody

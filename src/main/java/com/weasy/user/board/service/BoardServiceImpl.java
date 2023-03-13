@@ -1,6 +1,7 @@
 package com.weasy.user.board.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
+import com.weasy.user.command.noticeListVO;
 
 @Service("boardService")
 public class BoardServiceImpl implements BoardService{
@@ -94,6 +96,11 @@ public class BoardServiceImpl implements BoardService{
 	public ArrayList<ReplyVO> putReply(int taskNo) {
 		
 		return boardMapper.putReply(taskNo);
+	}
+	//공지사항 리스트 가져오기
+	@Override
+	public List<noticeListVO> getNoticeList() {
+		return boardMapper.getNoticeList();
 	}
 	
 }

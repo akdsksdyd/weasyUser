@@ -1,6 +1,7 @@
 package com.weasy.user.board.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -8,6 +9,7 @@ import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
+import com.weasy.user.command.noticeListVO;
 
 @Mapper
 public interface BoardMapper {
@@ -47,6 +49,9 @@ public interface BoardMapper {
 	public TaskVO putTask(int taskNo);
 	
 	public ArrayList<ReplyVO> putReply(int taskNo);
+	
+	//공지사항 리스트 가져오기
+	public List<noticeListVO> getNoticeList();
 }
 
 
