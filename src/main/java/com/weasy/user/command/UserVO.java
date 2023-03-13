@@ -15,9 +15,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserVO { //유저 VO
 	
-	@NotEmpty(message = "이름은 필수 입력 값입니다.")
+	@NotBlank(message = "이름은 필수 입력 값입니다.")
 	private String userName;
 	
+	@NotBlank(message = "이메일은 필수 입력 값입니다.")
 	@Pattern(regexp = "^(?:\\w+\\.?)*\\w+@(?:\\w+\\.)+\\w+$", message = "이메일 형식이 올바르지 않습니다.")
 	private String userEmail;
 
@@ -27,10 +28,11 @@ public class UserVO { //유저 VO
 	@Pattern(regexp = "[0-9]{3}-[0-9]{4}-[0-9]{4}", message = "핸드폰 번호는 000-0000-0000 형식으로 작성하세요.")
 	private String phoneNum;
 	
-	private String gender;	
+	private String gender;
+	
+	@Pattern(regexp = "^(19[0-9][0-9]|20\\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$")
 	private String birth;
 	private String permission;
-	
 	@Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{2,10}$", message = "닉네임은 특수문자를 제외한 2~10자리여야 합니다.")
 	private String nickname;
 	
@@ -39,11 +41,3 @@ public class UserVO { //유저 VO
 	private String check_pw;
 
 }
-//userEmail   VARCHAR(30) primary key NOT NULL,
-//userPw   VARCHAR(30) NOT NULL,
-//userName   VARCHAR(30) NOT NULL,
-//phoneNum   INT NOT NULL,
-//gender   CHAR(1) DEFAULT  'M'  CHECK ( gender  IN ('M'  ,  'F' )),
-//birth   INT NOT NULL,
-//permission   CHAR(1) DEFAULT  'N'  CHECK ( permission  IN ('Y'  , 'N' )),
-//nickname   VARCHAR(30) NOT NULL

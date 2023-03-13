@@ -16,10 +16,8 @@ public class UserAuthHandler implements HandlerInterceptor{
 		System.out.println("인터셉터실행");
 		
 		//현재세션을 얻음
-		HttpSession session = request.getSession();
-		System.out.println(session);
-		String user_id = (String)session.getAttribute("Email");
-		System.out.println("값 확인:"+user_id);
+		HttpSession session = request.getSession();		
+		String user_id = (String)session.getAttribute("Email");		
 
 		if(user_id == null) { //로그인 안됨
 			response.sendRedirect( request.getContextPath() + "/user/signin"); //로그인페이지로 리디렉션

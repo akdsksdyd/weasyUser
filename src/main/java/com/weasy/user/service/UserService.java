@@ -18,4 +18,6 @@ public interface UserService {
 	public int permissionId(UserVO vo);
 	//검색키워드로 직원찾기
 	public List<UserVO> searchUser(String keyword);
+	//로그인 날짜 저장
+	public int addLoginDate(String email);
 }
