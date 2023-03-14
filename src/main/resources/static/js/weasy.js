@@ -20,7 +20,10 @@ $(".teamTask").click(function(e){
 	e.preventDefault();
 	
 	/* 팀보드의 addTask버튼부분에 hidden 태그로 팀no 추가 */
-	var taskValue = '<input type="hidden" id="teamNo" name="teamNo" value="'+ teamNo +'">';
+	var taskValue = "";
+	taskValue += '<input type="hidden" id="teamNo" name="teamNo" value="'+ teamNo +'">';
+	taskValue += '<input type="hidden" id="userEmail" name="userEmail" value="'+ userEmail +'">';
+	console.log("hidden태그의 teamNo: "+teamNo);
 	$(".addTaskValue").html(taskValue);
 	
 	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
@@ -87,6 +90,10 @@ $(".listBox").on('click', 'article', function(e){
 	$("#card_modal").css("display", "flex");
 	$("html").css("overflow", "hidden");
 	
+	/* task테이블의 status값에 따라 selected속성 부여 */
+	var status = $("#selectCheck");
+	console.log(status);
+	
 	/* taskNo을 히든태그로 숨겨서 전달하기 위한 구문 */
 	var taskNo = $(e.target).closest('article').attr("data-taskno");
 	var taskNoHid = "";
@@ -94,7 +101,6 @@ $(".listBox").on('click', 'article', function(e){
 	taskNoHid += '<input type="hidden" id="taskNo" name="taskNo" value="'+ taskNo +'">';
 	
 	$(".taskNoHid").html(taskNoHid);
-	
 	
 	/* 상세페이지에 값을 전달 */
 	$.ajax({
@@ -111,8 +117,20 @@ $(".listBox").on('click', 'article', function(e){
 			}
 			
 			/* content가 업데이트 시 제대로 안뜨는 부분 수정 */
-				$('#description').val(result.content);
-			
+			$('#description').val(result.content);
+		
+			/* hidden으로 status값 전달 */
+			if(result.status == 0){
+				console.log("status 0임:"+result.status);
+				$("#selectCheck").val('0').prop("selected", true);
+			}else if(result.status == 1){
+				console.log("status 1임:"+result.status);
+				$("#selectCheck").val('1').prop("selected", true);
+			}else if(result.status == 2){
+				console.log("status 2임:"+result.status);
+				$("#selectCheck").val('2').prop("selected", true);
+			}
+			console.log("모달창 켰을 떄 status값: "+result.status);
 		},
 		error: function(err){
 			alert("조회에 실패 했습니다.");
@@ -123,6 +141,7 @@ $(".listBox").on('click', 'article', function(e){
 	var replyList = "";
 	var userEmail = $(".userEmail").val();
 	var teamNo= $(".teamNo").val();
+	var taskNo = $("#taskNo").val();
 	
 	$.ajax({
 		
@@ -272,13 +291,11 @@ $("#checkbox_content").on('click', 'button', function(e){
 
 /* task card 모달창에서 댓글 등록하기 버튼 눌렀을 때 동작 */
 /* 댓글 추가 버튼 누르면 댓글 업로드 */
-$("#commentBtn").click(function(e){
-	console.log($(".userEmail").val());
-	console.log($(".teamNo").val());
-	console.log($(".taskNo").val());
+$("#commentBtn").click(function(){
+	
 	var userEmail = $(".userEmail").val();
-	var teamNo= $(".teamNo").val();
-	var taskNo= $(".taskNo").val();
+	var teamNo= $("#teamNo").val();
+	var taskNo= $("#taskNo").val();
 	
 	var write_comment = $(".comment_box>textarea").val(); 
 	var comment = '';
@@ -401,6 +418,8 @@ function getTeamTask(teamNo, userEmail){
 	var todo_task = "";
 	var doing_task = "";
 	var done_task = "";
+	console.log("task그릴 떄 teamNo: " + teamNo);
+	console.log("task그릴 떄 userEmail: " + userEmail);
 			
 	/* team task 가져오는거 function으로 빼서 사용해야할듯.. (addTask 후에도 사용)*/
 	$.ajax({
@@ -449,6 +468,37 @@ function getTeamTask(teamNo, userEmail){
 		}
 	});
 }
+
+/* 상세페이지에서 select의 option값이 바뀔 때 task테이블의 status uptate */
+$("#selectCheck").change(function(e){
+	console.log("select값 바뀜");
+	var status = $(e.target).val();
+	console.log("select값 바뀐 value: "+status);
+	var taskNo = $("#taskNo").val();
+	console.log("select후 taskNo: "+taskNo);
+	var userEmail = $(".userEmail").val();
+	var teamNo = $("#teamNo").val();
+	
+	$.ajax({
+		
+		url: "../taskStatusChange",
+		type: "post",
+		contentType: "application/json",
+		data: JSON.stringify({"taskNo": taskNo,
+							  "status": status}),
+		success: function(result) {
+			
+			getTeamTask(teamNo, userEmail);
+			closeCardModal();
+			
+		},
+		error: function(err) {
+			alert("옮기기 실패 했습니다.");
+		}
+		
+	});
+	
+});
 
 /* 메인 페이지 로딩 후 바로 user가 속한 팀과 프로젝트 리스트를 가져와서 화면에 버튼으로 뿌려준다.*/
 function loadMainBoard(){
@@ -512,7 +562,10 @@ function loadMainBoard(){
 $("#mainBoardPage").on('click', 'article', function(e){
 
 	var teamNo = $(e.target).closest(".workspace").attr("data-teamNo");
+	console.log("보드에서 클릭시: "+teamNo);
 	var teamName = $(e.target).closest(".stat-cards-info").children(".stat-cards-info__num").html();
+	var userEmail = $(".userEmail").val();
+	console.log("팀 이름: "+teamName);
 	/* 만약 제일 바깥 div를 눌러서 teamName이 undefined라면 다시 teamName을 구한다.*/
 	if(teamName == undefined){
 		teamName = $(e.target).children().children(".stat-cards-info__num").html();
@@ -521,8 +574,15 @@ $("#mainBoardPage").on('click', 'article', function(e){
 	/* 보드의 상단에 타이틀을 팀명으로 변경 */
 	$("#boardName").html("# "+teamName);
 	
+	/* workspace클릭 시 히든태그로 값 넘기기 */
+	var taskValue = "";
+	taskValue += '<input type="hidden" id="teamNo" name="teamNo" value="'+ teamNo +'">';
+	taskValue += '<input type="hidden" id="userEmail" name="userEmail" value="'+ userEmail +'">';
+	console.log("hidden태그의 teamNo: "+teamNo);
+	$(".addTaskValue").html(taskValue);
+	
 	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
-	getTeamTask(teamNo);
+	getTeamTask(teamNo, userEmail);
 })
 
 /* sideMenubar에서 team의 ...버튼 클릭시 */
@@ -775,8 +835,10 @@ $(".taskSaveBtn").on('click', 'button', function(e){
 	var targetDate = $("#targetDate").val();
 	var content = $("#description").val();
 	var taskNo = $(e.target).next().children().val();
+	console.log("save시 task값"+ taskNo);
 	var teamNo = $("#teamNo").val();
-	var userEmail = $(".userEmail").val();
+	console.log("save시 team값"+ teamNo);
+	var userEmail = $("#userEmail").val();
 	
 	$.ajax({
 		
@@ -786,7 +848,8 @@ $(".taskSaveBtn").on('click', 'button', function(e){
 							  "startDate": startDate, 
 							  "targetDate": targetDate, 
 							  "content": content,
-							  "taskNo": taskNo}),
+							  "taskNo": taskNo,
+							  "userEmail": userEmail}),
 		contentType: "application/json",
 		success: function(result){
 			

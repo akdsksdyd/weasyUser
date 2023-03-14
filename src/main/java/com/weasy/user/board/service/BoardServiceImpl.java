@@ -45,6 +45,11 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public ArrayList<TaskVO> getTaskList(TaskVO taskVo) {
 		
+		ArrayList<TaskVO> list = boardMapper.getTaskList(taskVo);
+		System.out.println("서비스 getTeamTask이메일: " + taskVo.getUserEmail());
+		
+		System.out.println("서비스: "+list);
+		
 		return boardMapper.getTaskList(taskVo);
 	}
 	
@@ -87,6 +92,8 @@ public class BoardServiceImpl implements BoardService{
 
 	public void updateTask(TaskVO taskVo) {
 		
+		System.out.println("서비스 getTeamTask이메일: " + taskVo.getUserEmail());
+		
 		boardMapper.updateTask(taskVo);
 	}
 	
@@ -118,6 +125,12 @@ public class BoardServiceImpl implements BoardService{
 		return 0;
 	}
 	
+	
+	@Override
+	public void taskStatusChange(TaskVO taskVo) {
+		
+		boardMapper.taskStatusChange(taskVo);
+	}
 	
 }
 

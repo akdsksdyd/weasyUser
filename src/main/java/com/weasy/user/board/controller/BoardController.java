@@ -66,6 +66,12 @@ public class BoardController {
 		return "board/test";
 	}
 	
+	@GetMapping("/index")
+	public String index() {
+		
+		return "board/index";
+	}
+	
 }
 
 
