@@ -33,6 +33,11 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	@Override
+	public ArrayList<TeamVO> getTeamListWithRole(String user_id) {
+		return boardMapper.getTeamListWithRole(user_id);
+	}
+	
+	@Override
 	public int addTask(TaskVO vo) {
 		return boardMapper.addTask(vo);
 	}
@@ -56,6 +61,11 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int addAuthority(AuthorityVO vo) {
 		return boardMapper.addAuthority(vo);
+	}
+	
+	@Override
+	public AuthorityVO getAuthority(TeamVO vo) {
+		return boardMapper.getAuthority(vo);
 	}
 	
 	@Override
@@ -102,6 +112,12 @@ public class BoardServiceImpl implements BoardService{
 	public List<noticeListVO> getNoticeList() {
 		return boardMapper.getNoticeList();
 	}
+	
+	@Override
+	public int closeTeamStatus(int teamNo) {
+		return 0;
+	}
+	
 	
 }
 

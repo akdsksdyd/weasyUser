@@ -1,0 +1,57 @@
+<th:block th:fragment="modal(modal)">
+
+	<!-- 팀/프로젝트 추가 모달창 -->
+	<form action="addTeam" method="post">
+		<div class="modal" id="modal">
+			<div class="modal_body">
+				<div class="m_head">
+					<div class="modal_title">
+						<strong>add Team / Project</strong>
+					</div>
+					<div class="close_btn close-area" onclick="closeAddModal()">X</div>
+				</div>
+
+				<div class="m_body">
+					<!-- 팀생성일 ~ 팀 종료일 -->
+					<div class="m_date">
+						<p class="p">start date</p>
+						<input type="text" size="10" id="teamRegDate" name="teamRegdate"></input>
+						<!-- db에서 endDate입니다.(참고) -->
+						<p class="pl30 p">due date</p>
+						<input type="text" size="10" id="teamEndDate" name="endDate"></input>
+					</div>
+
+					<!-- 팀 이름 -->
+					<div class="modal_label">Team Name</div>
+					<input type="text" class="input_box" id="teamName" name="teamName" />
+					<!-- 팀 목료 -->
+					<div class="modal_label">Team Goal</div>
+					<input type="text" class="input_box" id="teamGoal" name="teamGoal" />
+					<!-- 팀 생성자 (팀 리더) -->
+					<div class="modal_label">Team Leader</div>
+					<input type="text" class="input_box searchTeamLeader"
+						id="userEmail" name="userEmail" required />
+					<div class="searchTeamLeaderList">
+						<ul class="search-component">
+							<!-- 검색된 팀 리더들 결과 리스트 -->
+						</ul>
+					</div>
+					<!-- 팀 상태 -->
+					<div class="modal_label">Team status</div>
+					<select class="modal_selectBox" id="teamStatus" name="teamStatus">
+						<option value="Y">진행중</option>
+						<option value="N">완료됨</option>
+					</select>
+				</div>
+
+				<div class="m_footer">
+					<button type="button" class="modal_btn cancle"
+						onclick="closeAddModal()">CANCLE</button>
+					<button type="submit" class="modal_btn save" id="teamAddSaveBtn">SAVE</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	<!-- 팀/프로젝트 추가 모달창 끝 -->
+
+</th:block>

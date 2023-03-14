@@ -13,10 +13,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.JsonParser;
 import com.weasy.user.board.service.BoardService;
 import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.ReplyVO;
@@ -51,17 +54,15 @@ public class BoardAjaxController {
 	public List<TaskVO> getTeamTask(@RequestBody TaskVO taskVo) {
 		//팀번호로 해당 팀의 task들 리스트 가져오기
 		List<TaskVO> list = boardService.getTaskList(taskVo);
-		
 		return list;
 	}
 	
 	@GetMapping("/getWorkspace")
 	@ResponseBody
 	public List<TeamVO> getWorkspace(HttpSession session) {
-		//세션에 연결된 이메일의 user가 들어가 있는 team전부 읽어오기
+		//세션에 연결된 이메일의 user가 들어가 있는 team과 user의 권한 읽어오기
 		String userEmail = (String)session.getAttribute("Email");
-		List<TeamVO> teamList = boardService.getTeamList(userEmail);
-		return teamList;
+		return boardService.getTeamListWithRole(userEmail);
 	}
 	
 	//업무 추가
@@ -95,6 +96,20 @@ public class BoardAjaxController {
 		return boardService.addAuthority(vo);
 	}
 	
+	//회원 권한가지고 오기
+	@ResponseBody
+	@PostMapping("/getAuthority")
+	public AuthorityVO getAuthority(@RequestBody Map<String, Object> param, HttpSession session) {
+		JsonParser parser = new JsonParser();
+		int teamNo = Integer.parseInt(param.get("teamNo").toString());
+		String email = session.getAttribute("Email").toString();
+		
+		TeamVO vo = TeamVO.builder().teamNo(teamNo)
+						.userEmail(email)
+						.build();
+		return boardService.getAuthority(vo);
+	}
+	
 	@PostMapping("/deleteAuthority")
 	@ResponseBody
 	public int deleteAuthority(@RequestBody AuthorityVO vo){
@@ -105,7 +120,7 @@ public class BoardAjaxController {
 		//아니라면 유지
 		return 0;
 	}
-
+	
 	//업무 update
 	@PostMapping("/updateTask")
 	@ResponseBody
@@ -142,31 +157,19 @@ public class BoardAjaxController {
 		return boardService.putReply(replyVo.getTaskNo());
 	}
 	
-	
-	
 	//공지사항
 	@PostMapping("/notice")
 	public List<noticeListVO> putoticeList(){
 		return boardService.getNoticeList();
 	}
 	
-	
+	@PostMapping("/closeTeamStatus")
+	@ResponseBody
+	public int closeTeamStatus(@RequestBody Map<String, Object> param) {
+		JsonParser parser = new JsonParser();
+		int teamNo = Integer.parseInt(param.get("teamNo").toString());
+		
+		return boardService.closeTeamStatus(teamNo);
+	}
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

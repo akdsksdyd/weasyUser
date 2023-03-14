@@ -7,8 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weasy Board</title>
   
-
-  
   <!-- Favicon -->
   <link rel="shortcut icon" href="/img/svg/logo.svg" type="image/x-icon">
   <!-- feather icon -->
@@ -108,7 +106,7 @@
     	<!-- 상단 로고 부분 -->
         <div class="sidebar-head">
         	<!-- 로고와 타이틀 -->
-            <a href="/" class="logo-wrapper" title="Home">
+            <a href="/board/board" class="logo-wrapper" title="Home">
                 <span class="sr-only">Home</span>
                 <span class="icon logo" aria-hidden="true"></span>
                 <div class="logo-text">
@@ -137,7 +135,7 @@
             <ul class="sidebar-body-menu">
             	<!-- 1. 대시보드 -->
                 <li>
-                    <a class="active" href="#"  id="mainBoardSideBar"><span class="icon home" aria-hidden="true"></span>Board</a>
+                    <a class="active" href="" id="mainBoardSideBar"><span class="icon home" aria-hidden="true"></span>Board</a>
                 </li>
                 
                 <!-- 2. 공지사항 목록 -->
@@ -147,7 +145,7 @@
                 
 				<!-- 3. 팀 -->
                 <li>
-                    <a class="show-cat-btn" href="##">
+                    <a class="show-cat-btn" href="">
                         <span class="icon user-3" aria-hidden="true"></span>
                         Team / Project
                         <span class="category__btn transparent-btn" title="Open list">
@@ -160,9 +158,12 @@
 						<th:block th:each="teamVo : ${teamList}">
 							<li class="stat-cards-info__num">
 					        	<button type="button" class="teamTask" th:text="${teamVo.teamName}"></button>
-					        	<button type="button" class="teamContextMenu" id="teamContextMenu">
-					        		<img class="teamContextMenu" src="/img/svg/more-vertical-white.svg" alt="">
-					        	</button>
+					        	<!-- 옵저버이면 버티컬 버튼 안보이게 -->
+					        	<th:block th:if="${teamVo.role == 0}">
+					        		<button type="button" class="teamContextMenu" id="teamContextMenu">
+					        			<img class="teamContextMenu" src="/img/svg/more-vertical-white.svg" alt="">
+					        		</button>
+					        	</th:block>
 							</li>
 				            <input type="hidden" class="teamNo" th:value="${teamVo.teamNo}">
 				            <input type="hidden" class="userEmail" th:value="${teamVo.userEmail}">
@@ -190,118 +191,13 @@
 </menu>
 <!-- 팀 목록에 대한 context menu 끝 -->
 
-<!-- 팀에 팀멤버 추가 모달창 -->
-<div class="modal" id="add_team_modal">
-	<div class="add_team_modal_body">
-		<div class="m_head">
-			<div class="modal_title">
-				<strong>add Member</strong>
-			</div>
-			<div class="close_btn close-area" onclick="closeAddMemberModal()">X</div>
-		</div>
-	
-		<div class="m_body searchModal">
-			<div class="searchBox">
-				<div class="horizontal searchPart">
-					<!-- 검색창 테스트 -->
-					<div class="content">
-						<!-- 타이틀 -->
-	  					<div class="title">
-	  						<span>[searchMember]</span>
-	  						<br/> 
-	  						<span class="smalltitle">search nickname or email</span>
-	  					</div>
-	  					<!-- 검색창 -->
-	  					<div class="search">
-	  						<div class="search-input">
-                				<input ref="input" type="text" placeholder="Type something..." id="searchMember"/>
-                			</div>
-                			<!-- 검색결과 -->
-	  						<div class="search-component">
-	    						<ul class="search-list">
-	    							<!-- 검색된 멤버 리스트 뿌려주기 -->
-	    						</ul>
-							</div>
-	  					</div>
+<!-- modal : teamMemberAdd -->
+<th:block th:replace="~{ ./modal/teamMemberAdd :: modal( ~{:: #add_team_modal} ) }"></th:block>
+<!-- teamMemberAdd 끝 -->
 
-					</div>
-				</div>
-				<div class="horizontal addMemberList">
-					<div class="content">
-	  					<div class="title">
-	  						<span>[Team Member List]</span>
-	  					</div>
-	  					<div class="addMemeberList">
-						<!-- 클릭하여 추가한 멤버 블럭 추가 -->
-							<ul class="chooseMemberList">
-								
-							</ul>
-						</div>
-	  				</div>
-				</div>
-			</div>
-		</div>
-	
-		<div class="m_footer">
-			<button type="button" class="modal_btn cancle" onclick="closeAddMemberModal()">CANCLE</button>
-			<button type="button" class="modal_btn save" id="addMemberSaveBtn">SAVE</button>
-		</div>
-	</div>
-</div>
-<!-- 팀에 팀멤버 추가 모달끝 -->
-
-<!-- 팀/프로젝트 추가 모달창 -->
-<form action="addTeam" method="post"> 
-<div class="modal" id="modal">
-	<div class="modal_body">
-		<div class="m_head">
-			<div class="modal_title">
-				<strong>add Team / Project</strong>
-			</div>
-			<div class="close_btn close-area" onclick="closeAddModal()">X</div>
-		</div>
-	
-		<div class="m_body">
-			<!-- 팀생성일 ~ 팀 종료일 -->
-			<div class="m_date">
-				<p class="p">start date</p>
-				<input type="text" size="10" id="teamRegDate" name="teamRegdate"></input>
-				<!-- db에서 endDate입니다.(참고) -->
-				<p class="pl30 p">due date</p>
-				<input type="text" size="10" id="teamEndDate" name="endDate"></input>
-			</div>
-			
-			<!-- 팀 이름 -->
-			<div class="modal_label">Team Name</div>
-			<input type="text" class="input_box" id="teamName" name="teamName"/>
-			<!-- 팀 목록 -->
-			<div class="modal_label">Team Goal</div>
-			<input type="text" class="input_box" id="teamGoal" name="teamGoal"/>
-			<!-- 팀 생성자 (팀 리더) -->
-			<div class="modal_label">Team Leader</div>
-			<input type="text" class="input_box searchTeamLeader" id="userEmail" name="userEmail" required/>
-			<div class="searchTeamLeaderList">
-				<ul class="search-component">
-					<!-- 검색된 팀 리더들 결과 리스트 -->
-				</ul>
-			</div>
-			<!-- 팀 상태 -->
-			<div class="modal_label">Team status</div>
-			<select class="modal_selectBox" id="teamStatus" name="teamStatus">
-				<option value="Y">진행중</option>
-				<option value="N">완료됨</option>
-			</select>
-		</div>
-	
-		<div class="m_footer">
-			<button type="button" class="modal_btn cancle" onclick="closeAddModal()">CANCLE</button>
-			<button type="submit" class="modal_btn save" id="teamAddSaveBtn">SAVE</button>
-		</div>
-	</div>
-</div>
-</form>
-<!-- 팀/프로젝트 추가 모달창 끝 -->
-
+<!-- modal : team/project Add -->
+<th:block th:replace="~{ ./modal/teamProjectAdd :: modal( ~{:: #modal} ) }"></th:block>
+<!-- team/project Add 끝 -->
 
 <div class="main-wrapper">
 	
@@ -319,11 +215,6 @@
     
     <!-- 상단바 - 오른쪽 부분 -->
     <div class="main-nav-end">
-    	<!-- 삭제? -->
-    	<!-- <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
-        	<span class="sr-only">Toggle menu</span>
-        	<span class="icon menu-toggle--gray" aria-hidden="true"></span>
-    	</button> -->
 	  
 	  	<!-- 1. 스위치 테마 버튼 -->
     	<button class="theme-switcher gray-circle-btn" type="button" title="Switch theme">
@@ -421,209 +312,19 @@
 
 
 <!-- 보드 메인 부분 (working board) -->
+	
 	<main class="main users chart-page " id="skip-target">
-		
-		<!-- (sideBar board) 보드 진입시 메인 보드 -->
-		<div class="container" id="mainBoardPage">
-			<div class="container">
-        		<h2 class="main-title">Your WorkSpace</h2>
-        		
-       			<div class="sub-title">
-       				<span>member권한</span>
-       			</div>
-        		<div class="row stat-cards" id="memberWorkspace">
-        			<!-- workspace 블럭 들어감 -->
-        		</div>
-        		
-       			<div class="sub-title">
-       				<span>read 권한</span>
-       			</div>
-       			<div class="row stat-cards" id="observerWorkspace">
-        			
-        		</div>
-        		
-			</div>
-		</div>
-	
-		<!-- (sideBar team/project) 팀/프로젝트 보드 리스트 -->
-    	<div class="container" id="teamProjectBoard">
-      		
-      		<!-- 보드 상단 타이틀과 task 추가 기능 -->
-	      	<div class="main-title main-board">
-		    	<div class="boardTitle">
-		    		<!-- 보드의 이름 (팀이나 프로젝트 명) -->
-			    	<span id="boardName"></span>
-		    	</div>
-		    	
-		    	<form action="addTask" method="post" class="addTaskBox">
-			      	<input class="addTask" type="text" id="taskText" placeholder="New Task..." required>
-			      	<button type="submit" class="btn btn-outline-primary addTaskBtn">Add New Task</button>
-			      	<div class="addTaskValue"></div>
-		    	</form>
-		    	
-	      	</div>
-	      	<!-- 보드 상단 타이틀과 task 추가 기능 끝 -->
-      
-      		<!-- 보드 리스트 부분 -->
-      		<div class="listBox stat-cards ">
-      			<!-- todo section -->
-      			<section class="list col" id="to-do">
-      				<header>To Do</header>
-      				<span id="to-do-content">
-      				</span>
-      				<!-- 디테일 아이콘 예시로 주석처리하여 남겨놓았다.
-      				카드 추가시 디테일 부분까지 완성되면 지울것!
- 					<article class="card">
-						<header>Drag and Drop CSS</header>
-						<div class="detail">
-							시작일과 종료일 표시
-							<i data-feather="calendar" class="detail-icon"></i>
-							<span>23/03/06-24/01/01</span>
-							<br/>
-							댓글 개수 표시
-							<i data-feather="message-circle" class="detail-icon"></i>
-							<span>3</span>
-							진척률
-							<i data-feather="check-square" class="detail-icon"></i>
-							<span>45%</span>
-							첨부파일 갯수
-							<i data-feather="paperclip" class="detail-icon"></i>
-							<span>1</span>
-						</div>
-					</article> 
-					-->
-				</section>
-				
-				<!-- doing section -->
-				<section class="list col" id="doing">
-					<header>Doing</header>
-					<span id="doing-content">
-      				</span>
-				</section>
-
-				<!-- done sction -->
-				<section class="list col" id="done">
-					<header>Done</header>
-					<span id="done-content">
-      				</span>
-				</section>
-      		</div>
-      		<!-- 보드 리스트 부분 끝 -->
-      		
-      	</div>
+		<th:block th:replace="~{ ./include/main :: main( ~{:: .container} ) }"></th:block>
+		<th:block th:replace="~{ ./include/task :: task( ~{:: .container} ) }"></th:block>
+		<th:block th:replace="~{ ./include/notice :: notice( ~{:: .container} ) }"></th:block>
 	</main>
-  </div>
-</div>
-
-<!-- 보드리스트의 카드 모달창 -->
-<div class="modal" id="card_modal">
-	<div class="cardmodal_body">
-		<div class="cardmodal-head">
-			<div class="close_btn close-area" onclick="closeCardModal()">X</div>
-		</div>
 	
-		<div class="m_body">
-			<!-- 1. task title -->
-			<div class="card_content">
-				<i data-feather="clipboard" class="detail-icon" ></i>
-				<input placeholder="title" type="text" class="input_box input-prevent taskTitle" id="taskTitle"/>
-			</div>
-			
-			<!-- 2. member -->
-			<div class="card_content">
-				<i data-feather="users" class="detail-icon"></i>
-				<button type="button" class="button-prevent" title="add Member" id="addTaskMember">
-					<i data-feather="plus-square" class="detail-icon"></i>
-				</button>
-				
-				<button type="button" class="button-prevent addMember">
-					<i data-feather="user" class="detail-icon"></i>
-					<span>member name</span>
-				</button>
-				
-			</div>
-			
-			<!-- 3. date 설정 -->
-			<i data-feather="calendar" class="detail-icon"></i>
-			<strong>Date</strong>
-			<div class="card_date">
-				<button type="button" class="button-prevent button-eventnone">start Date</button>
-				<input class="inputbox" type="text" id="startDate"></input>
-				<!-- db에서 endDate입니다.(참고) -->
-				<button type="button" class="button-prevent button-eventnone">due Date</button>
-				<input class="inputbox" type="text" id="targetDate"></input>
-			</div>
-			
-			<!-- 4. 업무 내용 -->
-			<div class="card_content">
-				<i data-feather="menu" class="detail-icon"></i>
-				<strong>Description</strong>
-				<button type="button" class="modal_btn cancle hidden" id="description_edit">EDIT</button>
-			</div>
-			<div id="description_content">
-				<!-- 쓴 description 내용이 들어간다. -->
-			</div>
-			<textarea class="hidden_scroll textbox" id="description" onkeyup="resize()" onkeydown="resize()"></textarea>
-			<button type="button" class="modal_btn cancle" id="description_cancle">CANCLE</button>
-			<button type="button" class="modal_btn save" id="description_save">SAVE</button>
-			
-			<!-- 5. 파일 업로드 -->
-			<div class="card_content">
-				<i data-feather="file" class="detail-icon"></i>
-				<strong>Attachments</strong>
-			</div>
-	<!-- 		<form action="uploadFile" method="post" enctype="multipart/form-data">
-        		<input type="file" id="input-file" style="display:none;"/>
-        		<label className="input-file-button" for="input-file">업로드</label>
-        		<input calss="modal_btn save" type="submit" value="파일업로드"></input>
-    		</form> -->
-			<div class="card_content filebox">
-				<input class="upload-name" value="첨부파일" placeholder="첨부파일">
-				<label for="file" class="save fileboxBtn" >파일찾기</label>
-				<input class="save fileboxBtn" type="file" id="file" style="display:none;">
-				<input class="save fileboxBtn" type="submit" value="업로드">
-			</div>
-			
-			<!-- 6. 체크 박스 -->
-			<div class="card_content">
-				<strong>CheckBox</strong>
-				<button class="button-prevent pl10" title="add CheckBox" id="card_checkbox">
-					<i data-feather="plus-square"></i>
-				</button>
-			</div>
-			<!-- 체크박스 컨텐츠 -->
-			<div id="checkbox_content">
-			</div>
-			
-			<!-- 7. 댓글(1단) -->
-			<div class="card_content">
-				<i data-feather="message-circle" class="detail-icon"></i>
-				<strong>Comment</strong>
-			</div>
-			<div class="comment_box card_content">
-          		<div class="profile_box">
-            		<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">
-          		</div>
-        		<textarea class="hidden_scroll textbox" onkeyup="resize()" onkeydown="resize()" ></textarea>
-        		<button id="commentBtn" type="button" title="write comment"><i class="bi bi-chat-square-quote-fill comment_icon"></i></button>
-			</div>
-			<div id="comment_list">
-				<div class="card_content">
-				</div>
-			</div>
-		</div>
-	
-		<div class="m_footer taskSaveBtn">
-			<button type="button" class="modal_btn cancle" onclick="closeCardModal()">CANCLE</button>
-			<button type="button" class="modal_btn save" id="save_btn">SAVE</button>
-			<!-- taskNo 실어 줄 태그 -->
-			<div class="taskNoHid"></div>
-		</div>
-	</div>
-</div>
-<!-- 보드리스트의 카드 모달창 끝 -->
+  </div><!-- main-wrapper 끝 -->
+</div><!-- page-flex 끝 -->
 
-
+<!-- 팀 task 카드 -->
+<th:block th:replace="~{ ./modal/taskCard :: modal( ~{:: #card_modal} ) }"></th:block>
+<!-- 팀 task 카드 끝 -->
 
 <!-- Icons library -->
 <script src="/plugins/feather.js"></script>
@@ -644,5 +345,4 @@
 </script>
 
 </body>
-
 </html>

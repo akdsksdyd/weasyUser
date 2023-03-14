@@ -32,14 +32,14 @@ public class BoardController {
 						TaskVO taskVo) {
 
 		String user_id = (String)session.getAttribute("Email");
-		ArrayList<TeamVO> teamList = boardService.getTeamList(user_id);
+		ArrayList<TeamVO> teamList = boardService.getTeamListWithRole(user_id);
 		model.addAttribute("teamList", teamList);
 		ArrayList<TaskVO> taskList = boardService.getTaskList(taskVo);
 		model.addAttribute("taskList", taskList);
 		
 		return "board/board";
 	}
-
+	
 	@PostMapping("/addTeam")
 	public String addTeam(TeamVO vo,
 						  RedirectAttributes ra) {

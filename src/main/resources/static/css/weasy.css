@@ -483,7 +483,7 @@ section.notice {
   display: none;
 }
 
-.btn {
+.btn-notice {
   display: inline-block;
   padding: 0 30px;
   font-size: 15px;

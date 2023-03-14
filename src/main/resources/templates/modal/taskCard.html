@@ -1,0 +1,113 @@
+<th:block th:fragment="modal(card_modal)">
+
+<!-- 보드리스트의 카드 모달창 -->
+<div class="modal" id="card_modal">
+	<div class="cardmodal_body">
+		<div class="cardmodal-head">
+			<div class="close_btn close-area" onclick="closeCardModal()">X</div>
+		</div>
+	
+		<div class="m_body">
+			<!-- 1. task title -->
+			<div class="card_content">
+				<i data-feather="clipboard" class="detail-icon" ></i>
+				<input placeholder="title" type="text" class="input_box input-prevent taskTitle" id="taskTitle"/>
+			</div>
+			
+			<!-- 2. member -->
+			<div class="card_content">
+				<i data-feather="users" class="detail-icon"></i>
+				<button type="button" class="button-prevent" title="add Member" id="addTaskMember">
+					<i data-feather="plus-square" class="detail-icon"></i>
+				</button>
+				
+				<button type="button" class="button-prevent addMember">
+					<i data-feather="user" class="detail-icon"></i>
+					<span>member name</span>
+				</button>
+				
+			</div>
+			
+			<!-- 3. date 설정 -->
+			<i data-feather="calendar" class="detail-icon"></i>
+			<strong>Date</strong>
+			<div class="card_date">
+				<button type="button" class="button-prevent button-eventnone">start Date</button>
+				<input class="inputbox" type="text" id="startDate"></input>
+				<!-- db에서 endDate입니다.(참고) -->
+				<button type="button" class="button-prevent button-eventnone">due Date</button>
+				<input class="inputbox" type="text" id="targetDate"></input>
+			</div>
+			
+			<!-- 4. 업무 내용 -->
+			<div class="card_content">
+				<i data-feather="menu" class="detail-icon"></i>
+				<strong>Description</strong>
+				<button type="button" class="modal_btn cancle hidden" id="description_edit">EDIT</button>
+			</div>
+			<div id="description_content">
+				<!-- 쓴 description 내용이 들어간다. -->
+			</div>
+			<textarea class="hidden_scroll textbox" id="description" onkeyup="resize()" onkeydown="resize()"></textarea>
+			<button type="button" class="modal_btn cancle" id="description_cancle">CANCLE</button>
+			<button type="button" class="modal_btn save" id="description_save">SAVE</button>
+			
+			<!-- 5. 파일 업로드 -->
+			<div class="card_content">
+				<i data-feather="file" class="detail-icon"></i>
+				<strong>Attachments</strong>
+			</div>
+			<!--
+	 		<form action="uploadFile" method="post" enctype="multipart/form-data">
+        		<input type="file" id="input-file" style="display:none;"/>
+        		<label className="input-file-button" for="input-file">업로드</label>
+        		<input calss="modal_btn save" type="submit" value="파일업로드"></input>
+    		</form> 
+    		-->
+			<div class="card_content filebox">
+				<input class="upload-name" value="첨부파일" placeholder="첨부파일">
+				<label for="file" class="save fileboxBtn" >파일찾기</label>
+				<input class="save fileboxBtn" type="file" id="file" style="display:none;">
+				<input class="save fileboxBtn" type="submit" value="업로드">
+			</div>
+			
+			<!-- 6. 체크 박스 -->
+			<div class="card_content">
+				<strong>CheckBox</strong>
+				<button class="button-prevent pl10" title="add CheckBox" id="card_checkbox">
+					<i data-feather="plus-square"></i>
+				</button>
+			</div>
+			<!-- 체크박스 컨텐츠 -->
+			<div id="checkbox_content">
+			</div>
+			
+			<!-- 7. 댓글(1단) -->
+			<div class="card_content">
+				<i data-feather="message-circle" class="detail-icon"></i>
+				<strong>Comment</strong>
+			</div>
+			<div class="comment_box card_content">
+          		<div class="profile_box">
+            		<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">
+          		</div>
+        		<textarea class="hidden_scroll textbox" onkeyup="resize()" onkeydown="resize()" ></textarea>
+        		<button id="commentBtn" type="button" title="write comment"><i class="bi bi-chat-square-quote-fill comment_icon"></i></button>
+			</div>
+			<div id="comment_list">
+				<div class="card_content">
+				</div>
+			</div>
+		</div>
+	
+		<div class="m_footer taskSaveBtn">
+			<button type="button" class="modal_btn cancle" onclick="closeCardModal()">CANCLE</button>
+			<button type="button" class="modal_btn save" id="save_btn">SAVE</button>
+			<!-- taskNo 실어 줄 태그 -->
+			<div class="taskNoHid"></div>
+		</div>
+	</div>
+</div>
+<!-- 보드리스트의 카드 모달창 끝 -->
+
+</th:block>

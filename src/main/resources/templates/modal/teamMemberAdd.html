@@ -1,0 +1,64 @@
+<th:block th:fragment="modal(addteammodal)">
+
+	<!-- 팀에 팀멤버 추가 모달창 -->
+	<div class="modal" id="add_team_modal">
+		<div class="add_team_modal_body">
+			<div class="m_head">
+				<div class="modal_title">
+					<strong>add Member</strong>
+				</div>
+				<div class="close_btn close-area" onclick="closeAddMemberModal()">X</div>
+			</div>
+
+			<div class="m_body searchModal">
+				<div class="searchBox">
+					<div class="horizontal searchPart">
+						<!-- 검색창 테스트 -->
+						<div class="content">
+							<!-- 타이틀 -->
+							<div class="title">
+								<span>[searchMember]</span> <br /> <span class="smalltitle">search
+									nickname or email</span>
+							</div>
+							<!-- 검색창 -->
+							<div class="search">
+								<div class="search-input">
+									<input ref="input" type="text" placeholder="Type something..."
+										id="searchMember" />
+								</div>
+								<!-- 검색결과 -->
+								<div class="search-component">
+									<ul class="search-list">
+										<!-- 검색된 멤버 리스트 뿌려주기 -->
+									</ul>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="horizontal addMemberList">
+						<div class="content">
+							<div class="title">
+								<span>[Team Member List]</span>
+							</div>
+							<div class="addMemeberList">
+								<!-- 클릭하여 추가한 멤버 블럭 추가 -->
+								<ul class="chooseMemberList">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="m_footer">
+				<button type="button" class="modal_btn cancle"
+					onclick="closeAddMemberModal()">CANCLE</button>
+				<button type="button" class="modal_btn save" id="addMemberSaveBtn">SAVE</button>
+			</div>
+		</div>
+	</div>
+	<!-- 팀에 팀멤버 추가 모달끝 -->
+
+</th:block>
