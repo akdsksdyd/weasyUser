@@ -122,7 +122,7 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Override
 	public int closeTeamStatus(int teamNo) {
-		return 0;
+		return boardMapper.closeTeamStatus(teamNo);
 	}
 	
 	
