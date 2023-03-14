@@ -82,10 +82,25 @@
 			<div id="checkbox_content">
 			</div>
 			
+			<!-- 업무 상태 체크 -->
+			<div id="statusContent">
+				<strong>State</strong>
+				<select id="selectCheck">
+					<option value="0">To Do				
+					<option value="1">Doing				
+					<option value="2">Done	
+				</select>
+				<span id="hiddenStatus"></span>
+			</div>
+			
 			<!-- 7. 댓글(1단) -->
 			<div class="card_content">
 				<i data-feather="message-circle" class="detail-icon"></i>
 				<strong>Comment</strong>
+			</div>
+			<div id="comment_list">
+				<div class="card_content">
+				</div>
 			</div>
 			<div class="comment_box card_content">
           		<div class="profile_box">
@@ -94,10 +109,6 @@
         		<textarea class="hidden_scroll textbox" onkeyup="resize()" onkeydown="resize()" ></textarea>
         		<button id="commentBtn" type="button" title="write comment"><i class="bi bi-chat-square-quote-fill comment_icon"></i></button>
 			</div>
-			<div id="comment_list">
-				<div class="card_content">
-				</div>
-			</div>
 		</div>
 	
 		<div class="m_footer taskSaveBtn">
@@ -105,6 +116,7 @@
 			<button type="button" class="modal_btn save" id="save_btn">SAVE</button>
 			<!-- taskNo 실어 줄 태그 -->
 			<div class="taskNoHid"></div>
+			<div class="addTaskValue"></div>
 		</div>
 	</div>
 </div>

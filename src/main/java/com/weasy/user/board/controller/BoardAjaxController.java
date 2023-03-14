@@ -128,6 +128,7 @@ public class BoardAjaxController {
 		
 		System.out.println(taskVo.getTitle());
 		System.out.println(taskVo.getTaskNo());
+		System.out.println("컨트롤러 putTask이메일: " + taskVo.getUserEmail());
 		
 		boardService.updateTask(taskVo);
 	}
@@ -171,5 +172,31 @@ public class BoardAjaxController {
 		
 		return boardService.closeTeamStatus(teamNo);
 	}
+	//task status 바꿔주기
+	@PostMapping("/taskStatusChange")
+	@ResponseBody
+	public void taskStatusChange(@RequestBody TaskVO taskVo) {
+		
+		boardService.taskStatusChange(taskVo);
+	}
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

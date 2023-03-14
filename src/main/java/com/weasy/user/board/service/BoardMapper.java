@@ -66,6 +66,8 @@ public interface BoardMapper {
 	
 	//공지사항 리스트 가져오기
 	public List<noticeListVO> getNoticeList();
+	
+	public void taskStatusChange(TaskVO taskVo);
 }
 
 
