@@ -345,7 +345,6 @@ $("#mainBoardSideBar").click(function(e){
 */
 $(".cat-sub-menu").on('click', 'button', function(e){
 	e.preventDefault();
-	
 	/* 버티컬 버튼 (컨텍스트 메뉴) 선택시 예외처리*/
 	if(!$(e.target).hasClass("teamTask")){
 		return;
@@ -366,7 +365,6 @@ $(".cat-sub-menu").on('click', 'button', function(e){
 		data: JSON.stringify({"teamNo" : teamNo , "userEmail" : userEmail}), //데이터
 		contentType: "application/json", //보내는 데이터 타입
 		success: function(result){
-			console.log(result.role)
 			//옵저버 권한 이라면 글쓰기 기능 제한 
 			if(result.role == 1){
 						/* task추가 부분 비활성화 */
@@ -619,18 +617,26 @@ $('menuitem').on('click', function(e){
 	}
 	
 	if($(e.target).attr("label") == "Delete Team/Project"){
-		/* 팀의 status N으로 변경 */
-		$.ajax({
-			url:"../closeTeamStatus", //컨트롤러
-			type:"post",
-			data:JSON.stringify({"teamNo": teamNo}),
-			contentType:"application/json; charset=utf-8",
-			success:function(result){
-				console.log(result);
-			},
-			error: function(){
-			}	
-		})
+		
+		if(!confirm("정말 삭제하시겠습니까?")){
+			console.log("아니요");
+			return;
+		}else{
+			/* 팀의 status N으로 변경 */
+			$.ajax({
+				url:"../closeTeamStatus", //컨트롤러
+				type:"post",
+				data:JSON.stringify({"teamNo": teamNo}),
+				contentType:"application/json; charset=utf-8",
+				success:function(result){
+					alert("삭제되었습니다.")
+					location.href="/board/board";
+				},
+				error: function(){
+					alert("삭제 실패하였습니다.")
+				}	
+			})
+		}
 	}
 })
 
