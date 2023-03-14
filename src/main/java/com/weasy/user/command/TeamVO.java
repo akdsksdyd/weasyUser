@@ -31,6 +31,9 @@ public class TeamVO { //팀 VO
 	private String teamGoal;
 	private String userEmail;
 	private String teamStatus;
+	
+	//user가 해당 팀에서 어떤 역할인지(권한)
+	private int role;
 
 }
 //teamNo  	int PRIMARY KEY auto_increment,

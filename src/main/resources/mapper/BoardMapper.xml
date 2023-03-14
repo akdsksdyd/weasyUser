@@ -19,11 +19,19 @@
   						   #{teamGoal},
   						   #{userEmail},
   						   #{teamStatus})
-  	
   	</insert>	
   	
   	<select id="getTeamList" resultType="TeamVO">
-  		select * from TEAM where teamNo IN (select teamNo from authority where userEmail=#{user_id})
+  		select teamNo, teamRegdate, endDate, teamName, teamGoal, userEmail, teamStatus 
+  		from TEAM where teamNo IN (select teamNo from authority where userEmail=#{userEmail});
+  	</select>
+  	
+  	<select id="getTeamListWithRole" resultType="TeamVO">
+  		select t.teamNo, t.teamRegdate, t.endDate, t.teamName, t.teamGoal, t.userEmail, t.teamStatus, a.role
+		from team t 
+		left join authority a
+		on t.teamNo = a.teamNo
+		where a.userEmail = #{userEmail};
   	</select>
   	
   	<insert id="addTask" parameterType="TaskVO">
@@ -44,9 +52,7 @@
   	</insert>
   	
   	<select id="getTaskList" resultType="TaskVO">
-  	
-  		select teamNo, userEmail, title, taskNo from TASK where teamNo = #{teamNo} order by taskNo desc
-  	
+  		select teamNo, userEmail, title, taskNo from TASK where teamNo = #{teamNo} order by taskNo desc;
   	</select>
   	
   	<select id="getTeamNo" resultType="int">
@@ -78,6 +84,12 @@
   		insert into authority (userEmail, teamNo, role) 
   		values (#{userEmail}, #{teamNo}, #{role})
   	</insert>
+  	
+  	<select id="getAuthority" resultType="AuthorityVO">
+  		select authNo, userEmail, teamNo, role 
+  		from authority 
+  		where teamNo=#{teamNo} and userEmail=#{userEmail};
+  	</select>
   	
   	<delete id="deleteAuthority" parameterType="int">
   		delete from authority where authNo=#{deletekey}

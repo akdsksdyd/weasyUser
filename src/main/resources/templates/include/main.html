@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="main(container)">
+
+<!-- (sideBar board) 보드 진입시 메인 보드 -->
+<div class="container" id="mainBoardPage">
+	<div class="container">
+		<h2 class="main-title">Your WorkSpace</h2>
+
+		<div class="sub-title">
+			<span>Member 권한</span>
+		</div>
+		<div class="row stat-cards" id="memberWorkspace">
+			<!-- Member 권한으로 들어가있는 팀 리스트 -->
+		</div>
+
+		<div class="sub-title">
+			<span>Observer 권한</span>
+		</div>
+		<div class="row stat-cards" id="observerWorkspace">
+			<!-- Observer 권한으로 들어가있는 팀 리스트 -->
+		</div>
+
+	</div>
+</div>
+
+</th:block>

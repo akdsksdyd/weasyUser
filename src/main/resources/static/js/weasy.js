@@ -14,7 +14,6 @@ $(document).ready(function(){
 /* 팀 클릭 시 teamNo전달 */
 $(".teamTask").click(function(e){
 	
-	console.log(e.target.parentElement.nextElementSibling.value);
 	var teamNo = $(e.target.parentElement.nextElementSibling).val();
 	var userEmail = $(e.target.parentElement.nextElementSibling.nextElementSibling).val();
 	
@@ -25,7 +24,7 @@ $(".teamTask").click(function(e){
 	$(".addTaskValue").html(taskValue);
 	
 	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
-	getTeamTask(teamNo);
+	getTeamTask(teamNo, userEmail);
 });
 
 /* task card 추가 function */
@@ -325,21 +324,78 @@ $("#mainBoardSideBar").click(function(e){
 2. 클릭한 보드의 팀명으로 getTeamTask ajax를 날려서 
    해당 팀의 task card를 가져와서 status 레벨에 맞게 배치해주기 
    (최신등록한 카드가 상단으로 배치)
+3. 옵저버 권한으로 참여된 팀인 경우 수정권한 제한.
 */
-$(".cat-sub-menu").on('click', 'a', function(e){
+$(".cat-sub-menu").on('click', 'button', function(e){
 	e.preventDefault();
+	
+	/* 버티컬 버튼 (컨텍스트 메뉴) 선택시 예외처리*/
+	if(!$(e.target).hasClass("teamTask")){
+		return;
+	}
 	
 	/* 보드의 상단에 타이틀을 팀명으로 변경 */
 	var teamName = $(e.target).html();
 	$("#boardName").html("# "+teamName);
-	
-	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
+			
 	var teamNo = $(e.target).parent().next().val();
 	var userEmail = $(e.target).parent().next().next().val();
-	console.log(userEmail);
-	getTeamTask(teamNo, userEmail);
-	
+			
+	var role = '';
+	/* 클릭한 메뉴 teamNo로 user의 권한 조회 */
+	$.ajax({
+		url: "../getAuthority",
+		type: "post",
+		data: JSON.stringify({"teamNo" : teamNo , "userEmail" : userEmail}), //데이터
+		contentType: "application/json", //보내는 데이터 타입
+		success: function(result){
+			console.log(result.role)
+			//옵저버 권한 이라면 글쓰기 기능 제한 
+			if(result.role == 1){
+						/* task추가 부분 비활성화 */
+						$(".addTaskBox").css("display", "none");
+						
+						/* input태그 readonly추가 */
+						$("#card_modal input").each(function(index, item){
+		       				$(item).attr("readonly",true);
+		   				});
+		   				
+						/* textarea태그 readonly추가 */
+		   				$("#card_modal textarea").each(function(index, item){
+		       				$(item).attr("readonly",true);
+		   				});
+		   				
+		   				/* x버튼을 제외한 모든 버튼 비활성화 */
+		   				$("#card_modal button").each(function(index, item){
+							$(item).attr("disabled", true);
+		   				});
+		   				
+					}else{
+						/* task추가 부분 활성화 */
+						$(".addTaskBox").css("display", "block");
+						
+						/* input태그 readonly 해제 */
+						$("#card_modal input").each(function(index, item){
+		       				$(item).attr("readonly",false);
+		   				});
+		   				/* textarea태그 readonly 해제 */
+		   				$("#card_modal textarea").each(function(index, item){
+		       				$(item).attr("readonly",false);
+		   				});
+		   				/* x버튼을 제외한 모든 버튼 활성화 */
+		   				$("#card_modal button").each(function(index, item){
+							$(item).attr("disabled", false);
+		   				});
+					}
+				},
+				error: function(err){
+				}
+			});
+		
+		/* 클릭한 메뉴 teamNo로 보드 task 조회*/
+		getTeamTask(teamNo, userEmail);
 })
+
 
 function getTeamTask(teamNo, userEmail){
 	var todo_task = "";
@@ -383,12 +439,9 @@ function getTeamTask(teamNo, userEmail){
 				}
 			} //for문의 끝
 			
-			console.dir($("#taskTitle").attr("placeholder"));
-			
 			$("#to-do-content").html(todo_task);
 			$("#doing-content").html(doing_task);
 			$("#done-content").html(done_task);
-			
 		},
 		error: function(err){
 			alert("보드 조회에 실패했습니다. 관리자에게 문의 부탁드립니다.🙏");
@@ -401,7 +454,9 @@ function getTeamTask(teamNo, userEmail){
 function loadMainBoard(){
 	
 	$(document).ready(function(){
-		var workspace = '';
+		var workspace_member = '';
+		var workspace_observer = '';
+		
 		$.ajax({
 			url: "../getWorkspace",
 			type: "get",
@@ -409,23 +464,41 @@ function loadMainBoard(){
 			success: function(result){
 				
 				for(var i = 0; i < result.length; i++){
-					workspace += '<div class="col-md-6 col-xl-3 workspace" data-teamNo='+result[i].teamNo+'>';
-					workspace += '<article class="stat-cards-item workspaceBtn" type="button">';
-					workspace += '<div class="stat-cards-info">';
-					workspace += '<p class="stat-cards-info__num">'+result[i].teamName+'</p>';
-					workspace += '<p class="stat-cards-info__title">'+result[i].teamGoal+'</p>';
 					
+					/* 시간 양식 변경 */
 					var teamRegdate =  new Date(result[i].teamRegdate);
 					var startdate = teamRegdate.getFullYear() + "-" + (teamRegdate.getMonth()+1) + "-" + teamRegdate.getDate();
 					var teamendDate = new Date(result[i].endDate);
 					var enddate = teamendDate.getFullYear() + "-" + (teamendDate.getMonth()+1) + "-" + teamendDate.getDate();
 					
-				 	workspace += '<p class="stat-cards-info__progress">'+ startdate + "  to  " + enddate +'</p>';
-					workspace += '</div>';
-					workspace += '</article>';
-					workspace += '</div>';
+					//member
+					if(result[i].role == 0){ 
+						workspace_member += '<div class="col-md-6 col-xl-3 workspace" data-teamNo='+result[i].teamNo+'>';
+						workspace_member += '<article class="stat-cards-item workspaceBtn" type="button">';
+						workspace_member += '<div class="stat-cards-info">';
+						workspace_member += '<p class="stat-cards-info__num">'+result[i].teamName+'</p>';
+						workspace_member += '<p class="stat-cards-info__title">'+result[i].teamGoal+'</p>';
+					 	workspace_member += '<p class="stat-cards-info__progress">'+ startdate + "  to  " + enddate +'</p>';
+						workspace_member += '</div>';
+						workspace_member += '</article>';
+						workspace_member += '</div>';
+					}
+					//observer
+					else {
+						workspace_observer += '<div class="col-md-6 col-xl-3 workspace" data-teamNo='+result[i].teamNo+'>';
+						workspace_observer += '<article class="stat-cards-item workspaceBtn" type="button">';
+						workspace_observer += '<div class="stat-cards-info">';
+						workspace_observer += '<p class="stat-cards-info__num">'+result[i].teamName+'</p>';
+						workspace_observer += '<p class="stat-cards-info__title">'+result[i].teamGoal+'</p>';
+					 	workspace_observer += '<p class="stat-cards-info__progress">'+ startdate + "  to  " + enddate +'</p>';
+						workspace_observer += '</div>';
+						workspace_observer += '</article>';
+						workspace_observer += '</div>';
+					}
+
 				}
-				$("#memberWorkspace").html(workspace);
+				$("#memberWorkspace").html(workspace_member);
+				$("#observerWorkspace").html(workspace_observer);
 				
 			},
 			error: function(err){
@@ -437,7 +510,6 @@ function loadMainBoard(){
 
 /* 메인 보드 페이지에서 workspace 버튼 클릭시 해당 보드 task불러오기 */
 $("#mainBoardPage").on('click', 'article', function(e){
-	e.preventDefault();
 
 	var teamNo = $(e.target).closest(".workspace").attr("data-teamNo");
 	var teamName = $(e.target).closest(".stat-cards-info").children(".stat-cards-info__num").html();
@@ -459,6 +531,7 @@ $(".cat-sub-menu").on('click', 'button', function(e){
 		$("#menu").css("display", "none");
 		return;
 	}
+	
 	var teamNo = $(e.target.parentElement.parentElement.nextElementSibling).val();
 	
 	$("#menu").attr("data-teamNo", teamNo);
@@ -471,17 +544,33 @@ $(".cat-sub-menu").on('click', 'button', function(e){
 $('menuitem').on('click', function(e){
 	/* 일단 컨텍스트 메뉴창 안보이게 처리 */
 	$("#menu").css("display", "none");
+	var teamNo = $("#menu").attr("data-teamNo");
+	
 	/* 팀원 추가 버튼*/
 	if($(e.target).attr("label") == "add Team/Project Member"){
 		
 		/* 기존에 팀에 추가되어있던 팀원과 권한설정 리스트 불러오기 */
-		var teamNo = $("#menu").attr("data-teamNo");
 		loadTeamMemeberState(teamNo);
 		
 		/* add member 모달창 켜짐 */
 		$("#add_team_modal").css("display", "flex");
 		$("#add_team_modal").attr("data-teamNo", teamNo);
 		$("html").css("overflow", "hidden");
+	}
+	
+	if($(e.target).attr("label") == "Delete Team/Project"){
+		/* 팀의 status N으로 변경 */
+		$.ajax({
+			url:"../closeTeamStatus", //컨트롤러
+			type:"post",
+			data:JSON.stringify({"teamNo": teamNo}),
+			contentType:"application/json; charset=utf-8",
+			success:function(result){
+				console.log(result);
+			},
+			error: function(){
+			}	
+		})
 	}
 })
 
@@ -681,7 +770,6 @@ $(".taskSaveBtn").on('click', 'button', function(e){
 	/* 부모태그에 기능을 줘서 cancle 을 눌렀을 떄 같이 먹는 거 방지. */
 	if($(this).hasClass("cancle"))return;
 	
-	console.log("!!!!!!!!!!!!!!!!!!");
 	var taskTitle = $("#taskTitle").val();
 	var startDate = $("#startDate").val();
 	var targetDate = $("#targetDate").val();

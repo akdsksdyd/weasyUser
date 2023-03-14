@@ -14,21 +14,29 @@ import com.weasy.user.command.noticeListVO;
 @Mapper
 public interface BoardMapper {
 	
+	/* 팀 */
 	public int insertTeam(TeamVO vo);
 	
 	public ArrayList<TeamVO> getTeamList(String user_id);
 	
-	public int addTask(TaskVO vo);
-	
-	public ArrayList<TaskVO> getTaskList(TaskVO taskVo);
+	//user가 속한 팀 리스트와 권한을 함께 가지고 온다.
+	public ArrayList<TeamVO> getTeamListWithRole(String user_id);
 	
 	public int getTeamNo(String teamName);
 	
 	//현재 팀에 추가되어있는 멤버 권한 리스트 가져오기
 	public ArrayList<AuthorityVO> getTeamMember(TeamVO vo);
 	
+	//팀 닫기
+	public int closeTeamStatus(int teamNo);
+	
+	/* 권한(팀원) */
+	
 	//팀원 추가 (권한 테이블)	
 	public int addAuthority(AuthorityVO vo);
+	
+	//팀원 권한 조회	
+	public AuthorityVO getAuthority(TeamVO vo);
 
 	//기존에 있는 팀원인지 체크
 	public int checkAuthority(AuthorityVO vo);
@@ -42,6 +50,12 @@ public interface BoardMapper {
 	//권한 authno얻기 (pk)
 	public int getAuthNo(AuthorityVO vo);
 
+	/* task */
+	
+	public int addTask(TaskVO vo);
+	
+	public ArrayList<TaskVO> getTaskList(TaskVO taskVo);
+	
 	public void updateTask(TaskVO taskVo);
 	
 	public void insertReply(ReplyVO replyVo);
