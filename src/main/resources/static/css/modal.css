@@ -116,7 +116,6 @@
 	text-align: center;
 	font-size: 14px;
 	font-weight: bolder;
-	padding-top: 5px;
 	margin-left: 5px;
 	font-family: sans-serif;
 }
@@ -247,12 +246,14 @@
 	width: 80px;
 	height: 40px;
 	border-radius: 5px;
-	text-align: center;
 	font-size: 14px;
 	font-weight: bolder;
-	padding-top: 5px;
-	margin-left: 5px;
+	margin: 0 0 0 5px;
 	font-family: sans-serif;
+	
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .filebox input[type="file"] {
@@ -329,7 +330,7 @@
 /* 팀 생성시 검색창 css */
 
 .searchTeamLeaderList{
-	width: 475px;
+	width: 469px;
 	height: 30px;
 	position: absolute;
 	z-index: 1;
@@ -347,8 +348,8 @@
 
 .searchTeamLeaderList .search-component li {
 	padding: 10px 8px;
-	background: #9fc5e8;
-	color: #7d8083;
+	background: #1E2235;
+	color: #F6F8FF;
 	cursor: pointer;
 	transition: background .2s ease, color .2s ease;
 	display: flex;
