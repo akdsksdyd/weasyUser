@@ -204,11 +204,16 @@ html {
 }
 
 .workspaceBtn{
-	background: rgba(134, 182, 254, 0.5);
+	background: #1E2235;
+	color:#F6F8FF;
+}
+
+.workspaceBtn .stat-cards-info__num{
+	color:#F6F8FF;
 }
 
 .workspaceBtn:hover{
-	background: white;
+	background: #404663;
 }
 
 .boardTitle {
@@ -560,5 +565,4 @@ section.notice {
   width: 1px;
   height: 1px;
 }
-
 
