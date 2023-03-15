@@ -358,7 +358,14 @@ $(".cat-sub-menu").on('click', 'button', function(e){
 	var userEmail = $(e.target).parent().next().next().val();
 			
 	var role = '';
-	/* 클릭한 메뉴 teamNo로 user의 권한 조회 */
+	/* 클릭한 메뉴 teamNo로 user의 권한 조회하여 write기능 활성화or비활성화 처리 */
+	getAuthority(teamNo, userEmail);
+		
+	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
+	getTeamTask(teamNo, userEmail);
+})
+
+function getAuthority(teamNo, userEmail){
 	$.ajax({
 		url: "../getAuthority",
 		type: "post",
@@ -385,6 +392,11 @@ $(".cat-sub-menu").on('click', 'button', function(e){
 							$(item).attr("disabled", true);
 		   				});
 		   				
+		   				/* select 박스 비활성화 */
+		   				$("#card_modal #selectCheck").each(function(index, item){
+							$(item).attr("disabled", true);
+		   				});
+		   				
 					}else{
 						/* task추가 부분 활성화 */
 						$(".addTaskBox").css("display", "block");
@@ -401,21 +413,22 @@ $(".cat-sub-menu").on('click', 'button', function(e){
 		   				$("#card_modal button").each(function(index, item){
 							$(item).attr("disabled", false);
 		   				});
+		   				/* select 박스 활성화 */
+		   				$("#card_modal #selectCheck").each(function(index, item){
+							$(item).attr("disabled", false);
+		   				});
 					}
 				},
 				error: function(err){
 				}
 			});
-		
-		/* 클릭한 메뉴 teamNo로 보드 task 조회*/
-		getTeamTask(teamNo, userEmail);
-})
-
+}
 
 function getTeamTask(teamNo, userEmail){
 	var todo_task = "";
 	var doing_task = "";
 	var done_task = "";
+	
 	console.log("task그릴 떄 teamNo: " + teamNo);
 	console.log("task그릴 떄 userEmail: " + userEmail);
 			
@@ -429,13 +442,15 @@ function getTeamTask(teamNo, userEmail){
 			$("#mainBoardPage").css("display","none");
 			$("#teamProjectBoard").css("display","block");
 			
-				/* 요청으로 받아온 리스트 들을 화면에 task 단게에 맞게 뿌려준다. */
+			/* 요청으로 받아온 리스트 들을 화면에 task 단게에 맞게 뿌려준다. */
 			for(var i = 0; i < result.length; i++){
 				/* todo에 넣을것 */
 				if(result[i].status == 0){
 					todo_task += '<article class="card" data-taskno="'+result[i].taskNo+'">';
 					todo_task += '<header>'+ result[i].title +'</header>';
-					todo_task += '<div class="detail">'+ '디테일 추후에 넣어줘' +'</div>';
+					todo_task += '<div class="detail">'
+					todo_task += makeDetail(result[i]);
+					todo_task += '</div>';
 					todo_task += '</article>';
 				}
 				
@@ -443,7 +458,9 @@ function getTeamTask(teamNo, userEmail){
 				else if(result[i].status == 1){
 					doing_task += '<article class="card" data-taskno="'+result[i].taskNo+'">';
 					doing_task += '<header>'+ result[i].title +'</header>';
-					doing_task += '<div class="detail">'+ '디테일 추후에 넣어줘' +'</div>';
+					doing_task += '<div class="detail">';
+					doing_task += makeDetail(result[i]);
+					doing_task += '</div>';
 					doing_task += '</article>';
 				}
 				
@@ -451,7 +468,9 @@ function getTeamTask(teamNo, userEmail){
 				else if(result[i].status == 2){
 					done_task += '<article class="card" data-taskno="'+result[i].taskNo+'">';
 					done_task += '<header>'+ result[i].title +'</header>';
-					done_task += '<div class="detail">'+ '디테일 추후에 넣어줘' +'</div>';
+					done_task += '<div class="detail">';
+					done_task += makeDetail(result[i]);
+					done_task += '</div>';
 					done_task += '</article>';
 				}
 			} //for문의 끝
@@ -465,6 +484,63 @@ function getTeamTask(teamNo, userEmail){
 			console.log(err);
 		}
 	});
+}
+
+function makeDetail(task){
+	var detail = '';
+	
+	/*1. 날짜*/
+	if(task.startDate != null){
+		detail += '<i class="bi bi-calendar3"></i>  ';
+		/* 형식 변환 */
+		var timestamp = task.startDate;
+		var date = new Date(timestamp);
+		detail += date.getFullYear()+ '/' + date.getMonth() + '/' + date.getDate();
+	}
+	if(task.targetDate != null){
+		detail += ' - ';
+		/* 형식 변환 */
+		var timestamp = task.targetDate;
+		var date = new Date(timestamp);
+		detail += date.getFullYear()+ '/' + date.getMonth() + '/' + date.getDate();
+		detail += '<br/>';
+	}
+	
+	/* 댓글 갯수 */
+	var countReply = replyCount(task.taskNo);
+	if(countReply != 0){
+		detail += '<i class="bi bi-chat-square-dots"></i>  ';
+		detail += countReply;
+		detail += '  ';
+	}
+	
+	/* 진척률 */
+	if(task.progressRate > 0){
+		detail += '<i class="bi bi-check-square"></i>  ';
+		detail += task.progressRate + '%';
+	}
+
+	/* 첨부파일 갯수 아직 미완..*/
+	return detail;
+}
+
+function replyCount(taskNo){
+	var count;
+	/*2. 댓글 갯수*/
+	$.ajax({
+		url: "../putReply",
+		type: "post",
+		contentType: "application/json",
+		data: JSON.stringify({taskNo: taskNo}),
+		async: false,
+		success: function(reply){
+			count = reply.length;
+		},
+		error: function(err){
+			count = 0;
+		}
+	});
+	return count;
 }
 
 /* 상세페이지에서 select의 option값이 바뀔 때 task테이블의 status uptate */
@@ -578,6 +654,9 @@ $("#mainBoardPage").on('click', 'article', function(e){
 	taskValue += '<input type="hidden" id="userEmail" name="userEmail" value="'+ userEmail +'">';
 	console.log("hidden태그의 teamNo: "+teamNo);
 	$(".addTaskValue").html(taskValue);
+	
+	/* 클릭한 메뉴 teamNo로 user의 권한 조회하여 write기능 활성화or비활성화 처리 */
+	getAuthority(teamNo, userEmail);
 	
 	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
 	getTeamTask(teamNo, userEmail);
