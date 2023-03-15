@@ -137,9 +137,7 @@ public class BoardAjaxController {
 	@PostMapping("/insertReply")
 	@ResponseBody
 	public void insertReply(@RequestBody ReplyVO replyVo) {
-		
 		boardService.insertReply(replyVo);
-		
 	}
 	
 	//상세페이지에 값 넣기
@@ -150,11 +148,10 @@ public class BoardAjaxController {
 		return boardService.putTask(taskVo.getTaskNo());
 	}
 	
-	//상세페이지에 댓글 넣기
+	//상세페이지에 댓글 넣기(가지고오기)
 	@PostMapping("/putReply")
 	@ResponseBody
 	public List<ReplyVO> putReply(@RequestBody ReplyVO replyVo) {
-		
 		return boardService.putReply(replyVo.getTaskNo());
 	}
 	
@@ -172,6 +169,7 @@ public class BoardAjaxController {
 		
 		return boardService.closeTeamStatus(teamNo);
 	}
+	
 	//task status 바꿔주기
 	@PostMapping("/taskStatusChange")
 	@ResponseBody

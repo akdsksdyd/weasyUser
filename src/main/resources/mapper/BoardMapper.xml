@@ -58,7 +58,8 @@
   	</insert>
   	
   	<select id="getTaskList" resultType="TaskVO">
-  		select teamNo, userEmail, title, taskNo, status from TASK where teamNo = #{teamNo} order by taskNo desc
+  		select taskNo, teamNo, userEmail, title, content, startDate, progressRate, targetDate, status 
+  		from TASK where teamNo = #{teamNo} order by taskNo desc
   	</select>
   	
   	<select id="getTeamNo" resultType="int">
