@@ -11,6 +11,7 @@ import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.noticeListVO;
+import com.weasy.user.util.Criteria;
 
 @Service("boardService")
 public class BoardServiceImpl implements BoardService{
@@ -116,7 +117,7 @@ public class BoardServiceImpl implements BoardService{
 	}
 	//공지사항 리스트 가져오기
 	@Override
-	public List<noticeListVO> getNoticeList() {
+	public ArrayList<noticeListVO> getNoticeList() {
 		return boardMapper.getNoticeList();
 	}
 	
@@ -128,8 +129,17 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Override
 	public void taskStatusChange(TaskVO taskVo) {
-		
 		boardMapper.taskStatusChange(taskVo);
+	}
+	//공지사항 글 개수 
+	@Override
+	public int getTotal(Criteria cri) {
+		return boardMapper.getTotal(cri);
+	}
+	//공지사항 상세페이지
+	@Override
+	public ArrayList<noticeListVO> getDetailNotice(noticeListVO noticeVo) {
+		return boardMapper.getDetailNotice(noticeVo);
 	}
 	
 }

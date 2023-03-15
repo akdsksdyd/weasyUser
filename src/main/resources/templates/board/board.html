@@ -123,14 +123,12 @@
         </div>
         
         <!-- 로그 아래에 사용자 이미지와 사용자 정보 표시 -->
-        <!--  
-        <div class="sidebar-head">
+        <!-- <div class="sidebar-head">
         	<div class="box">
         	<img class="profile" src="/img/avatar/avatar-face-03.png" alt="">
         	</div>
         	<span class="text">나의 프로필</span>
-        </div>
-        -->
+        </div> -->
         
 <!-- 사이드바 메뉴 부분 -->
         <div class="sidebar-body">
@@ -142,7 +140,7 @@
                 
                 <!-- 2. 공지사항 목록 -->
                 <li>
-                    <a class="notice" href="##"><span class="icon bell" id="hey" aria-hidden="true"></span>notice list</a>
+                    <a class="noticeSidebar" href="##"><span class="icon bell" id="hey" aria-hidden="true"></span>notice list</a>
                 </li>
                 
 				<!-- 3. 팀 -->
@@ -200,6 +198,10 @@
 <!-- modal : team/project Add -->
 <th:block th:replace="~{ ./modal/teamProjectAdd :: modal( ~{:: #modal} ) }"></th:block>
 <!-- team/project Add 끝 -->
+
+<!-- modal : noticeDetailList -->
+<th:block th:replace="~{ ./modal/noticeDetail :: modal( ~{:: #modal} ) }"></th:block>
+<!-- noticeDetailList 끝 -->
 
 <div class="main-wrapper">
 	
@@ -321,6 +323,9 @@
 		<th:block th:replace="~{ ./include/notice :: notice( ~{:: .container} ) }"></th:block>
 	</main>
 	
+  </div><!-- main-wrapper 끝 -->
+</div><!-- page-flex 끝 -->
+
 <!-- 팀 task 카드 -->
 <th:block th:replace="~{ ./modal/taskCard :: modal( ~{:: #card_modal} ) }"></th:block>
 <!-- 팀 task 카드 끝 -->

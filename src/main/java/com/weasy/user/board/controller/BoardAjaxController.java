@@ -155,12 +155,6 @@ public class BoardAjaxController {
 		return boardService.putReply(replyVo.getTaskNo());
 	}
 	
-	//공지사항
-	@PostMapping("/notice")
-	public List<noticeListVO> putoticeList(){
-		return boardService.getNoticeList();
-	}
-	
 	@PostMapping("/closeTeamStatus")
 	@ResponseBody
 	public int closeTeamStatus(@RequestBody Map<String, Object> param) {
@@ -178,23 +172,15 @@ public class BoardAjaxController {
 		boardService.taskStatusChange(taskVo);
 	}
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	//공지사항 리스트
+	@PostMapping("/getNoticeList")
+	public ArrayList<noticeListVO> getNoticeList(noticeListVO noticeVo){
+		return boardService.getNoticeList();
+	}
+	//공지사항 상세페이지
+	@PostMapping("/getDetailNotice")
+	public ArrayList<noticeListVO> getDetailNotice(@RequestBody noticeListVO noticeVo){
+		return boardService.getDetailNotice(noticeVo);
+	}
 
 }

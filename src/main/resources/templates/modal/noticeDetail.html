@@ -1,0 +1,48 @@
+<th:block th:fragment="modal(noticeModal)">
+
+	<!-- 보드리스트의 카드 모달창 -->
+<div class="modal" id="noticeModal">
+	<div class="noticeModal_body">
+		<div class="cardmodal-head">
+			<div class="close_btn close-area" onclick="closeNoticeModal()">X</div>
+		</div>
+		
+		<div class="nm_body">
+			<div class="bigTitle">공지사항</div>
+			<hr style="border: 0; height: 3px; background: black;"/>
+			
+			<!-- 여기로 -->
+			<div id="noticeDetailHtml">
+			</div>
+			
+			<div class="bbs-view-file">
+				<ul>
+					<!-- 저장된 첨부파일 가져오기 -->
+				</ul>
+			</div>
+		
+			<div class="prev-next-notice">
+				<ul>
+					<li>
+						<span>다음글</span>
+						<a href="##"></a>
+					 </li>
+					 <li>
+						<span>이전글</span>
+						<a href="##"></a>
+					 </li>
+				</ul>
+			</div>
+			
+		</div>
+	
+		<div class="m_footer taskSaveBtn">
+			<button type="button" class="modal_btn cancle" onclick="closeNoticeModal()">CANCLE</button>
+		</div>
+			<!-- taskNo 실어 줄 태그 -->
+			<div class="taskNoHid"></div>
+			<div class="addTaskValue"></div>
+	</div>
+</div>
+<!-- 보드리스트의 카드 모달창 끝 -->
+</th:block>

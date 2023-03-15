@@ -153,7 +153,6 @@ public class UserController {
 	public List<UserVO> searchUserList(@RequestBody Map<String, Object> param) {
 		JsonParser parser = new JsonParser();
 		String keyword = param.get("searchKeyWord").toString();
-		
 		return userService.searchUser(keyword);
 	}
 }

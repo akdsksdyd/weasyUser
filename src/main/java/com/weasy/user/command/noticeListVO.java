@@ -16,7 +16,7 @@ public class noticeListVO { //공지사항 리스트 VO
 	private int noticeNo;
 	private String noticeTitle;
 	private String noticeContent;
-	private Timestamp noticeRegdate;
+	private String noticeRegdate;
 	private String noticeLevel;
 	private String userEmail;
 

@@ -1,14 +1,12 @@
 package com.weasy.user.board.service;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.noticeListVO;
+import com.weasy.user.util.Criteria;
 
 public interface BoardService {
 	
@@ -58,9 +56,15 @@ public interface BoardService {
 	
 	public ArrayList<ReplyVO> putReply(int taskNo);
 	//공지사항 리스트 가져오기
-	public List<noticeListVO> getNoticeList();
+	public ArrayList<noticeListVO> getNoticeList();
+	//공지사항 글 개수 
+	public int getTotal(Criteria cri);
+	//공지사항 상세페이지 가져오기
+	public ArrayList<noticeListVO> getDetailNotice(noticeListVO noticeVo);
 	
 	public void taskStatusChange(TaskVO taskVo);
+	
+	
 	
 }
 

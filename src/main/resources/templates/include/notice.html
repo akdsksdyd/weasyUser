@@ -1,11 +1,55 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="notice(container)">
+<style>
+@import url(//fonts.googleapis.com/earlyaccess/jejumyeongjo.css);
+</style>
 
 <!-- notice 페이지 -->
-<div class="container" id="mainBoardPage">
-	<div class="container">
+<div class="container notice-font" id="mainBoardPage">
+	<div class="notice-container">
 		
+		<section class="notice" id="noticePage">
+		  <div class="page-title">
+		        <div class="container">
+		            <h3>공지사항</h3>
+		        </div>
+		    </div>
+		
+		    <!-- board seach area -->
+		    <div id="notice-search">
+		        <div class="container">
+		            <div class="search-window">
+		                <form action="">
+		                    <div class="search-wrap">
+		                        <label for="search" class="blind">공지사항 내용 검색</label>
+		                        <input id="search" type="search" name="" placeholder="검색어를 입력해주세요." value="">
+		                        <button type="submit" class="btn notice-btn-dark">검색</button>
+		                    </div>
+		                </form>
+		            </div>
+		        </div>
+		    </div>
+		   
+		  <!-- board list area -->
+		    <div id="board-list">
+		        <div class="container">
+		            <table class="board-table">
+		                <thead>
+		                <tr>
+		                    <th scope="col" class="th-num">번호</th>
+		                    <th scope="col" class="th-title">제목</th>
+		                    <th scope="col" class="th-date">등록일</th>
+		                </tr>
+		                </thead>
+		                <tbody id="ajaxNoticeList" >               
+		          			<!-- 여기들어옴 -->
+		                </tbody>
+		            </table>
+		        </div>
+		    </div>
+		
+		</section>
 	</div>
 </div>
 
