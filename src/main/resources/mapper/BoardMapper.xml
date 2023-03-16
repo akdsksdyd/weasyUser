@@ -40,15 +40,13 @@
   	
   	<insert id="addTask" parameterType="TaskVO">
   	
-  		insert into task(userEmail,
-  						 title,
+  		insert into task(title,
   						 content,
   						 startDate,
   						 targetDate,
   						 teamNo,
   						 status)
-  					values(#{userEmail},
-  						   #{title},
+  					values(#{title},
   						   #{content},
   						   #{startDate},
   						   #{targetDate},
@@ -125,10 +123,9 @@
   	</insert>
   	
   	<select id="putTask" resultType="TaskVO">
-  		select title, content, startDate, targetDate, status
+  		select userEmail, title, content, startDate, progressRate, targetDate, status
   		from TASK
   		where taskNo = #{taskNo}
-  	
   	</select>
   	
   	<select id="putReply" resultType="ReplyVO">
@@ -173,7 +170,9 @@
   		update task set status = #{status} where taskNo = #{taskNo}
   	</update>
   	
-  	
+  	<update id="updateTaskUser" parameterType="taskVo">
+  		update task set userEmail = #{userEmail} where teamNo = #{teamNo} and taskNo = #{taskNo};
+  	</update>
   	
   </mapper>
   

@@ -155,4 +155,18 @@ public class UserController {
 		String keyword = param.get("searchKeyWord").toString();
 		return userService.searchUser(keyword);
 	}
+	
+	//검색어로 회원 검색 (팀내의 회원들 안에서만 검색)
+	@ResponseBody
+	@PostMapping("/searchTaskUserList")
+	public List<UserVO> searchTaskUserList(@RequestBody Map<String, Object> param) {
+		JsonParser parser = new JsonParser();
+		int teamNo = Integer.parseInt(param.get("teamNo").toString());
+		String keyword = param.get("searchKeyWord").toString();
+		
+		System.out.println(teamNo);
+		System.out.println(keyword);
+		
+		return userService.searchTaskUser(teamNo, keyword);
+	}
 }

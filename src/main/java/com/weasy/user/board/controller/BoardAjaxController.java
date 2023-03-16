@@ -112,13 +112,15 @@ public class BoardAjaxController {
 	
 	@PostMapping("/deleteAuthority")
 	@ResponseBody
-	public int deleteAuthority(@RequestBody AuthorityVO vo){
-		//기존에 존재하던 권한이라면 삭제
-		if(boardService.checkAuthority(vo) != 0) { //기존회원 있음
-			return boardService.deleteAuthority(vo);
+	public void deleteAuthority(@RequestBody List<AuthorityVO> list){
+		//삭제할 권한 배열 받아서
+		for(int i = 0; i < list.size(); i++) {
+			AuthorityVO vo = list.get(i);
+			//기존에 존재하던 권한이라면 삭제
+			if(boardService.checkAuthority(vo) != 0) { //기존회원 있음
+				boardService.deleteAuthority(vo);
+			}
 		}
-		//아니라면 유지
-		return 0;
 	}
 	
 	//업무 update
@@ -168,7 +170,6 @@ public class BoardAjaxController {
 	@PostMapping("/taskStatusChange")
 	@ResponseBody
 	public void taskStatusChange(@RequestBody TaskVO taskVo) {
-		
 		boardService.taskStatusChange(taskVo);
 	}
 	
@@ -182,5 +183,11 @@ public class BoardAjaxController {
 	public ArrayList<noticeListVO> getDetailNotice(@RequestBody noticeListVO noticeVo){
 		return boardService.getDetailNotice(noticeVo);
 	}
-
+	
+	//task card의 user 변경해주기
+	@PostMapping("/updateTaskUser")
+	@ResponseBody
+	public int updateTaskUser(@RequestBody TaskVO taskVo) {
+		return boardService.updateTaskUser(taskVo);
+	}
 }

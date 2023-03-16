@@ -19,8 +19,6 @@ public class UserServiceImpl implements UserService {
 	//회원가입
 	@Override
 	public void userSignup(UserVO userVo) {
-		
-		
 		userMapper.userSignup(userVo);
 	}
 	
@@ -50,5 +48,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserVO> searchUser(String keyword) {
 		return userMapper.searchUser(keyword);
+	}
+	
+	@Override
+	public List<UserVO> searchTaskUser(int teamNo, String keyword) {
+		return userMapper.searchTaskUser(teamNo, keyword);
 	}
 }

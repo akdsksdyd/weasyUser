@@ -64,7 +64,8 @@ public interface BoardService {
 	
 	public void taskStatusChange(TaskVO taskVo);
 	
-	
+	//task 할당자 변경
+	public int updateTaskUser(TaskVO taskVo);
 	
 }
 

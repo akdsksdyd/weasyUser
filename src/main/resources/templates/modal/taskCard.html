@@ -16,14 +16,17 @@
 			
 			<!-- 2. member -->
 			<div class="card_content">
+				<!--  
 				<i data-feather="users" class="detail-icon"></i>
 				<button type="button" class="button-prevent" title="add Member" id="addTaskMember">
 					<i data-feather="plus-square" class="detail-icon"></i>
 				</button>
+				-->
 				
 				<button type="button" class="button-prevent addMember">
-					<i data-feather="user" class="detail-icon"></i>
-					<span>member name</span>
+					<i data-feather="user" class="addMember"></i>
+					<i id="plusBtn" data-feather="plus-square" class="hidden addMember"></i>
+					<span id="taskuser" class="addMember"></span>
 				</button>
 				
 			</div>
@@ -119,7 +122,20 @@
 			<div class="addTaskValue"></div>
 		</div>
 	</div>
+	<!-- task member 검색창 -->
+	<div class="searchTaskMember">
+		<input type="text" placeholder="search for member on your team" id="searchTaskMember" />
+		<!-- 검색결과 -->
+		<div class="search-component">
+			<ul class="search-list">
+			<!-- 검색된 멤버 리스트 뿌려주기 -->
+			</ul>
+		</div>
+	</div>
+
 </div>
 <!-- 보드리스트의 카드 모달창 끝 -->
+
+
 
 </th:block>
