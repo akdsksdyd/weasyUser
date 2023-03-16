@@ -21,9 +21,24 @@
   						   #{teamStatus})
   	</insert>	
   	
+  	<update id="updateTeam" parameterType="TeamVO">
+  		update team set
+  			teamRegdate=#{teamRegdate},
+  			endDate=#{endDate},
+  			teamGoal=#{teamGoal},
+  			userEmail=#{userEmail}
+  		where teamNo = #{teamNo}
+  	</update>
+  	
   	<select id="getTeamList" resultType="TeamVO">
   		select teamNo, teamRegdate, endDate, teamName, teamGoal, userEmail, teamStatus 
   		from TEAM where teamNo IN (select teamNo from authority where userEmail=#{userEmail}) and t.teamStatus = 'Y'
+  		order by teamNo asc
+  	</select>
+  	
+  	<select id="getTeamInfo" resultType="TeamVO">
+  		select teamNo, teamRegdate, endDate, teamName, teamGoal, userEmail, teamStatus 
+  		from team where teamNo=#{teamNo};
   	</select>
   	
   	<update id="closeTeamStatus">
@@ -36,10 +51,10 @@
 		left join authority a
 		on t.teamNo = a.teamNo
 		where a.userEmail = #{userEmail} and t.teamStatus = 'Y'
+		order by teamNo asc
   	</select>
   	
   	<insert id="addTask" parameterType="TaskVO">
-  	
   		insert into task(title,
   						 content,
   						 startDate,
@@ -52,7 +67,6 @@
   						   #{targetDate},
   						   #{teamNo},
   						   0)
-  						   
   	</insert>
   	
   	<select id="getTaskList" resultType="TaskVO">

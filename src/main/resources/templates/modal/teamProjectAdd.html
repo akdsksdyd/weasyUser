@@ -2,6 +2,7 @@
 
 	<!-- 팀/프로젝트 추가 모달창 -->
 	<form action="addTeam" method="post">
+		
 		<div class="modal" id="modal">
 			<div class="modal_body">
 				<div class="m_head">
@@ -12,6 +13,8 @@
 				</div>
 
 				<div class="m_body">
+					<input type="hidden" id="teamNo" name="teamNo" value="0">
+					
 					<!-- 팀생성일 ~ 팀 종료일 -->
 					<div class="m_date">
 						<p class="p">start date</p>
