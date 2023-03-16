@@ -142,6 +142,11 @@ public class BoardServiceImpl implements BoardService{
 		return boardMapper.getDetailNotice(noticeVo);
 	}
 	
+	@Override
+	public int updateTaskUser(TaskVO taskVo) {
+		return boardMapper.updateTaskUser(taskVo);
+	}
+	
 }
 
 

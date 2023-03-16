@@ -32,8 +32,19 @@
 		WHERE (userEmail like concat('%', #{keyword}, '%') or nickName like concat('%', #{keyword}, '%')) 
 		and permission = 'Y';
 	</select>
+	
 	<insert id="addLoginDate" parameterType="UserVO">
 		INSERT INTO loginlog (userEmail, loginDate) VALUES(#{userEmail}, date_format(now(), '%Y%m%d%H%i%s'));
 	</insert>
+	
+	<!-- 검색어로 직원찾기 (팀내의 직원들 중..) -->
+	<select id="searchTaskUser" resultType="UserVO">
+		select a.userEmail, u.nickname 
+		from authority a
+		LEFT JOIN users u
+		ON a.userEmail = u.userEmail
+		WHERE (a.userEmail like concat('%', #{keyword}, '%') or u.nickName like concat('%', #{keyword}, '%')) 
+		and a.teamNo=#{teamNo}
+	</select>
 
   </mapper>

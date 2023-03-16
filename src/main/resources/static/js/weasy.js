@@ -92,7 +92,6 @@ $(".listBox").on('click', 'article', function(e){
 	
 	/* task테이블의 status값에 따라 selected속성 부여 */
 	var status = $("#selectCheck");
-	console.log(status);
 	
 	/* taskNo을 히든태그로 숨겨서 전달하기 위한 구문 */
 	var taskNo = $(e.target).closest('article').attr("data-taskno");
@@ -116,26 +115,33 @@ $(".listBox").on('click', 'article', function(e){
 				$("#targetDate").val(result.targetDate.substring(0, 11));
 			}
 			
+			/* 
+			task 할당 받은 user가 없다면 +버튼을 보여지게
+							   있다면 +버튼을 없애고 userEmail이 보여지게 처리
+			*/
+			if(result.userEmail == undefined){
+				$("#plusBtn").removeClass("hidden");
+				$("#taskuser").html(" ");
+			}else{
+				$("#plusBtn").attr("class", "hidden");
+				$("#taskuser").html(result.userEmail);
+			}
+			
 			/* content가 업데이트 시 제대로 안뜨는 부분 수정 */
 			$('#description').val(result.content);
 		
 			/* hidden으로 status값 전달 */
 			if(result.status == 0){
-				console.log("status 0임:"+result.status);
 				$("#selectCheck").val('0').prop("selected", true);
 			}else if(result.status == 1){
-				console.log("status 1임:"+result.status);
 				$("#selectCheck").val('1').prop("selected", true);
 			}else if(result.status == 2){
-				console.log("status 2임:"+result.status);
 				$("#selectCheck").val('2').prop("selected", true);
 			}
-			console.log("모달창 켰을 떄 status값: "+result.status);
 		},
 		error: function(err){
 			alert("조회에 실패 했습니다.");
 		}
-		
 	});
 	
 	var replyList = "";
@@ -163,16 +169,115 @@ $(".listBox").on('click', 'article', function(e){
 				replyList += '</div>'; 
 			
 				$("#comment_list").html(replyList);
-
 			}
 			
 		},
 		error: function(err){
 			alert("댓글 조회 실패!");
 		}
-		
 	})
 	
+});
+
+
+/* task card modal창 안에서 멤버 버튼 클릭시 검색창 뜨도록 구현 */
+$(".addMember").click(function(e){
+	
+	$(".searchTaskMember").css("top", e.pageY);
+	$(".searchTaskMember").css("left", e.pageX);
+	$(".searchTaskMember").css("display", "block");
+		
+	//만약 taskuser가 빈값이면 +버튼을 다시 숨겨줘야한다.
+	if($(this).last().text().trim() == ""){
+		
+	}
+})
+
+/* 해당 팀 내의 멤버만 검색 */
+$("#searchTaskMember").keyup(function(e){
+	
+	var teamNo = $("#teamNoHidden").val();
+	var searchKeyword = $(e.target).val();
+	var findUserList = '';
+	
+	$.ajax({
+		url:"../user/searchTaskUserList", //컨트롤러
+		type:"post",
+		data:JSON.stringify({"teamNo": teamNo, "searchKeyWord": searchKeyword}),
+		contentType:"application/json; charset=utf-8",
+		success:function(result){
+			
+			for(var i = 0; i < result.length; i++){
+				findUserList += '<li class="searchtitle chooseUser">';
+				findUserList += '<span>'+result[i].nickname+'</span><br/>';
+				findUserList += '<span class="subtitle">'+result[i].userEmail+'</span>';
+			}
+			
+			$(".searchTaskMember .search-list").html(findUserList);
+			
+		}, 
+		error: function(){
+		}		
+	});
+})
+
+/* 검색한 멤버의 이름을 클릭하면 */
+$(".searchTaskMember .search-list").on('click', 'li', function(e){
+	/* 검색어 초기화 & 사라지게 */
+	$("#searchTaskMember").val("");
+	$(".searchTaskMember").css("display", "none");
+	
+	/* 찾은 userlist 초기화 */
+	$(".search-list").html("");
+	
+	/* nickname과 email을 구한다. */
+	var email = $(this).children().last().html();
+	if(email == $("#taskuser").html()){
+		alert("이미 할당된 멤버 입니다.");
+		return;
+	}
+	
+	$("#taskuser").html(email);
+	$("#plusBtn").attr("class", "hidden");
+	
+	var teamNo = $("#teamNoHidden").val();
+	var taskNo = $("#taskNo").val();
+	
+	/* db에 값 업데이트 */
+	$.ajax({
+		url: "../updateTaskUser",
+		type: "post",
+		data: JSON.stringify({"userEmail": email, "teamNo": teamNo, "taskNo": taskNo}),
+		contentType: "application/json",
+		success: function(result){
+			alert(email + "에게 업무가 할당되었습니다.");
+		},
+		error: function(err){
+			alert("");
+		}
+	})
+	
+})
+
+/* task card modal창에서 검색창 부분 사라지게 하는 부분 */
+$('html').click(function(e) {
+
+	if($(e.target).attr("class") == undefined){
+		/* 콘솔창에 에러나는것 예외처리 */
+		return;
+	}
+	/* addmember 버튼영역도 아니고 searchTaskMemeber input박스를 제외한 영역 클릭히 검색창 사라지게 처리 */
+	if($(e.target).attr("class").indexOf("addMember") == -1 && $(e.target).attr("id") != "searchTaskMember"){
+		/* 검색어 초기화 & 사라지게 */
+		$("#searchTaskMember").val("");
+		$(".searchTaskMember").css("display", "none");
+	
+		/* 찾은 userlist 초기화 */
+		$(".search-list").html("");
+		
+		/* 화면에서 안보이게 처리 */
+		$(".searchTaskMember").css("dio9splay", "none");
+	}
 });
 
 /* 보드 리스트 카드 모달창 닫기 */
@@ -355,8 +460,10 @@ $(".cat-sub-menu").on('click', 'button', function(e){
 	/* 보드의 상단에 타이틀을 팀명으로 변경 */
 	var teamName = $(e.target).html();
 	$("#boardName").html("# "+teamName);
-			
+	
 	var teamNo = $(e.target).parent().next().val();
+	$("#boardName").append('<input type="hidden" id="teamNoHidden" value="'+ teamNo +'">');
+	
 	var userEmail = $(e.target).parent().next().next().val();
 			
 	var role = '';
@@ -489,12 +596,20 @@ function getTeamTask(teamNo, userEmail){
 	});
 }
 
+/* task card의 디테일 부분을 만들어준다. */
 function makeDetail(task){
 	var detail = '';
 	
+	/*0. 닉네임 표시*/
+	var nickname = findNickname(task.userEmail);
+	if(nickname != ""){
+		detail += '<i class="bi bi-emoji-laughing"></i>  ';
+		detail += nickname;
+	}
+	
 	/*1. 날짜*/
 	if(task.startDate != null){
-		detail += '<i class="bi bi-calendar3"></i>  ';
+		detail += '  <i class="bi bi-calendar3"></i>  ';
 		/* 형식 변환 */
 		var timestamp = task.startDate;
 		var date = new Date(timestamp);
@@ -524,9 +639,11 @@ function makeDetail(task){
 	}
 
 	/* 첨부파일 갯수 아직 미완..*/
+	
 	return detail;
 }
 
+/* task card에 달린 댓글의 갯수를 가져온다 */
 function replyCount(taskNo){
 	var count;
 	/*2. 댓글 갯수*/
@@ -544,6 +661,23 @@ function replyCount(taskNo){
 		}
 	});
 	return count;
+}
+
+function findNickname(email){
+	var nickname;
+	$.ajax({
+		url:"../user/searchUserList", //컨트롤러
+		type:"post",
+		data:JSON.stringify({"searchKeyWord": email}),
+		contentType:"application/json; charset=utf-8",
+		async: false,
+		success:function(result){
+			nickname = result[0].nickname;
+		}, 
+		error: function(){
+		}		
+	})
+	return nickname;
 }
 
 /* 상세페이지에서 select의 option값이 바뀔 때 task테이블의 status uptate */
@@ -639,10 +773,8 @@ function loadMainBoard(){
 $("#mainBoardPage").on('click', 'article', function(e){
 
 	var teamNo = $(e.target).closest(".workspace").attr("data-teamNo");
-	console.log("보드에서 클릭시: "+teamNo);
 	var teamName = $(e.target).closest(".stat-cards-info").children(".stat-cards-info__num").html();
 	var userEmail = $(".userEmail").val();
-	console.log("팀 이름: "+teamName);
 	/* 만약 제일 바깥 div를 눌러서 teamName이 undefined라면 다시 teamName을 구한다.*/
 	if(teamName == undefined){
 		teamName = $(e.target).children().children(".stat-cards-info__num").html();
@@ -650,6 +782,7 @@ $("#mainBoardPage").on('click', 'article', function(e){
 	
 	/* 보드의 상단에 타이틀을 팀명으로 변경 */
 	$("#boardName").html("# "+teamName);
+	$("#boardName").append('<input type="hidden" id="teamNoHidden" value="'+ teamNo +'">');
 	
 	/* workspace클릭 시 히든태그로 값 넘기기 */
 	var taskValue = "";
@@ -701,7 +834,6 @@ $('menuitem').on('click', function(e){
 	if($(e.target).attr("label") == "Delete Team/Project"){
 		
 		if(!confirm("정말 삭제하시겠습니까?")){
-			console.log("아니요");
 			return;
 		}else{
 			/* 팀의 status N으로 변경 */
@@ -738,6 +870,7 @@ function loadTeamMemeberState(teamNo){
 				memberState += '<span>'+result[i].nickName+'</span>';
 				memberState += '<span class="subtitle">'+result[i].userEmail+'</span>';
 				memberState += '</div>';
+				memberState += '<div>';
 				memberState += '<select class="selectPossible">';
 				if(result[i].role == 0){ //멤버 권한
 					memberState += '<option value="0" selected>Member멤버</option>';
@@ -747,6 +880,8 @@ function loadTeamMemeberState(teamNo){
 					memberState += '<option value="1" selected>Observer옵저버</option>';
 				}
 				memberState += '</select>';
+				memberState += '<button class="button-prevent deleteMember">X</button>';
+				memberState += '</div>';
 				memberState += '</li>';
 			}
 			/* 태그만들어서 memberList부분에 넣어주기 */
@@ -764,7 +899,7 @@ $('html').click(function(e) {
 		if(!$(e.target).hasClass("contextMenu") && !$(e.target).hasClass("teamContextMenu")){
 			$("#menu").css("display", "none");
 		}
-	} 
+	}
 });
 
 /* 팀원 추가 모달창 닫기 */
@@ -812,7 +947,7 @@ $(".search-list").on("click", function() {
 })
 
 /* 검색한 멤버의 이름을 클릭하면 */
-$(".search-list").on('click', 'li', function(e){
+$(".searchModal .search-list").on('click', 'li', function(e){
 	/* 검색어 초기화 */
 	$("#searchMember").val("");
 	/* 찾은 userlist 초기화 */
@@ -835,36 +970,45 @@ $(".search-list").on('click', 'li', function(e){
 	chooseUser += '<span>'+nickname+'</span>';
 	chooseUser += '<span class="subtitle">'+email+'</span>';
 	chooseUser += '</div>';
+	chooseUser += '<div>';
 	chooseUser += '<select class="selectPossible">';
 	chooseUser += '<option value="0" selected>Member멤버</option>';
 	chooseUser += '<option value="1">Observer옵저버</option>';
 	chooseUser += '</select>';
+	chooseUser += '<button class="button-prevent deleteMember">X</button>';
+	chooseUser += '</div>';
 	chooseUser += '</li>';
 	
 	/* 태그만들어서 memberList부분에 넣어주기 */
 	$(".chooseMemberList").append(chooseUser);
 })
 
-/* 모달창에서 추가된 멤버 더블 클릭시 삭제 되는 기능 추가 */
-$(".chooseMemberList").on('dblclick', 'li', function(e){
-	$(this).remove();
+let deleteData = [];
+
+/* 모달창에서 추가된 멤버 x버튼 클릭시 삭제 되는 기능 추가 */
+$(".chooseMemberList").on('click', 'button', function(e){
+	$(this.parentElement.parentElement).remove();
 	
-	var email = $(this).children().first().children().last().html();
-	var role = $(this).children().last().val();
+	var email = $(this.parentElement.parentElement).children().first().children().last().html();
+	var role = $(this.parentElement.parentElement).children().last().prev().val();
 	var teamNo = $("#add_team_modal").attr("data-teamNo");
-	
+
+	deleteData.push({"userEmail" : email, "teamNo" : teamNo, "role" : role});
+})
+
+function deleteAuthority(data){
 	/* 권한 테이블에 등록된 사람이었는지 체크 후 등록되었었다면 삭제 */
 	$.ajax({
 		url:"../deleteAuthority",
 		type:"post",
-		data:JSON.stringify({"userEmail" : email, "teamNo" : teamNo, "role" : role}),
+		data:JSON.stringify(data),
 		contentType:"application/json; charset=utf-8",
 		success:function(result){
 		}, 
 		error: function(){
 		}		
 	})
-})
+}
 
 /* 팀원 추가 모달창에서 save 버튼 클릭시 DB에 insert */
 $("#add_team_modal").on('click', 'button', function(e){
@@ -872,6 +1016,8 @@ $("#add_team_modal").on('click', 'button', function(e){
 	if($(this).attr("id") != "addMemberSaveBtn"){
 		return;
 	}
+	
+	deleteAuthority(deleteData);
 	
 	var emailList = $(".chooseMemberList li .subtitle").get();
 	var roleList = $(".chooseMemberList li .selectPossible option:selected").get();
@@ -900,17 +1046,6 @@ $("#add_team_modal").on('click', 'button', function(e){
 		})
 	}
 })
-/*$(".listBox").on('click', 'article', function(e){
-	
-   	var taskNo = $(e.target).closest('article').attr("data-taskno");
-   	
-   	$(".save").click(function(e){
-		e.preventDefault();
-   		console.log(taskNo);
-		   
-	})
-})*/
-
 
 /* task 상세 페이지에서 제일 하단부에 있는 save버튼을 눌렀을 시 task테이블 update */
 $(".taskSaveBtn").on('click', 'button', function(e){

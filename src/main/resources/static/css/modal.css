@@ -10,6 +10,7 @@
 	background-color: rgba(0, 0, 0, 0.4);
 	position:fixed;
 	overflow: hidden;
+	z-index: 2;
 }
 
 .show {
@@ -162,6 +163,10 @@
 .detail-icon {
 	margin:5px 0px;
 	margin-right: 5px;
+}
+
+.hidden{
+	display: none;
 }
 
 .button-prevent {
@@ -494,7 +499,12 @@
 	color: #ABB2B9;
 	cursor: pointer;
 	transition: background .2s ease, color .2s ease;
-	width: 300px;
+	width: 340px;
+}
+
+.deleteMember{
+	padding-left: 20px;
+	color : white;
 }
 
 .selectUser{
@@ -523,7 +533,6 @@
 ::-moz-placeholder {
 	color: #85C1E9;
 }
-
 
 /* 공지사항 모달 */
 
@@ -579,5 +588,3 @@ hr{
 	background-position: center;
 }
  
-
-
