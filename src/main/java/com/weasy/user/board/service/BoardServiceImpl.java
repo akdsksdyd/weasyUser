@@ -21,10 +21,18 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Override
 	public int insertTeam(TeamVO vo) {
-		
 		System.out.println("서비스" + vo.toString());
-		
 		return boardMapper.insertTeam(vo);
+	}
+	
+	@Override
+	public int updateTeam(TeamVO vo) {
+		return boardMapper.updateTeam(vo);
+	}
+	
+	@Override
+	public TeamVO getTeamInfo(TeamVO vo) {
+		return boardMapper.getTeamInfo (vo);
 	}
 	
 	@Override

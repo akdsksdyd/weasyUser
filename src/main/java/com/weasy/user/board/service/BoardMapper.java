@@ -18,12 +18,18 @@ public interface BoardMapper {
 	/* 팀 */
 	public int insertTeam(TeamVO vo);
 	
+	/* 팀 update */
+	public int updateTeam(TeamVO vo);
+	
 	public ArrayList<TeamVO> getTeamList(String user_id);
 	
 	//user가 속한 팀 리스트와 권한을 함께 가지고 온다.
 	public ArrayList<TeamVO> getTeamListWithRole(String user_id);
 	
 	public int getTeamNo(String teamName);
+	
+	//선택한 팀 정보 읽어오기
+	public TeamVO getTeamInfo(TeamVO vo);
 	
 	//현재 팀에 추가되어있는 멤버 권한 리스트 가져오기
 	public ArrayList<AuthorityVO> getTeamMember(TeamVO vo);

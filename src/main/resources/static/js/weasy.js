@@ -79,8 +79,14 @@ $("#addTeamProject").click(function(){
 function closeAddModal() {
 	$("#modal").css("display", "none");
 	$("html").css("overflow", "auto");
+	
+	/* 닫을시 모든 input태그의 정보 초기화 */
+	$("#modal input").each(function(index, item){
+		$(item).val("");
+	});
+	/* 검색 기록 삭제 */
+	$("#modal .search-component").html("");
 }
-
 
 /* 보드리스트의 카드 모달창 */
 
@@ -120,10 +126,10 @@ $(".listBox").on('click', 'article', function(e){
 							   있다면 +버튼을 없애고 userEmail이 보여지게 처리
 			*/
 			if(result.userEmail == undefined){
-				$("#plusBtn").removeClass("hidden");
+				$("#plusBtn").removeClass("hiddenBtn");
 				$("#taskuser").html(" ");
 			}else{
-				$("#plusBtn").attr("class", "hidden");
+				$("#plusBtn").attr("class", "hiddenBtn");
 				$("#taskuser").html(result.userEmail);
 			}
 			
@@ -238,7 +244,7 @@ $(".searchTaskMember .search-list").on('click', 'li', function(e){
 	}
 	
 	$("#taskuser").html(email);
-	$("#plusBtn").attr("class", "hidden");
+	$("#plusBtn").attr("class", "hiddenBtn");
 	
 	var teamNo = $("#teamNoHidden").val();
 	var taskNo = $("#taskNo").val();
@@ -285,13 +291,15 @@ function closeCardModal(){
 	$("#card_modal").css("display", "none");
 	$("html").css("overflow", "auto");
 	
-	/* 상세페이지에서 x버튼 눌렀을 시 입력 했던 값 공백으로 치환 */
-	$("#taskTitle").val("");
-	$("#startDate").val("");
-	$("#targetDate").val("");
-	$("#description_content").val("");
-	$("#comment_list").empty();
+	/* 닫을시 모든 input태그의 정보 초기화 */
+	$("#card_modal input").each(function(index, item){
+		$(item).val("");
+	});
 	
+	/* 닫을시 모든 textarea태그의 정보 초기화 */
+	$("#card_modal textarea").each(function(index, item){
+		$(item).val("");
+	});
 }
 
 /* task card의 description 글자 크기만큼 자동 늘리기 */
@@ -599,13 +607,17 @@ function getTeamTask(teamNo, userEmail){
 /* task card의 디테일 부분을 만들어준다. */
 function makeDetail(task){
 	var detail = '';
-	
+	 
 	/*0. 닉네임 표시*/
-	var nickname = findNickname(task.userEmail);
-	if(nickname != ""){
-		detail += '<i class="bi bi-emoji-laughing"></i>  ';
-		detail += nickname;
+	if(task.userEmail != undefined){
+		var nickname = findNickname(task.userEmail);
+		if(nickname != "" && nickname != undefined){
+			detail += '<i class="bi bi-emoji-laughing"></i>  ';
+			detail += nickname;
+		}
 	}
+	
+	
 	
 	/*1. 날짜*/
 	if(task.startDate != null){
@@ -664,7 +676,7 @@ function replyCount(taskNo){
 }
 
 function findNickname(email){
-	var nickname;
+	var nickname="";
 	$.ajax({
 		url:"../user/searchUserList", //컨트롤러
 		type:"post",
@@ -672,9 +684,12 @@ function findNickname(email){
 		contentType:"application/json; charset=utf-8",
 		async: false,
 		success:function(result){
-			nickname = result[0].nickname;
+			for(var i = 0; i < result.length; i++){
+				nickname = result[i].nickname;
+			}
 		}, 
 		error: function(){
+			nickname = "";
 		}		
 	})
 	return nickname;
@@ -756,7 +771,6 @@ function loadMainBoard(){
 						workspace_observer += '</article>';
 						workspace_observer += '</div>';
 					}
-
 				}
 				$("#memberWorkspace").html(workspace_member);
 				$("#observerWorkspace").html(workspace_observer);
@@ -831,7 +845,41 @@ $('menuitem').on('click', function(e){
 		$("html").css("overflow", "hidden");
 	}
 	
-	if($(e.target).attr("label") == "Delete Team/Project"){
+	/* 팀 수정 */
+	else if($(e.target).attr("label") == "edit Team/Project"){
+		$("#modal").css("display", "flex");
+		$("html").css("overflow", "hidden");
+		
+		/* 선택한 팀정보 가져와서 뿌려주기 */
+		$.ajax({
+			url:"../getTeamInfo", //컨트롤러
+			type:"post",
+			data:JSON.stringify({"teamNo": teamNo}),
+			contentType:"application/json; charset=utf-8",
+			success:function(result){
+				console.log(result);
+				
+				/* 팀 no를 */
+				$("#teamNo").val(result.teamNo);
+				
+				if(result.teamRegdate != null){
+					$("#teamRegDate").val(result.teamRegdate.substring(0, 11));
+					$("#teamEndDate").val(result.endDate.substring(0, 11));
+				}
+				
+				$("#teamName").val(result.teamName);
+				$("#teamGoal").val(result.teamGoal);
+				$("#userEmail").val(result.userEmail);
+				
+				/* 수정할 수 있는 팀은 status가 진행중 일것이라고 생각하고 따로 작업해주지 않았다. */
+			},
+			error: function(){
+			}
+		})
+	}
+	
+	/* 팀 삭제 (사실상 status 종료된 팀으로 update) */
+	else if($(e.target).attr("label") == "Delete Team/Project"){
 		
 		if(!confirm("정말 삭제하시겠습니까?")){
 			return;
@@ -906,12 +954,15 @@ $('html').click(function(e) {
 function closeAddMemberModal() {
 	$("#add_team_modal").css("display", "none");
 	$("html").css("overflow", "auto");
+	
 	/* 검색어 초기화 */
 	$("#searchMember").val("");
 	/* 찾은 userlist 초기화 */
 	$(".search-list").html("");
 	/* 멤버 추가 리스트 초기화 */
 	$(".chooseMemberList").html("");
+	/* 삭제 하려던 멤버 정보 초기화 */
+	deleteData =[];
 }
 
 /* 
@@ -987,14 +1038,39 @@ let deleteData = [];
 
 /* 모달창에서 추가된 멤버 x버튼 클릭시 삭제 되는 기능 추가 */
 $(".chooseMemberList").on('click', 'button', function(e){
-	$(this.parentElement.parentElement).remove();
-	
 	var email = $(this.parentElement.parentElement).children().first().children().last().html();
-	var role = $(this.parentElement.parentElement).children().last().prev().val();
 	var teamNo = $("#add_team_modal").attr("data-teamNo");
+	console.log(checkTeamCtor(teamNo));
+	/* 지금 삭제하려는 이메일이 팀 생성자와 일치하는지 검사 */
+	if(email == checkTeamCtor(teamNo)){
+		alert("팀 생성자는 삭제 불가능 합니다.");
+		return;
+	}else{
+		$(this.parentElement.parentElement).remove();
+		var role = $(this.parentElement.parentElement).children().last().prev().val();
 
-	deleteData.push({"userEmail" : email, "teamNo" : teamNo, "role" : role});
+		deleteData.push({"userEmail" : email, "teamNo" : teamNo, "role" : role});
+	}
 })
+
+function checkTeamCtor(teamNo){
+	var email = "";
+	$.ajax({
+		url:"../getTeamInfo", //컨트롤러
+		type:"post",
+		data:JSON.stringify({"teamNo": teamNo}),
+		contentType:"application/json; charset=utf-8",
+		async: false,
+		success:function(result){
+		console.log(result);
+			email = result.userEmail;
+		},
+		error: function(){
+			email = "";
+		}
+	})
+	return email;
+}
 
 function deleteAuthority(data){
 	/* 권한 테이블에 등록된 사람이었는지 체크 후 등록되었었다면 삭제 */

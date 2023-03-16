@@ -48,6 +48,12 @@ public class BoardAjaxController {
 //		return null;
 	}
 	
+	@PostMapping("/getTeamInfo")
+	@ResponseBody
+	public TeamVO getTeamInfo(@RequestBody TeamVO vo) {
+		return boardService.getTeamInfo(vo);
+	}
+	
 	//팀 선택 시 그 해당하는 팀의 task불러오기
 	@PostMapping("/getTeamTask")
 	@ResponseBody

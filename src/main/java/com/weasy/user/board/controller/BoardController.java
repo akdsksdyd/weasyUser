@@ -45,19 +45,25 @@ public class BoardController {
 	public String addTeam(TeamVO vo,
 						  RedirectAttributes ra) {
 		
-		int result = boardService.insertTeam(vo);
 		int teamNo = boardService.getTeamNo(vo.getTeamName());
-		
 		//해당 팀no로 지정한 teamLeader 권한 주기
 		AuthorityVO authVO = AuthorityVO.builder().userEmail(vo.getUserEmail())
 							 .teamNo(teamNo)
 							 .role(0)
 							 .build();
-		boardService.addAuthority(authVO);
+		int result = 0;
+		if(vo.getTeamNo() != 0) {
+			/* 기존에 있는 팀이라면 update & 권한도 업데이트 teamLeader가 변경되었을수 있으므로 */
+			result = boardService.updateTeam(vo);
+			boardService.updateAuthority(authVO);
+		}else {
+			/* 기존에 없는 팀이면 insertTeam & teamLeader에 권한 insert */
+			result = boardService.insertTeam(vo);
+			boardService.addAuthority(authVO);
+		}
 		
 		String msg = result == 1 ? "정상 입력되었습니다" : "등록에 실패했습니다";
 		ra.addFlashAttribute("msg", msg);
-		
 		return "redirect:/board/board";
 	}
 	
