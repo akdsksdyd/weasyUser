@@ -591,4 +591,10 @@ hr{
 	background-repeat: no-repeat;
 	background-position: center;
 }
+
+.option{
+	display: inline-block;
+}
  
+
+

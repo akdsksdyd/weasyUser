@@ -19,6 +19,9 @@ public class noticeListVO { //공지사항 리스트 VO
 	private String noticeRegdate;
 	private String noticeLevel;
 	private String userEmail;
+	
+	private String searchType;
+	private String keyword;
 
 }
 //noticeNo   INT primary key auto_increment,
