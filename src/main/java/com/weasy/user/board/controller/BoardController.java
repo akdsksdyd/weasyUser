@@ -75,21 +75,7 @@ public class BoardController {
 		
 		return "board/index";
 	}
-	
-	
-	
-//	@GetMapping("/noticeSidebar")
-//	public String noticeSidebar() {	
-//		
-//		return "board/board";
-//	}
-//	//공지사항 리스트
-//	@GetMapping("/getNoticeList")
-//	public String getNoticeList(noticeListVO noticeVo){
-//		System.out.println("공지사항 리스트: "+ boardService.getNoticeList());		
-//		return "board/board";
-//	}
-		
+			
 }
 
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -179,15 +180,20 @@ public class BoardAjaxController {
 		boardService.taskStatusChange(taskVo);
 	}
 	
-	//공지사항 리스트
+	//공지사항-리스트
 	@PostMapping("/getNoticeList")
 	public ArrayList<noticeListVO> getNoticeList(noticeListVO noticeVo){
 		return boardService.getNoticeList();
 	}
-	//공지사항 상세페이지
+	//공지사항-상세페이지
 	@PostMapping("/getDetailNotice")
 	public ArrayList<noticeListVO> getDetailNotice(@RequestBody noticeListVO noticeVo){
 		return boardService.getDetailNotice(noticeVo);
+	}
+	//공지사항-검색기능
+	@PostMapping("/getSearchNotice")
+	public ArrayList<noticeListVO> getSearchNotice(@RequestBody noticeListVO noticeVo){
+		return boardService.getSearchNotice(noticeVo);
 	}
 	
 	//task card의 user 변경해주기
@@ -196,4 +202,6 @@ public class BoardAjaxController {
 	public int updateTaskUser(@RequestBody TaskVO taskVo) {
 		return boardService.updateTaskUser(taskVo);
 	}
+	
+
 }

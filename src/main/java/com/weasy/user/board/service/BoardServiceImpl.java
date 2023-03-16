@@ -149,6 +149,11 @@ public class BoardServiceImpl implements BoardService{
 	public ArrayList<noticeListVO> getDetailNotice(noticeListVO noticeVo) {
 		return boardMapper.getDetailNotice(noticeVo);
 	}
+	//공지사항 검색
+	@Override
+	public ArrayList<noticeListVO> getSearchNotice(noticeListVO noticeVo) {
+		return boardMapper.getSearchNotice(noticeVo);
+	}
 	
 	@Override
 	public int updateTaskUser(TaskVO taskVo) {

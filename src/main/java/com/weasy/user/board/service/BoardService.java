@@ -67,7 +67,8 @@ public interface BoardService {
 	public int getTotal(Criteria cri);
 	//공지사항 상세페이지 가져오기
 	public ArrayList<noticeListVO> getDetailNotice(noticeListVO noticeVo);
-	
+	//공지사항 검색
+	public ArrayList<noticeListVO> getSearchNotice(noticeListVO noticeVo);
 	public void taskStatusChange(TaskVO taskVo);
 	
 	//task 할당자 변경
