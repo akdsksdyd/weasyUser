@@ -17,6 +17,7 @@ import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.UserVO;
+import com.weasy.user.command.noticeListVO;
 
 @Controller
 @RequestMapping("/board")
@@ -61,10 +62,7 @@ public class BoardController {
 	}
 	
 	
-	@GetMapping("/test")
-	public String test() {
-		return "board/test";
-	}
+
 	
 	@GetMapping("/index")
 	public String index() {
@@ -72,6 +70,20 @@ public class BoardController {
 		return "board/index";
 	}
 	
+	
+	
+//	@GetMapping("/noticeSidebar")
+//	public String noticeSidebar() {	
+//		
+//		return "board/board";
+//	}
+//	//공지사항 리스트
+//	@GetMapping("/getNoticeList")
+//	public String getNoticeList(noticeListVO noticeVo){
+//		System.out.println("공지사항 리스트: "+ boardService.getNoticeList());		
+//		return "board/board";
+//	}
+		
 }
 
 

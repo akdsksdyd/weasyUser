@@ -333,6 +333,8 @@ $("#mainBoardSideBar").click(function(e){
 	e.preventDefault();
 	$("#teamProjectBoard").css("display","none");
 	$("#mainBoardPage").css("display","block");
+	$("#noticePage").css("display","none");
+	
 })
 
 /* 
@@ -441,6 +443,7 @@ function getTeamTask(teamNo, userEmail){
 		success: function(result){
 			$("#mainBoardPage").css("display","none");
 			$("#teamProjectBoard").css("display","block");
+			$("#noticePage").css("display","none");
 			
 			/* 요청으로 받아온 리스트 들을 화면에 task 단게에 맞게 뿌려준다. */
 			for(var i = 0; i < result.length; i++){

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.weasy.user.util.Criteria;
 import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskVO;
@@ -65,9 +66,14 @@ public interface BoardMapper {
 	public ArrayList<ReplyVO> putReply(int taskNo);
 	
 	//공지사항 리스트 가져오기
-	public List<noticeListVO> getNoticeList();
+	public ArrayList<noticeListVO> getNoticeList();
+	//공지사항 게시글 수(페이징)
+	public int getTotal(Criteria cri); //전체게시글 수 
+	//공지사항 상세페이지 가져오기
+	public ArrayList<noticeListVO> getDetailNotice(noticeListVO noticeVo);
 	
 	public void taskStatusChange(TaskVO taskVo);
+	
 }
 
 
