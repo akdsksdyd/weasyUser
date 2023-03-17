@@ -1129,15 +1129,16 @@ $(".taskSaveBtn").on('click', 'button', function(e){
 	/* 부모태그에 기능을 줘서 cancle 을 눌렀을 떄 같이 먹는 거 방지. */
 	if($(this).hasClass("cancle"))return;
 	
+	/* task upate될 정보들 */
 	var taskTitle = $("#taskTitle").val();
 	var startDate = $("#startDate").val();
 	var targetDate = $("#targetDate").val();
 	var content = $("#description").val();
 	var taskNo = $(e.target).next().children().val();
-	console.log("save시 task값"+ taskNo);
-	var teamNo = $("#teamNo").val();
-	console.log("save시 team값"+ teamNo);
-	var userEmail = $("#userEmail").val();
+	/*console.log("save시 task값"+ taskNo);*/
+	var teamNo = $("#teamNoHidden").val();
+	/*console.log("save시 team값"+ teamNo);*/
+	var userEmail = $("#taskuser").val();
 	
 	$.ajax({
 		
@@ -1152,14 +1153,19 @@ $(".taskSaveBtn").on('click', 'button', function(e){
 		contentType: "application/json",
 		success: function(result){
 			
-			/* 상세페이지에서 save버튼 눌렀을 시 입력 했던 값 공백으로 치환 */
-			$("#taskTitle").val("");
-			$("#startDate").val("");
-			$("#targetDate").val("");
-			$("#description").val("");
-			//$("#description_contetn").val("");
-			console.log("팀넘버:"+teamNo);
-			console.log("이메일:"+userEmail);
+			/* 저장시 모든 input태그의 정보 초기화 */
+			$("#card_modal input").each(function(index, item){
+				$(item).val("");
+			});
+	
+			/* 저장시 모든 textarea태그의 정보 초기화 */
+			$("#card_modal textarea").each(function(index, item){
+				$(item).val("");
+			});
+			
+			/*console.log("팀넘버:"+teamNo);
+			console.log("이메일:"+userEmail);*/
+			/* 사실 팀 task를 읽어올 떄 userEmail은 필요없다. */
 			getTeamTask(teamNo, userEmail);
 			closeCardModal();
 			
