@@ -6,6 +6,7 @@ import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.noticeListVO;
+import com.weasy.user.command.noticeVO;
 import com.weasy.user.util.Criteria;
 
 public interface BoardService {
@@ -73,6 +74,15 @@ public interface BoardService {
 	
 	//task 할당자 변경
 	public int updateTaskUser(TaskVO taskVo);
+	
+	//사용자 개개인에게 보여질 notice insert
+	public int insertUserNotice(noticeVO noticevo);
+	
+	//session에 연결된 email계정에 해당하는 notcie 읽어오기
+	public ArrayList<noticeVO> getUserNotice(String email);
+	
+	//확인된 notice의 checked상태 변경
+	public int updateUserNoticeChecked(noticeVO noticevo);
 	
 }
 

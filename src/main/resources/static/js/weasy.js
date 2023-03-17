@@ -23,7 +23,7 @@ $(".teamTask").click(function(e){
 	var taskValue = "";
 	taskValue += '<input type="hidden" id="teamNo" name="teamNo" value="'+ teamNo +'">';
 	taskValue += '<input type="hidden" id="userEmail" name="userEmail" value="'+ userEmail +'">';
-	console.log("hidden태그의 teamNo: "+teamNo);
+	/*console.log("hidden태그의 teamNo: "+teamNo);*/
 	$(".addTaskValue").html(taskValue);
 	
 	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
@@ -39,10 +39,10 @@ $(".addTaskBtn").click(function(e){
 		return;
 	}
 
-	console.log(e.target.nextElementSibling.firstChild);
+	/*console.log(e.target.nextElementSibling.firstChild);*/
 	var teamNoValue = $(e.target.nextElementSibling.firstChild).val();
 	var emailValue = $(e.target.nextElementSibling.lastChild).val();
-	console.log(teamNoValue);
+	/*console.log(teamNoValue);*/
 
 	e.preventDefault();
 		
@@ -192,11 +192,7 @@ $(".addMember").click(function(e){
 	$(".searchTaskMember").css("top", e.pageY);
 	$(".searchTaskMember").css("left", e.pageX);
 	$(".searchTaskMember").css("display", "block");
-		
-	//만약 taskuser가 빈값이면 +버튼을 다시 숨겨줘야한다.
-	if($(this).last().text().trim() == ""){
-		
-	}
+
 })
 
 /* 해당 팀 내의 멤버만 검색 */
@@ -256,14 +252,44 @@ $(".searchTaskMember .search-list").on('click', 'li', function(e){
 		data: JSON.stringify({"userEmail": email, "teamNo": teamNo, "taskNo": taskNo}),
 		contentType: "application/json",
 		success: function(result){
-			alert(email + "에게 업무가 할당되었습니다.");
+			if(confirm(email + "에게 업무가 할당되었습니다.\n" + email + "에게 notice를 보낼까요?")){
+				var msg = "[" + $("#taskTitle").val() + "] 업무가 할당되었습니다.";
+				insertUserNotice(email, msg, 1);
+			}
 		},
 		error: function(err){
 			alert("");
 		}
 	})
-	
 })
+
+/**
+user에게 알림 보내기 (상단에 종 icon)
+
+@param email : notice를 받는 사람
+@param msg : notice 문구
+@param status : 어떤 notice인지 종류
+
+- 추후에 다양한 알림을 받을 수 있도록 status를 param값으로 받도록 해놓았습니다.
+- 0 : 멤버 초대
+- 1: 업무 할당
+- 2 : 댓글 추가
+*/
+function insertUserNotice(email, msg, status){
+	
+	$.ajax({
+		url: "../insertUserNotice",
+		type: "post",
+		data: JSON.stringify({"userEmail": email, "message": msg, "msgStatus": status}),
+		contentType: "application/json",
+		success: function(result){
+			console.log(result);
+		},
+		error: function(err){
+		}
+	})
+	
+}
 
 /* task card modal창에서 검색창 부분 사라지게 하는 부분 */
 $('html').click(function(e) {
@@ -282,7 +308,7 @@ $('html').click(function(e) {
 		$(".search-list").html("");
 		
 		/* 화면에서 안보이게 처리 */
-		$(".searchTaskMember").css("dio9splay", "none");
+		$(".searchTaskMember").css("display", "none");
 	}
 });
 
@@ -546,8 +572,8 @@ function getTeamTask(teamNo, userEmail){
 	var doing_task = "";
 	var done_task = "";
 	
-	console.log("task그릴 떄 teamNo: " + teamNo);
-	console.log("task그릴 떄 userEmail: " + userEmail);
+	/*console.log("task그릴 떄 teamNo: " + teamNo);
+	console.log("task그릴 떄 userEmail: " + userEmail);*/
 			
 	/* team task 가져오는거 function으로 빼서 사용해야할듯.. (addTask 후에도 사용)*/
 	$.ajax({
@@ -599,7 +625,7 @@ function getTeamTask(teamNo, userEmail){
 		},
 		error: function(err){
 			alert("보드 조회에 실패했습니다. 관리자에게 문의 부탁드립니다.🙏");
-			console.log(err);
+			/*console.log(err);*/
 		}
 	});
 }
@@ -697,11 +723,11 @@ function findNickname(email){
 
 /* 상세페이지에서 select의 option값이 바뀔 때 task테이블의 status uptate */
 $("#selectCheck").change(function(e){
-	console.log("select값 바뀜");
+	/*console.log("select값 바뀜");*/
 	var status = $(e.target).val();
-	console.log("select값 바뀐 value: "+status);
+	/*console.log("select값 바뀐 value: "+status);*/
 	var taskNo = $("#taskNo").val();
-	console.log("select후 taskNo: "+taskNo);
+	/*console.log("select후 taskNo: "+taskNo);*/
 	var userEmail = $(".userEmail").val();
 	var teamNo = $("#teamNo").val();
 	
@@ -802,7 +828,7 @@ $("#mainBoardPage").on('click', 'article', function(e){
 	var taskValue = "";
 	taskValue += '<input type="hidden" id="teamNo" name="teamNo" value="'+ teamNo +'">';
 	taskValue += '<input type="hidden" id="userEmail" name="userEmail" value="'+ userEmail +'">';
-	console.log("hidden태그의 teamNo: "+teamNo);
+	/*console.log("hidden태그의 teamNo: "+teamNo);*/
 	$(".addTaskValue").html(taskValue);
 	
 	/* 클릭한 메뉴 teamNo로 user의 권한 조회하여 write기능 활성화or비활성화 처리 */
@@ -857,7 +883,7 @@ $('menuitem').on('click', function(e){
 			data:JSON.stringify({"teamNo": teamNo}),
 			contentType:"application/json; charset=utf-8",
 			success:function(result){
-				console.log(result);
+				/*console.log(result);*/
 				
 				/* 팀 no를 */
 				$("#teamNo").val(result.teamNo);
@@ -1040,7 +1066,7 @@ let deleteData = [];
 $(".chooseMemberList").on('click', 'button', function(e){
 	var email = $(this.parentElement.parentElement).children().first().children().last().html();
 	var teamNo = $("#add_team_modal").attr("data-teamNo");
-	console.log(checkTeamCtor(teamNo));
+	/*console.log(checkTeamCtor(teamNo));*/
 	/* 지금 삭제하려는 이메일이 팀 생성자와 일치하는지 검사 */
 	if(email == checkTeamCtor(teamNo)){
 		alert("팀 생성자는 삭제 불가능 합니다.");
@@ -1053,6 +1079,9 @@ $(".chooseMemberList").on('click', 'button', function(e){
 	}
 })
 
+/*
+팀에 등록된 team Leader값을 return
+*/
 function checkTeamCtor(teamNo){
 	var email = "";
 	$.ajax({
@@ -1062,7 +1091,7 @@ function checkTeamCtor(teamNo){
 		contentType:"application/json; charset=utf-8",
 		async: false,
 		success:function(result){
-		console.log(result);
+			/*console.log(result);*/
 			email = result.userEmail;
 		},
 		error: function(){
@@ -1097,10 +1126,41 @@ $("#add_team_modal").on('click', 'button', function(e){
 	
 	var emailList = $(".chooseMemberList li .subtitle").get();
 	var roleList = $(".chooseMemberList li .selectPossible option:selected").get();
+	var teamNo = $("#add_team_modal").attr("data-teamNo");
+	/* teamNo로 teamName 조회 notice 메세지 만들기 위한 작업 */
+	var teamName = '';
+	$.ajax({
+		url:"../getTeamInfo", //컨트롤러
+		type:"post",
+		data:JSON.stringify({"teamNo": teamNo}),
+		contentType:"application/json; charset=utf-8",
+		async: false,
+		success:function(result){
+			console.log(result);
+			teamName = result.teamName;
+		},
+		error: function(){
+		}
+	})
+		
 	for(var i = 0; i < emailList.length; i++){
 		var email = emailList[i].innerHTML;
 		var role = roleList[i].value;
-		var teamNo = $("#add_team_modal").attr("data-teamNo");
+		
+		/* 초대 msg 만들기 */
+		var msg = "["+ teamName + "] 팀에 ";
+		if(role == 0){ //멤버
+			msg += "member로 ";
+		}else{ //옵저버
+			msg += "observer로 ";
+		}
+		msg += "초대되었습니다.";
+		
+		if(checkAuthority(email, teamNo) == 0){
+			if(confirm(email + "에게 초대 메세지를 보내시겠습니까?")){
+				insertUserNotice(email, msg, 0);
+			}
+		}
 		
 		$.ajax({
 			url:"../addAuthority",
@@ -1122,6 +1182,25 @@ $("#add_team_modal").on('click', 'button', function(e){
 		})
 	}
 })
+
+/* 기존에 멤버로 존재하는지 체크 */
+function checkAuthority(email, teamNo){
+	var existMember = 0;
+	$.ajax({
+		url:"../checkAuthority",
+		type:"post",
+		data:JSON.stringify({"userEmail" : email, "teamNo" : teamNo}),
+		contentType:"application/json; charset=utf-8",
+		async: false,
+		success:function(result){
+			existMember = result;
+		}, 
+		error: function(){
+			existMember = -1;
+		}		
+	})
+	return existMember;
+}
 
 /* task 상세 페이지에서 제일 하단부에 있는 save버튼을 눌렀을 시 task테이블 update */
 $(".taskSaveBtn").on('click', 'button', function(e){
@@ -1216,4 +1295,100 @@ $(".searchTeamLeaderList").on('click', 'li', function(e){
 	
 	var email = $(this).children().first().html();
 	$(".searchTeamLeader").val(email)
+})
+
+/**
+ * polling ajax를 사용하여 특정 초마다 user의 notice를 읽어온다.
+ */
+$(document).ready(
+	(function pollUserNotice() {
+	/*이메일은 컨트롤러에서 session email 사용*/
+	    $.ajax({
+	        url: '../getUserNotice',
+	        type: 'GET',
+			dataType: "json",
+	        success: function(result) {
+	            console.log(result);
+				
+				var noticeTag = '';
+				for(var i = 0; i < result.length; i++){
+					noticeTag += makeUserNotice(result[i]);				
+				}
+	            
+	            $("#userNotice").html(noticeTag);
+	            
+	            /* msg가 있다면 icon에 active class 추가 */
+				if(result.length != 0){
+					$("#userNoticeIcon").addClass("active");
+				}else{
+					console.log("메세지 없음");
+					$("#userNotice").html("메세지가 없습니다.");
+				}
+	        },
+	        error: function(){
+			},
+	        timeout: 10000, //5초
+	        complete: setTimeout(function() { pollUserNotice(); }, 6000)
+	    })
+	})()
+)
+
+/* notice에 뿌려줄 메세지 tag 만들기 */
+function makeUserNotice(notice){
+	var tag = '';
+	tag += '<li>';
+	tag += '<a href="">';
+	
+	/* msg status에 따라 제목과 아이콘 컬러를 다르게해주었다. */
+	//아이콘 컬러 (info / danger / purple / success / warning / grey)
+	var noticeTitle = '';
+	if(notice.msgStatus == 0){ //팀 초대 알림
+		noticeTitle = "Welcome to Our Team!";
+		tag += '<div class="notification-dropdown-icon success">'; //컬러
+		tag += '<img src="/img/svg/gift-green.svg">'; //아이콘 
+	}else if(notice.msgStatus == 1){ //업무 할당 알림
+		noticeTitle = "Task Assignment";
+		tag += '<div class="notification-dropdown-icon info">'; //컬러
+		tag += '<img src="/img/svg/coffee-blue.svg">'; //아이콘 
+	}else if(notice.msgStatus == 2){ //댓글 알림
+		noticeTitle = "Comment on Work";
+		tag += '<div class="notification-dropdown-icon warning">'; //컬러
+		tag += '<img src="/img/svg/send-orange.svg">'; //아이콘 
+	}
+	tag += '</div>';
+	tag += '<div class="notification-dropdown-text">';
+	tag += '<span class="notification-dropdown__title">'+ noticeTitle +'</span>';
+	tag += '<span class="notification-dropdown__subtitle">'+ notice.message +'</span>';
+	tag += '<input type="hidden" id="userNoticeNo" value="'+ notice.noticeNo +'">';
+	tag += '</div>';
+	tag += '</a>';
+	tag += '</li>';
+	
+	return tag;
+}
+
+/* notice를 클릭하면 해당 notice의 checked 상태를 Y로 변경시켜 확인된 notice가 되도록 처리해준다. */
+$("#userNotice").on('click', 'li', function(e){
+	e.preventDefault();
+	
+	var noticeNo = $(this).find('#userNoticeNo').val();
+	$(this).remove();
+
+	//메세지가 한건도 없는 경우	
+	if($("#userNotice li").length == 0){
+		$("#userNoticeIcon").removeClass("active");
+		$("#userNotice").html("메세지가 없습니다.");
+	}
+		
+	$.ajax({
+		url: '../updateUserNoticeChecked',
+	    type: 'POST',
+	    data:JSON.stringify({"noticeNo": noticeNo}),
+		contentType:"application/json; charset=utf-8",
+	    success: function(result) {
+			console.log(result);
+	    },
+	    error: function(){
+		},
+    });
 })

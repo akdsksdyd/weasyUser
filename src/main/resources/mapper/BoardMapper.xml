@@ -38,7 +38,7 @@
   	
   	<select id="getTeamInfo" resultType="TeamVO">
   		select teamNo, teamRegdate, endDate, teamName, teamGoal, userEmail, teamStatus 
-  		from team where teamNo=#{teamNo};
+  		from team where teamNo=#{teamNo}
   	</select>
   	
   	<update id="closeTeamStatus">
@@ -176,30 +176,52 @@
      </select>
   	<!-- 공지사항 상세페이지 가져오기 -->
   	<select id="getDetailNotice" resultType="noticeListVO">
-  		SELECT noticeNo, noticeTitle, noticeContent, DATE_FORMAT(noticeRegdate, '%Y-%m-%d')as noticeRegdate FROM noticeList where noticeNo = #{noticeNo};
+  		SELECT noticeNo, noticeTitle, noticeContent, DATE_FORMAT(noticeRegdate, '%Y-%m-%d')as noticeRegdate FROM noticeList where noticeNo = #{noticeNo}
   	</select>
+  	
   	<!-- 공지사항 검색 -->
   	<select id="getSearchNotice" resultType="noticeListVO">
   		SELECT noticeNo, noticeTitle, noticeContent, DATE_FORMAT(noticeRegdate, '%Y-%m-%d')as noticeRegdate , noticeLevel 
   		FROM noticeList 
   		<choose>
 	  		<when test="searchType != null and searchType.equals('title')">
-	  			WHERE noticeTitle  LIKE CONCAT('%',#{keyword},'%') order by noticeLevel desc, noticeNo desc; 
+	  			WHERE noticeTitle  LIKE CONCAT('%',#{keyword},'%') order by noticeLevel desc, noticeNo desc
 	  		</when>
   		</choose>
   		<choose>
 	  		<when test="searchType != null and searchType.equals('content')">
-	  			WHERE noticeContent LIKE CONCAT('%',#{keyword},'%') order by noticeLevel desc, noticeNo desc;
+	  			WHERE noticeContent LIKE CONCAT('%',#{keyword},'%') order by noticeLevel desc, noticeNo desc
 	  		</when>
   		</choose>
   	</select>
   	
+  	<!-- task상태(todo/doing/done) 변경 update -->
   	<update id="taskStatusChange" parameterType="taskVO">
   		update task set status = #{status} where taskNo = #{taskNo}
   	</update>
   	
+  	<!-- task에 user 추가 (업무할당기능) -->
   	<update id="updateTaskUser" parameterType="taskVo">
-  		update task set userEmail = #{userEmail} where teamNo = #{teamNo} and taskNo = #{taskNo};
+  		update task set userEmail = #{userEmail} where teamNo = #{teamNo} and taskNo = #{taskNo}
+  	</update>
+  	
+  	<!-- 상단에 header부분에 뜨는 notice insert -->
+  	<insert id="insertUserNotice" parameterType="noticevo">
+  		insert into notice (userEmail, message, msgStatus) 
+  		values(#{userEmail}, #{message}, #{msgStatus})
+  	</insert>
+  	
+  	<!-- user의 notice 읽어오기 -->
+  	<select id="getUserNotice" resultType="noticeVO">
+  		select noticeNo, userEmail, message, msgStatus, checked 
+  		from notice 
+  		where userEmail = #{email} and checked = 'N'
+  		order by noticeNo asc
+  	</select>
+  	
+  	<!-- 확인된 notice checked상태 Y로 변경 -->
+  	<update id="updateUserNoticeChecked" parameterType="noticevo">
+  		update notice set checked = 'Y' where noticeNo = #{noticeNo}
   	</update>
   	
   </mapper>

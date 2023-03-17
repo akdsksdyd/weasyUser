@@ -14,8 +14,11 @@ public class noticeVO { //알림VO
 	private int noticeNo;
 	private String userEmail;
 	private String message;
+	private String msgStatus;
+	private String checked;
 	
 }
+
 //noticeNo   INT(8) primary key auto_increment,
 //userEmail   VARCHAR(30) NOT NULL,
 //message   VARCHAR(200) NOT NULL
