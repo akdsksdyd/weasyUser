@@ -28,6 +28,7 @@ import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.UserVO;
 import com.weasy.user.command.noticeListVO;
+import com.weasy.user.command.noticeVO;
 
 @RestController
 public class BoardAjaxController {
@@ -101,6 +102,13 @@ public class BoardAjaxController {
 		}
 		//아니라면 insert 해주도록 변경
 		return boardService.addAuthority(vo);
+	}
+	
+	@PostMapping("/checkAuthority")
+	@ResponseBody
+	public int checkAuthority(@RequestBody AuthorityVO vo){
+		//0 이 아니면 기존회원 있음, 0이면 신규 추가 멤버
+		return boardService.checkAuthority(vo);
 	}
 	
 	//회원 권한가지고 오기
@@ -201,6 +209,42 @@ public class BoardAjaxController {
 	@ResponseBody
 	public int updateTaskUser(@RequestBody TaskVO taskVo) {
 		return boardService.updateTaskUser(taskVo);
+	}
+	
+	/**
+	 * 
+	 * @return 성공1 , 실패0
+	 */
+	@PostMapping("/insertUserNotice")
+	@ResponseBody
+	public int  insertUserNotice(@RequestBody noticeVO noticevo) {
+		return boardService.insertUserNotice(noticevo);
+	}
+	
+	/**
+	 * session의 이메일계정과 일치하는 사람의 checked가 N인(미확인) notice를 전부 읽어온다.
+	 * 
+	 * @param session 세션에 등록된 email 사용
+	 * @return ArrayList<noticeVO>
+	 */
+	@GetMapping("/getUserNotice")
+	@ResponseBody
+	public ArrayList<noticeVO> getUserNotice(HttpSession session) {
+		String email = (String)session.getAttribute("Email");
+		return boardService.getUserNotice(email);
+	}
+	
+	/**
+	 * notice를 클릭하면 checked 상태를 변경하여 확인된 notice로 상태를 변경해준다.
+	 * checked 컬럼의 상태 N -> Y로 변경
+	 * 
+	 * @param noticevo noticeNo를 활용하여 해당 notice의 checked상태 변경
+	 * @return
+	 */
+	@PostMapping("/updateUserNoticeChecked")
+	@ResponseBody
+	public int updateUserNoticeChecked(@RequestBody noticeVO noticevo) {
+		return boardService.updateUserNoticeChecked(noticevo);
 	}
 	
 

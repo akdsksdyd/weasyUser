@@ -11,6 +11,7 @@ import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.noticeListVO;
+import com.weasy.user.command.noticeVO;
 import com.weasy.user.util.Criteria;
 
 @Service("boardService")
@@ -158,6 +159,21 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int updateTaskUser(TaskVO taskVo) {
 		return boardMapper.updateTaskUser(taskVo);
+	}
+	
+	@Override
+	public int insertUserNotice(noticeVO noticevo) {
+		return boardMapper.insertUserNotice(noticevo);
+	}
+	
+	@Override
+	public ArrayList<noticeVO> getUserNotice(String email) {
+		return boardMapper.getUserNotice(email);
+	}
+	
+	@Override
+	public int updateUserNoticeChecked(noticeVO noticevo) {
+		return boardMapper.updateUserNoticeChecked(noticevo);
 	}
 	
 }
