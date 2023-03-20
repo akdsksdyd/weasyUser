@@ -143,8 +143,11 @@ public class BoardAjaxController {
 	//댓글 추가
 	@PostMapping("/insertReply")
 	@ResponseBody
-	public void insertReply(@RequestBody ReplyVO replyVo) {
+	public String insertReply(@RequestBody ReplyVO replyVo, HttpSession session) {
+		String email = session.getAttribute("Email").toString();
+		replyVo.setUserEmail(email);
 		boardService.insertReply(replyVo);
+		return email;
 	}
 	
 	//상세페이지에 값 넣기

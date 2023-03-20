@@ -156,7 +156,7 @@ $(".listBox").on('click', 'article', function(e){
 	var teamNo= $("#teamNoHidden").val();
 	var taskNo = $("#taskNo").val();
 	
-	putReply(taskNo, userEmail, teamNo);
+	putReply(taskNo, teamNo);
 	
 	putTaskDetail(taskNo);
 	$("add_checkbox_wrap").remove();
@@ -164,7 +164,7 @@ $(".listBox").on('click', 'article', function(e){
 });
 
 /* 댓글 조회 */
-function putReply(taskNo, userEmail, teamNo){
+function putReply(taskNo, teamNo){
 	
 	var replyList = "";
 	
@@ -174,7 +174,6 @@ function putReply(taskNo, userEmail, teamNo){
 		type: "post",
 		contentType: "application/json",
 		data: JSON.stringify({taskNo: taskNo,
-							  userEmail: userEmail,
 							  teamNo: teamNo}),
 		success: function(result){
 			
@@ -189,7 +188,7 @@ function putReply(taskNo, userEmail, teamNo){
 				replyList += '<button title="update" class="update_reply button-prevent reply_button" data-replyNo="'+ result[i].replyNo +'"><i class="bi bi-pencil-square"></i></button>'
 				replyList += '<button title="delete" class="delete_reply button-prevent reply_button" data-replyNo="'+ result[i].replyNo +'"><i class="bi bi-trash"></i></button>'	
 				replyList += '<br/>';
-				replyList += result[i].comment;
+				replyList += '<input class="comment_box" value="'+ result[i].comment +'"/>'; 
 				replyList +='</span>';
 				replyList += '</div>'; 
 			
@@ -206,6 +205,7 @@ function putReply(taskNo, userEmail, teamNo){
 
 $("#comment_list").on("click", "button", function(e){
 	
+	e.preventDefault();
 	/* 삭제 후 다시 댓글 불러올 때 필요한 변수들 */
 	var userEmail = $(".userEmail").val();
 	var teamNo = $(".teamNo").val();
@@ -213,7 +213,6 @@ $("#comment_list").on("click", "button", function(e){
 	
 	/* 댓글 수정버튼 */
 	if($(e.target).hasClass("update_reply")){
-		
 		var replyNo = $(e.target).attr("data-replyNo");
 		var comment = $(e.target).prev().val();
 		
@@ -225,8 +224,8 @@ $("#comment_list").on("click", "button", function(e){
 								  "userEmail": userEmail,
 								  "comment": comment}),
 			success: function(result){
-				
-				putReply(taskNo, userEmail, teamNo);
+				console.log(result);
+				putReply(taskNo, teamNo);
 				
 			},
 			error: function(err){
@@ -248,7 +247,7 @@ $("#comment_list").on("click", "button", function(e){
 			data: JSON.stringify({"replyNo": replyNo}),
 			success: function(result){
 				
-				putReply(taskNo, userEmail, teamNo);
+				putReply(taskNo, teamNo);
 				
 			},
 			error: function(err){
@@ -639,7 +638,6 @@ function progressUpdate(taskNo){
 /* 댓글 추가 버튼 누르면 댓글 업로드 */
 $("#commentBtn").click(function(){
 	
-	var userEmail = $(".userEmail").val();
 	var teamNo= $(".teamNo").val();
 	var taskNo= $("#taskNo").val();
 	
@@ -649,23 +647,13 @@ $("#commentBtn").click(function(){
 	$.ajax({
 		url: "../insertReply",
 		type: "post",
-		data: JSON.stringify({"userEmail": userEmail,
-							  "teamNo": teamNo,
+		data: JSON.stringify({"teamNo": teamNo,
 							  "taskNo": taskNo,
 							  "comment": write_comment}),
 		contentType: "application/json",
 		success: function(result){
 			
-			comment += '<div class="card_content add_checkbox_wrap">'; 
-			comment += '<div class="profile_box">';
-			comment += '<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">';
-			comment += '</div>';
-			comment += '<input class="comment_box" value="'+ write_comment +'"/>'; 
-			comment += '<button type="button" class="checkbox_btn save update_reply"">UPDATE</button>';
-			comment += '<button type="button" class="checkbox_btn cancle delete_reply">DELETE</button>';
-			comment += '</div>'; 
-			
-			$("#comment_list").append(comment);
+			putReply(taskNo, teamNo);
 			$(".comment_box>textarea").val("");
 			
 		},
@@ -859,9 +847,9 @@ function makeDetail(task){
 		
 		var day = 86400000; // 하루의 시간
 		
-		if(compareDate <= day*7){ //7일 남음
+		if(compareDate <= day*3){ //3일 남음
 			color = "red";
-		}else if(compareDate <= day*14){ //14일 남음
+		}else if(compareDate <= day*7){ //7일 남음
 			color = "#FF9933";
 		}
 	}

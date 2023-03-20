@@ -111,7 +111,6 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Override
 	public void insertReply(ReplyVO replyVo) {
-		
 		boardMapper.insertReply(replyVo);
 	}
 	
