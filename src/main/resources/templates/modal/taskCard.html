@@ -47,14 +47,14 @@
 			<div class="card_content">
 				<i data-feather="menu" class="detail-icon"></i>
 				<strong>Description</strong>
-				<button type="button" class="modal_btn cancle hidden" id="description_edit">EDIT</button>
+				<!-- <button type="button" class="modal_btn cancle hidden" id="description_edit">EDIT</button> -->
 			</div>
 			<div id="description_content">
 				<!-- 쓴 description 내용이 들어간다. -->
 			</div>
 			<textarea class="hidden_scroll textbox" id="description" onkeyup="resize()" onkeydown="resize()"></textarea>
-			<button type="button" class="modal_btn cancle" id="description_cancle">CANCLE</button>
-			<button type="button" class="modal_btn save" id="description_save">SAVE</button>
+			<!-- <button type="button" class="modal_btn cancle" id="description_cancle">CANCLE</button>
+			<button type="button" class="modal_btn save" id="description_save">SAVE</button> -->
 			
 			<!-- 5. 파일 업로드 -->
 			<div class="card_content">
@@ -72,18 +72,27 @@
 				<input class="upload-name" value="첨부파일" placeholder="첨부파일">
 				<label for="file" class="save fileboxBtn" >파일찾기</label>
 				<input class="save fileboxBtn" type="file" id="file" style="display:none;">
-				<input class="save fileboxBtn" type="submit" value="업로드">
+				<button class="save fileboxBtn" type="submit" >업로드</button> 
 			</div>
 			
 			<!-- 6. 체크 박스 -->
 			<div class="card_content">
 				<strong>CheckBox</strong>
-				<button class="button-prevent pl10" title="add CheckBox" id="card_checkbox">
+				<!-- <button class="button-prevent pl10" title="add CheckBox" id="card_checkbox">
 					<i data-feather="plus-square"></i>
-				</button>
+				</button> -->
 			</div>
 			<!-- 체크박스 컨텐츠 -->
 			<div id="checkbox_content">
+				<div class="checkbox_box">
+					<div class="card_content">
+						<span class="pr10">0%</span>
+						<progress class="progressbar" value="0" max="100"></progress>
+						<button type="button" class="checkbox_btn save add_checkbox">ADD ITEM</button>
+						<!-- taskDetail 들어가는 태그 -->
+					</div>
+					<div id="detailContentBox"></div>
+				</div>
 			</div>
 			
 			<!-- 업무 상태 체크 -->

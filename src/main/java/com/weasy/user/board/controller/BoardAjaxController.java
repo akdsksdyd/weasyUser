@@ -24,6 +24,7 @@ import com.google.gson.JsonParser;
 import com.weasy.user.board.service.BoardService;
 import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.ReplyVO;
+import com.weasy.user.command.TaskDetailVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.UserVO;
@@ -42,10 +43,6 @@ public class BoardAjaxController {
 	public ResponseEntity<List<TaskVO>> getTeamNo(@RequestBody TaskVO vo,
 								  				  Model model) {
 		
-		System.out.println(vo.getTeamNo());
-		System.out.println(vo.getTitle());
-		System.out.println(vo.getTaskNo());
-		
 		return new ResponseEntity<>(boardService.getTaskList(vo), HttpStatus.OK);
 //		return null;
 	}
@@ -62,6 +59,7 @@ public class BoardAjaxController {
 	public List<TaskVO> getTeamTask(@RequestBody TaskVO taskVo) {
 		//팀번호로 해당 팀의 task들 리스트 가져오기
 		List<TaskVO> list = boardService.getTaskList(taskVo);
+		System.out.println("팀태스크 가져오는 칸터를로: "+list.toString());
 		return list;
 	}
 	
@@ -78,10 +76,6 @@ public class BoardAjaxController {
 	@ResponseBody
 	public ResponseEntity<Integer> addTask(@RequestBody TaskVO taskVo,
 										   TeamVO teamVo){
-		
-		System.out.println(taskVo.getTeamNo());
-		System.out.println(taskVo.getTitle());
-		System.out.println(teamVo.getUserEmail());
 		
 		return new ResponseEntity<>(boardService.addTask(taskVo), HttpStatus.OK);
 	}
@@ -143,10 +137,6 @@ public class BoardAjaxController {
 	@ResponseBody
 	public void updateTask(@RequestBody TaskVO taskVo){
 		
-		System.out.println(taskVo.getTitle());
-		System.out.println(taskVo.getTaskNo());
-		System.out.println("컨트롤러 putTask이메일: " + taskVo.getUserEmail());
-		
 		boardService.updateTask(taskVo);
 	}
 	
@@ -170,6 +160,22 @@ public class BoardAjaxController {
 	@ResponseBody
 	public List<ReplyVO> putReply(@RequestBody ReplyVO replyVo) {
 		return boardService.putReply(replyVo.getTaskNo());
+	}
+	
+	//댓글 수정
+	@PostMapping("/update_reply")
+	@ResponseBody
+	public void updateReply(@RequestBody ReplyVO replyNo) {
+		
+		boardService.updateReply(replyNo);
+	}
+	
+	//댓글 삭제
+	@PostMapping("/delete_reply")
+	@ResponseBody
+	public void deleteReply(@RequestBody ReplyVO replyVo) {
+		
+		boardService.deleteReply(replyVo);
 	}
 	
 	@PostMapping("/closeTeamStatus")
@@ -247,5 +253,66 @@ public class BoardAjaxController {
 		return boardService.updateUserNoticeChecked(noticevo);
 	}
 	
+	//taskDetail (todo)테이블에 값 넣어주기
+	@PostMapping("/insertTodoList")
+	@ResponseBody
+	public void insertTodoList(@RequestBody TaskDetailVO tdVo) {
+		
+		boardService.insertTodoList(tdVo);
+	}
+	
+	//taskDetail 업데이트 구문
+	@PostMapping("/update_todo")
+	@ResponseBody
+	public void updateTodoList(@RequestBody TaskDetailVO tdVo) {
+		
+		System.out.println("체크박스 클릭 후 :"+tdVo.toString());
+		
+		boardService.updateTodoList(tdVo);
+	}
+	
+	//taskDetail 조회
+	@PostMapping("/put_taskdetail")
+	@ResponseBody
+	public List<TaskDetailVO> putTaskDetail(@RequestBody TaskDetailVO tdVo){
+		
+		
+		return boardService.putTaskDetail(tdVo);
+	}
+	
+	//진척률 업데이트
+	@PostMapping("/progress_update")
+	@ResponseBody
+	public void progressUpdate(@RequestBody TaskVO taskVo) {
+		
+		boardService.progressUpdate(taskVo);
+	}
+	
+	//todo리스트 삭제
+	@PostMapping("/deletetodo")
+	@ResponseBody
+	public void deleteTodo(@RequestBody TaskDetailVO tdVo) {
+		
+		boardService.deletetodo(tdVo);
+	}
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

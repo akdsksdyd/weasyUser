@@ -60,13 +60,15 @@
   						 startDate,
   						 targetDate,
   						 teamNo,
-  						 status)
+  						 status,
+  						 progressRate)
   					values(#{title},
   						   #{content},
   						   #{startDate},
   						   #{targetDate},
   						   #{teamNo},
-  						   0)
+  						   0,
+  						   #{progressRate})
   	</insert>
   	
   	<select id="getTaskList" resultType="TaskVO">
@@ -117,10 +119,21 @@
   	<update id="updateTask">
   		update task set title = #{title},
   						content = #{content},
-  						startDate = #{startDate},
-  						targetDate = #{targetDate},
+  						<if test="startDate != '' and startDate != null">
+	  						startDate = #{startDate},
+  						</if>
+  						<if test="targetDate != '' and targetDate != null">
+	  						targetDate = #{targetDate},
+  						</if>
   						progressRate = #{progressRate}
   					where taskNo = #{taskNo}
+  			
+  		<selectKey keyProperty="progressRate" resultType="int" order="BEFORE">
+  		
+  			select progressRate from task where taskNo = #{taskNo}
+  		
+  		</selectKey>		
+  			
   	</update>
   	
   	<insert id="insertReply" parameterType="ReplyVO">
@@ -145,6 +158,22 @@
   	<select id="putReply" resultType="ReplyVO">
   		select replyNo, taskNo, comment from REPLY where taskNo = #{taskNo}
   	</select>
+  	
+  	<!-- 댓글 수정 -->
+  	<update id="updateReply" parameterType="ReplyVO">
+  	
+  		update reply set comment = #{comment},
+  						 replyDate = now()
+  					 where replyNo = #{replyNo}
+  	
+  	</update>
+  	
+  	<!-- 댓글 삭제 -->
+  	<delete id="deleteReply" parameterType="ReplyVO">
+  	
+  		delete from reply where replyNo = #{replyNo}
+  	
+  	</delete>
   	
   	<!-- 공지사항 리스트 -->
   	<select id="getNoticeList" resultType="noticeListVO">
@@ -223,6 +252,52 @@
   	<update id="updateUserNoticeChecked" parameterType="noticevo">
   		update notice set checked = 'Y' where noticeNo = #{noticeNo}
   	</update>
+  	
+  	<!-- taskDetail테이블 추가 -->
+  	<insert id="insertTodoList" parameterType="TaskDetailVO">
+  	
+  		insert into taskdetail (taskNo,
+  								taskDetail,
+  								userEmail,
+  								status)
+  					values(#{taskNo},
+  						   #{taskDetail},
+  						   #{userEmail},
+  						   #{status})
+  	
+  	</insert>
+  	
+  	<!-- taskDetail 업데이트 구문 -->
+  	<update id="updateTodoList" parameterType="TaskDetailVO">
+  	
+  		update taskdetail set taskDetail = #{taskDetail},
+  							  status = #{status}
+  						  where taskDetailNo = #{taskDetailNo}
+  	
+  	</update>
+  	
+  	<!-- taskDetail 조회 -->
+  	<select id="putTaskDetail" resultType="TaskDetailVO">
+  	
+  		select taskDetailNo, taskNo, taskDetail, status from taskDetail where taskNo = #{taskNo}
+  	
+  	</select>
+  	
+  	<update id="progressUpdate" parameterType="TaskVO">
+  	
+  		<selectKey keyProperty="progressRate" resultType="int" order="BEFORE">
+  			select round(count(case when status = 2 then 1 end)/count(*)*100,0) as progressRate
+       		from taskdetail where taskNo = #{taskNo}
+  		</selectKey>
+  		
+  		update task set progressRate = #{progressRate} where taskNo = #{taskNo}
+  	
+  	</update>
+  	
+  	<!-- todo리스트 삭제 -->
+  	<delete id="deletetodo" parameterType="TaskDetailVO">
+  		delete from taskdetail where taskDetailNo = #{taskDetailNo}
+  	</delete>
   	
   </mapper>
   

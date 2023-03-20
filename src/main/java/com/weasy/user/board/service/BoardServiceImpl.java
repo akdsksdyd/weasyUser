@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.ReplyVO;
+import com.weasy.user.command.TaskDetailVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.noticeListVO;
@@ -124,6 +126,20 @@ public class BoardServiceImpl implements BoardService{
 		
 		return boardMapper.putReply(taskNo);
 	}
+	
+	//댓글 수정
+	@Override
+	public void updateReply(ReplyVO replyNo) {
+		
+		boardMapper.updateReply(replyNo);
+	}
+	
+	//댓글 삭제
+	public void deleteReply(@RequestBody ReplyVO replyVo) {
+		
+		boardMapper.deleteReply(replyVo);
+	}
+	
 	//공지사항 리스트 가져오기
 	@Override
 	public ArrayList<noticeListVO> getNoticeList() {
@@ -174,6 +190,41 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int updateUserNoticeChecked(noticeVO noticevo) {
 		return boardMapper.updateUserNoticeChecked(noticevo);
+	}
+	
+	//taskDetail (todo)테이블에 값 넣어주기
+	@Override
+	public void insertTodoList(TaskDetailVO tdVo) {
+		
+		boardMapper.insertTodoList(tdVo);
+	}
+	
+	@Override
+	public void updateTodoList(TaskDetailVO tdVo) {
+		
+		boardMapper.updateTodoList(tdVo);
+	}
+	
+	@Override
+	public ArrayList<TaskDetailVO> putTaskDetail(TaskDetailVO tdVo) {
+		
+		System.out.println("detail조회시 서비스 taskNo: " + tdVo.getTaskNo());
+		
+		return boardMapper.putTaskDetail(tdVo);
+	}
+	
+	//진척률 업데이트
+	@Override
+	public void progressUpdate(TaskVO taskVo) {
+		
+		boardMapper.progressUpdate(taskVo);
+	}
+	
+	//todo리스트 삭제
+	@Override
+	public void deletetodo(TaskDetailVO tdVo) {
+		
+		boardMapper.deletetodo(tdVo);
 	}
 	
 }
