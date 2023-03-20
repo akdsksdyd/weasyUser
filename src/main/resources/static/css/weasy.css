@@ -2,6 +2,11 @@
 	box-sizing: border-box;
 }
 
+.logo {
+  background-image: url(../img/png/weasylogo.png);
+  
+}
+
 html {
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
@@ -684,3 +689,5 @@ section.notice {
 	color: #a0a3bd;
 	background-color: rgba(160, 163, 189, 0.3);
 }
+
+

@@ -156,7 +156,7 @@
   	</select>
   	
   	<select id="putReply" resultType="ReplyVO">
-  		select replyNo, taskNo, comment from REPLY where taskNo = #{taskNo}
+  		select userEmail, replyNo, taskNo, comment from REPLY where taskNo = #{taskNo}
   	</select>
   	
   	<!-- 댓글 수정 -->
