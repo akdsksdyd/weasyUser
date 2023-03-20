@@ -295,24 +295,4 @@ public class BoardAjaxController {
 		
 		boardService.deletetodo(tdVo);
 	}
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

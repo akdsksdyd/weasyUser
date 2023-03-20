@@ -184,9 +184,13 @@ function putReply(taskNo, userEmail, teamNo){
 				replyList += '<div class="profile_box">';
 				replyList += '<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">';
 				replyList += '</div>';
-				replyList += '<input class="comment_box" value="'+ result[i].comment +'"/>';
-				replyList += '<button type="button" data-replyNo="'+ result[i].replyNo +'" class="checkbox_btn save update_reply">UPDATE</button>';
-				replyList += '<button type="button" class="checkbox_btn cancle delete_reply">DELETE</button>'; 
+				replyList += '<span class="comment_box">';
+				replyList += '<strong>' + result[i].userEmail + '</strong>';
+				replyList += '<button title="update" class="update_reply button-prevent reply_button" data-replyNo="'+ result[i].replyNo +'"><i class="bi bi-pencil-square"></i></button>'
+				replyList += '<button title="delete" class="delete_reply button-prevent reply_button" data-replyNo="'+ result[i].replyNo +'"><i class="bi bi-trash"></i></button>'	
+				replyList += '<br/>';
+				replyList += result[i].comment;
+				replyList +='</span>';
 				replyList += '</div>'; 
 			
 				$("#comment_list").html(replyList);
@@ -788,6 +792,8 @@ function getTeamTask(teamNo, userEmail){
 			$("#teamProjectBoard").css("display","block");
 			$("#noticePage").css("display","none");
 			
+			/*pollTeamTask();*/
+			
 			/* 요청으로 받아온 리스트 들을 화면에 task 단게에 맞게 뿌려준다. */
 			for(var i = 0; i < result.length; i++){
 				/* todo에 넣을것 */
@@ -844,7 +850,21 @@ function makeDetail(task){
 		}
 	}
 	
-	
+	var color = "";
+	/* 오늘날짜와 endDate 비교 하여 날짜 detail에 컬러 부여 */
+	if(task.targetDate != null){
+		var endDate = new Date(task.targetDate);
+		var now = new Date();
+		var compareDate = endDate - now;
+		
+		var day = 86400000; // 하루의 시간
+		
+		if(compareDate <= day*7){ //7일 남음
+			color = "red";
+		}else if(compareDate <= day*14){ //14일 남음
+			color = "#FF9933";
+		}
+	}
 	
 	/*1. 날짜*/
 	if(task.startDate != null){
@@ -852,14 +872,20 @@ function makeDetail(task){
 		/* 형식 변환 */
 		var timestamp = task.startDate;
 		var date = new Date(timestamp);
-		detail += date.getFullYear()+ '/' + date.getMonth() + '/' + date.getDate();
+		detail += '<span style="color:'+color+';">';
+		detail += date.getFullYear()+ '/' + (date.getMonth()+1) + '/' + date.getDate();
+		detail += '</span>';
 	}
+	
 	if(task.targetDate != null){
+		detail += '<span style="color:'+color+';">';
 		detail += ' - ';
 		/* 형식 변환 */
 		var timestamp = task.targetDate;
 		var date = new Date(timestamp);
-		detail += date.getFullYear()+ '/' + date.getMonth() + '/' + date.getDate();
+		var target_date = date.getFullYear( )+ '/' + (date.getMonth()+1) + '/' + date.getDate();
+		detail += target_date;
+		detail += '</span>';
 		detail += '<br/>';
 	}
 	
@@ -1594,3 +1620,25 @@ $("#userNotice").on('click', 'li', function(e){
 		},
     });
 })
+
+/**
+ * polling ajax를 사용하여 특정 초마다 user의 notice를 읽어온다.
+ */
+/*
+$(document).ready(
+	(function pollTask() {
+		setInterval(
+			printtemano()
+			,500
+		);
+	})
+);
+*/
+$(document).ready(function(){
+    setInterval(printtemano(),5000);
+});
+
+function printtemano(){
+	console.log("팀넘버");
+	console.log($(".teamNo").val());
+}
