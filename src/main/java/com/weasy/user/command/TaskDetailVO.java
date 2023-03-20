@@ -12,9 +12,10 @@ import lombok.NoArgsConstructor;
 public class TaskDetailVO { //상세업무 VO
 	
 	private int taskDetailNo;
-	private int boardNo;
+	private int taskNo;
 	private String taskDetail;
 	private String userEmail;
+	private int status;
 
 }
 //taskDetailNo  	int PRIMARY KEY auto_increment,

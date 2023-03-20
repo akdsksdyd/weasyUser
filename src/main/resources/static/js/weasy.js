@@ -1,7 +1,6 @@
 "use strict";
 /* 로그인창에서 쿠키값이 있으면 이메일에 띄우기(내가 만든 쿠키~~) */
 $(document).ready(function(){	
-	/*console.log("쿠기값" + document.cookie.replace("lastlogin=", ""));*/
 	$("input[name=check_id]").attr('value', document.cookie.replace("lastlogin=", ""));
 	/* 쿠키 값이 있으면 체크박스 checked */
 	if(document.cookie.replace("lastlogin=", "") !== ""){
@@ -24,6 +23,7 @@ $(".teamTask").click(function(e){
 	taskValue += '<input type="hidden" id="teamNo" name="teamNo" value="'+ teamNo +'">';
 	taskValue += '<input type="hidden" id="userEmail" name="userEmail" value="'+ userEmail +'">';
 	/*console.log("hidden태그의 teamNo: "+teamNo);*/
+	taskValue += '<input type="hidden" class="userEmail" name="userEmail" value="'+ userEmail +'">';
 	$(".addTaskValue").html(taskValue);
 	
 	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
@@ -39,10 +39,10 @@ $(".addTaskBtn").click(function(e){
 		return;
 	}
 
-	/*console.log(e.target.nextElementSibling.firstChild);*/
 	var teamNoValue = $(e.target.nextElementSibling.firstChild).val();
 	var emailValue = $(e.target.nextElementSibling.lastChild).val();
-	/*console.log(teamNoValue);*/
+	var teamNoValue = $(e.target.nextElementSibling.firstChild).val();
+	var emailValue = $(e.target.nextElementSibling.lastChild).val();
 
 	e.preventDefault();
 		
@@ -96,9 +96,6 @@ $(".listBox").on('click', 'article', function(e){
 	$("#card_modal").css("display", "flex");
 	$("html").css("overflow", "hidden");
 	
-	/* task테이블의 status값에 따라 selected속성 부여 */
-	var status = $("#selectCheck");
-	
 	/* taskNo을 히든태그로 숨겨서 전달하기 위한 구문 */
 	var taskNo = $(e.target).closest('article').attr("data-taskno");
 	var taskNoHid = "";
@@ -144,16 +141,32 @@ $(".listBox").on('click', 'article', function(e){
 			}else if(result.status == 2){
 				$("#selectCheck").val('2').prop("selected", true);
 			}
+			
+			/* task들어 갈 떄 진척률 반영 */	
+			$(".pr10").html(result.progressRate + "%");
+			$(".progressbar").val(result.progressRate);
+		
 		},
 		error: function(err){
 			alert("조회에 실패 했습니다.");
 		}
 	});
 	
-	var replyList = "";
 	var userEmail = $(".userEmail").val();
-	var teamNo= $(".teamNo").val();
+	var teamNo= $("#teamNoHidden").val();
 	var taskNo = $("#taskNo").val();
+	
+	putReply(taskNo, userEmail, teamNo);
+	
+	putTaskDetail(taskNo);
+	$("add_checkbox_wrap").remove();
+	
+});
+
+/* 댓글 조회 */
+function putReply(taskNo, userEmail, teamNo){
+	
+	var replyList = "";
 	
 	$.ajax({
 		
@@ -171,7 +184,9 @@ $(".listBox").on('click', 'article', function(e){
 				replyList += '<div class="profile_box">';
 				replyList += '<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">';
 				replyList += '</div>';
-				replyList += '<span class="comment_box">'+ result[i].comment +'</span>'; 
+				replyList += '<input class="comment_box" value="'+ result[i].comment +'"/>';
+				replyList += '<button type="button" data-replyNo="'+ result[i].replyNo +'" class="checkbox_btn save update_reply">UPDATE</button>';
+				replyList += '<button type="button" class="checkbox_btn cancle delete_reply">DELETE</button>'; 
 				replyList += '</div>'; 
 			
 				$("#comment_list").html(replyList);
@@ -183,8 +198,63 @@ $(".listBox").on('click', 'article', function(e){
 		}
 	})
 	
-});
+}
 
+$("#comment_list").on("click", "button", function(e){
+	
+	/* 삭제 후 다시 댓글 불러올 때 필요한 변수들 */
+	var userEmail = $(".userEmail").val();
+	var teamNo = $(".teamNo").val();
+	var taskNo = $("#taskNo").val();
+	
+	/* 댓글 수정버튼 */
+	if($(e.target).hasClass("update_reply")){
+		
+		var replyNo = $(e.target).attr("data-replyNo");
+		var comment = $(e.target).prev().val();
+		
+		$.ajax({
+			url: "../update_reply",
+			type: "post",
+			contentType: "application/json",
+			data: JSON.stringify({"replyNo": replyNo,
+								  "userEmail": userEmail,
+								  "comment": comment}),
+			success: function(result){
+				
+				putReply(taskNo, userEmail, teamNo);
+				
+			},
+			error: function(err){
+				alert("댓글 수정 실패 !");
+			}
+		})
+		
+	}
+	
+	/* 댓글 삭제버튼 */
+	if($(e.target).hasClass("delete_reply")){
+		
+		var replyNo = $(e.target).attr("data-replyNo");
+		
+		$.ajax({
+			url: "../delete_reply",
+			type: "post",
+			contentType: "application/json",
+			data: JSON.stringify({"replyNo": replyNo}),
+			success: function(result){
+				
+				putReply(taskNo, userEmail, teamNo);
+				
+			},
+			error: function(err){
+				alert("댓글 삭제 실패 !");
+			}
+		})
+		
+	}
+	
+})
 
 /* task card modal창 안에서 멤버 버튼 클릭시 검색창 뜨도록 구현 */
 $(".addMember").click(function(e){
@@ -311,6 +381,80 @@ $('html').click(function(e) {
 		$(".searchTaskMember").css("display", "none");
 	}
 });
+function putTaskDetail(taskNo){
+		
+	$.ajax({
+		url: "../put_taskdetail",
+		type: "post",
+		contentType: "application/json",
+		data: JSON.stringify({"taskNo": taskNo}),
+		success: function(result){
+			
+			var addcheckbox = '';
+					
+			for(var i = 0; i < result.length; i++){
+				
+					addcheckbox += '<div class="card_content add_checkbox_wrap">';
+					if(result[i].status == 1){
+						addcheckbox += '<input type="checkbox" class="checkValue">';
+					}else{
+						addcheckbox += '<input type="checkbox" class="checkValue" checked="checked">';
+					}
+					addcheckbox += '	<input type="text" class="input_box input-prevent taskDetailNo" value="'+ result[i].taskDetail +'" data-detailNo="'+ result[i].taskDetailNo +'"/>';
+					addcheckbox += '	<button type="button" class="checkbox_btn save" id="checkboxUpdate">UPDATE</button>';
+					addcheckbox += '	<button type="button" class="checkbox_btn cancle delete_checkbox">DELETE</button>';
+					addcheckbox += '</div>';
+					
+					
+					$("#detailContentBox").html(addcheckbox);
+					progressUpdate(taskNo);
+					
+			}
+			
+		},
+		error: function(err){
+			alert("todo리스트 조회 실패 !");
+		}	
+	})
+
+}
+
+$("#detailContentBox").on("click", "input", function(e){
+	
+	if($(e.target).hasClass("checkValue")){
+	
+		var taskNo = $("#taskNo").val();
+		var taskDetailNo = $(e.target).next().attr("data-detailNo");
+		var taskDetail = $(e.target).next().val();
+		var checkValue = "";
+		if($(e.target).is(':checked') == true){
+			checkValue = 2;
+		}else{
+			checkValue = 1;
+		}
+		
+		$.ajax({
+			url: "../update_todo",
+			type: "post",
+			contentType: "application/json",
+			data: JSON.stringify({"taskDetailNo": taskDetailNo,
+								  "taskDetail": taskDetail,
+								  "status": checkValue,
+								  "taskNo": taskNo}),
+			success: function(result){
+				
+				progressUpdate(taskNo);
+				
+			},
+			error: function(err){
+				alert("체크리스트 업데이트 실패 !");
+			}
+		})
+		
+		
+	}
+	
+})
 
 /* 보드 리스트 카드 모달창 닫기 */
 function closeCardModal(){
@@ -326,6 +470,10 @@ function closeCardModal(){
 	$("#card_modal textarea").each(function(index, item){
 		$(item).val("");
 	});
+	var teamNo = $("#teamNoHidden").val();
+	var userEmail = $(".userEmail").val();
+	getTeamTask(teamNo, userEmail);
+	$(".add_checkbox_wrap").remove();
 }
 
 /* task card의 description 글자 크기만큼 자동 늘리기 */
@@ -337,43 +485,6 @@ function resize() {
 	}
 }
 
-/* task card의 description cancle버튼 클릭시 원래 크기로 돌려놓기 */
-const description_cancle = document.getElementById("description_cancle");
-description_cancle.addEventListener("click", e=>{
-	description.value='';
-	description.style.height ='5em';
-});
-
-/*
-description save시
-textarea / cancle 버튼 / save 버튼 안보이게 숨기기
-edit 버튼 / 입력된 description 부분 보이게 변경 
-*/
-$('#description_save').click(function(){
-	$('#description').hide();
-	$('#description_cancle').hide();
-	$('#description_save').hide();
-	$('#description_edit').show();
-	$('#description_content').show();
-	
-	var description = '<p>' + $('#description').val() + '</p>';
-	$('#description_content').html(description);
-	$("#description").val(description);
-});
-
-/*
-description edit시
-textarea / cancle 버튼 / save 버튼 보이게 변경
-edit 버튼 / 입력된 description 부분 안보이게 변경
-*/
-$('#description_edit').click(function(){
-	$('#description').show();
-	$('#description_cancle').show();
-	$('#description_save').show();
-	$('#description_edit').hide();
-	$('#description_content').hide();
-});
-
 /* file 등록시 선택한 파일 이름 뜨도록 해주기 */
 $("#file").on('change',function(){
   var fileName = $("#file").val();
@@ -384,56 +495,148 @@ function checkbox_reload(){
       $("#card_checkbox").load("#card_checkbox");
 }
 
-$("#card_checkbox").click(function(e){
-	e.preventDefault();
-	var content = '';
-	content += '<div class="checkbox_box">';
-	content += '<div class="card_content">';
-	content += '<i data-feather="check-square" class="detail-icon"></i>';
-	content += '<input placeholder="title" type="text" class="input_box input-prevent"/>';
-	content += '<button type="button" class="checkbox_btn save add_checkbox">ADD ITEM</button>';
-	content += '<button type="button" class="checkbox_btn cancle delete_checkbox">DELETE</button>';
-	content += '</div>';
-	content += '<div class="card_content">';
-	content += '<span class="pr10">20%</span>';
-	content += '<progress class="progressbar" value="20" max="100"></progress>';
-	content += '</div>';
-	content += '</div>';
-	$("#checkbox_content").append(content);
-});
-
-$(".add_checkbox").click(function(e){
-	var checkbox ='<input type="checkbox">';
-	$(e.target).prev().append(checkbox);
-});
-
 //체크 박스가 몇개든지 새로 생길 수 있기때문에 위임을 통해 delete버튼과 additem버튼을 정상동작할 수 있게 해주었다.
 $("#checkbox_content").on('click', 'button', function(e){
 	var class_attr = $(e.target).attr("class");
 
 	/* delete 버튼 작업 */
 	if(class_attr.indexOf('delete_checkbox') != -1) {
-		$(e.target).closest(".checkbox_box").remove();
+		
+		var taskDetailNo = $(e.target).prev().prev().attr("data-detailNo");
+		var teamNo = $("#teamNoHidden").val();
+		var userEmail = $(".userEmail").val();
+		var taskNo = $("#taskNo").val();
+		
+		$.ajax({
+			url: "../deletetodo",
+			type: "post",
+			contentType: "application/json",
+			data: JSON.stringify({"taskDetailNo": taskDetailNo}),
+			success: function(result){
+				$(e.target).closest(".card_content").remove();
+				progressUpdate(taskNo);
+				getTeamTask(teamNo, userEmail);
+			},
+			error: function(err){
+				alert("todo리스트 삭제에 실패 했습니다.");
+			}		
+		})
+		
 	}
 	
 	/* add item 버튼 작업 */
+	var addcheckbox = "";
 	if(class_attr.indexOf('add_checkbox') != -1) {
 		var addcheckbox = '';
-		addcheckbox += '<div class="card_content">';
-		addcheckbox += '<input type="checkbox">';
-		addcheckbox += '<input type="text" class="input_box input-prevent"/>';
+		addcheckbox += '<div class="card_content add_checkbox_wrap">';
+		addcheckbox += '	<input type="checkbox" class="checkValue">';
+		addcheckbox += '	<input type="text" class="input_box input-prevent"/>';
+		addcheckbox += '	<button type="button" class="checkbox_btn save" id="checkboxSave">SAVE</button>';
+		addcheckbox += '	<button type="button" class="checkbox_btn cancle delete_checkbox">DELETE</button>';
 		addcheckbox += '</div>';
 		
 		$(e.target).closest(".checkbox_box").append(addcheckbox);
 	}
 });
 
+/* todo리스트 추가하는 구문 */
+$("#checkbox_content").on('click', 'button', function(e){
+	if($(e.target).attr("id") == "checkboxSave"){
+		
+		var taskNo = $("#taskNo").val();
+		var userEmail = $(".userEmail").val();
+		var taskDetail = $(e.target).prev().val();
+		var checkValue = "";
+		if($(e.target).prev().prev().is(':checked') == true){
+			checkValue = 2;
+		}else{
+			checkValue = 1;
+		}
+		
+		var taskDetailNo = "";
+		
+		$.ajax({
+	
+			url: "../insertTodoList",
+			type: "post",
+			contentType: "application/json",
+			data: JSON.stringify({"taskNo": taskNo,
+								  "userEmail": userEmail,
+								  "taskDetail": taskDetail,
+								  "status": checkValue}),
+			success: function(result){
+				
+				$("#checkboxSave").text("UPDATE");
+				$("#checkboxSave").attr("id", "checkboxUpdate");
+				progressUpdate(taskNo);
+					
+			},
+			error: function(err){
+				alert("체크리스트 저장 실패 !");
+			}	
+			
+		});
+		
+	}
+	
+	if($(e.target).attr("id") == "checkboxUpdate"){
+		
+		var taskDetail = $(e.target).prev().val();
+		var taskDetailNo = $(e.target).prev().attr("data-detailNo");
+		var taskNo = $("#taskNo").val();
+		var checkValue = "";
+		if($(e.target).prev().prev().is(':checked') == true){
+			checkValue = 2;
+		}else{
+			checkValue = 1;
+		}
+		
+		$.ajax({
+			url: "../update_todo",
+			type: "post",
+			contentType: "application/json",
+			data: JSON.stringify({"taskDetailNo": taskDetailNo,
+								  "taskDetail": taskDetail,
+								  "status": checkValue}),
+			success: function(result){
+				
+				$(".input_box").val();
+				
+				putTaskDetail(taskNo);
+				progressUpdate(taskNo);
+				
+			},
+			error: function(err){
+				alert("체크리스트 업데이트 실패 !");
+			}
+		})
+		
+	}
+	
+});
+
+function progressUpdate(taskNo){
+	
+	$.ajax({
+		url: "../progress_update",
+		type: "post",
+		contentType: "application/json",
+		data: JSON.stringify({"taskNo": taskNo}),
+		success: result => {
+		},
+		error: err => {
+			alert("진척률 업데이트 실패 !");
+		}
+	})
+	
+}
+
 /* task card 모달창에서 댓글 등록하기 버튼 눌렀을 때 동작 */
 /* 댓글 추가 버튼 누르면 댓글 업로드 */
 $("#commentBtn").click(function(){
 	
 	var userEmail = $(".userEmail").val();
-	var teamNo= $("#teamNo").val();
+	var teamNo= $(".teamNo").val();
 	var taskNo= $("#taskNo").val();
 	
 	var write_comment = $(".comment_box>textarea").val(); 
@@ -449,11 +652,13 @@ $("#commentBtn").click(function(){
 		contentType: "application/json",
 		success: function(result){
 			
-			comment += '<div class="card_content">'; 
+			comment += '<div class="card_content add_checkbox_wrap">'; 
 			comment += '<div class="profile_box">';
 			comment += '<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">';
 			comment += '</div>';
-			comment += '<span class="comment_box">'+write_comment+'</span>'; 
+			comment += '<input class="comment_box" value="'+ write_comment +'"/>'; 
+			comment += '<button type="button" class="checkbox_btn save update_reply"">UPDATE</button>';
+			comment += '<button type="button" class="checkbox_btn cancle delete_reply">DELETE</button>';
 			comment += '</div>'; 
 			
 			$("#comment_list").append(comment);
@@ -572,9 +777,6 @@ function getTeamTask(teamNo, userEmail){
 	var doing_task = "";
 	var done_task = "";
 	
-	/*console.log("task그릴 떄 teamNo: " + teamNo);
-	console.log("task그릴 떄 userEmail: " + userEmail);*/
-			
 	/* team task 가져오는거 function으로 빼서 사용해야할듯.. (addTask 후에도 사용)*/
 	$.ajax({
 		url: "../getTeamTask",
@@ -625,7 +827,6 @@ function getTeamTask(teamNo, userEmail){
 		},
 		error: function(err){
 			alert("보드 조회에 실패했습니다. 관리자에게 문의 부탁드립니다.🙏");
-			/*console.log(err);*/
 		}
 	});
 }
@@ -723,13 +924,13 @@ function findNickname(email){
 
 /* 상세페이지에서 select의 option값이 바뀔 때 task테이블의 status uptate */
 $("#selectCheck").change(function(e){
-	/*console.log("select값 바뀜");*/
 	var status = $(e.target).val();
-	/*console.log("select값 바뀐 value: "+status);*/
 	var taskNo = $("#taskNo").val();
-	/*console.log("select후 taskNo: "+taskNo);*/
+	
+	var status = $(e.target).val();
+	var taskNo = $("#taskNo").val();
 	var userEmail = $(".userEmail").val();
-	var teamNo = $("#teamNo").val();
+	var teamNo = $("#teamNoHidden").val();
 	
 	$.ajax({
 		
@@ -828,7 +1029,8 @@ $("#mainBoardPage").on('click', 'article', function(e){
 	var taskValue = "";
 	taskValue += '<input type="hidden" id="teamNo" name="teamNo" value="'+ teamNo +'">';
 	taskValue += '<input type="hidden" id="userEmail" name="userEmail" value="'+ userEmail +'">';
-	/*console.log("hidden태그의 teamNo: "+teamNo);*/
+	taskValue += '<input type="hidden" class="teamNo" name="teamNo" value="'+ teamNo +'">';
+	taskValue += '<input type="hidden" class="userEmail" name="userEmail" value="'+ userEmail +'">';
 	$(".addTaskValue").html(taskValue);
 	
 	/* 클릭한 메뉴 teamNo로 user의 권한 조회하여 write기능 활성화or비활성화 처리 */
@@ -883,7 +1085,6 @@ $('menuitem').on('click', function(e){
 			data:JSON.stringify({"teamNo": teamNo}),
 			contentType:"application/json; charset=utf-8",
 			success:function(result){
-				/*console.log(result);*/
 				
 				/* 팀 no를 */
 				$("#teamNo").val(result.teamNo);
@@ -1064,9 +1265,10 @@ let deleteData = [];
 
 /* 모달창에서 추가된 멤버 x버튼 클릭시 삭제 되는 기능 추가 */
 $(".chooseMemberList").on('click', 'button', function(e){
+	
 	var email = $(this.parentElement.parentElement).children().first().children().last().html();
 	var teamNo = $("#add_team_modal").attr("data-teamNo");
-	/*console.log(checkTeamCtor(teamNo));*/
+	
 	/* 지금 삭제하려는 이메일이 팀 생성자와 일치하는지 검사 */
 	if(email == checkTeamCtor(teamNo)){
 		alert("팀 생성자는 삭제 불가능 합니다.");
@@ -1091,7 +1293,6 @@ function checkTeamCtor(teamNo){
 		contentType:"application/json; charset=utf-8",
 		async: false,
 		success:function(result){
-			/*console.log(result);*/
 			email = result.userEmail;
 		},
 		error: function(){
@@ -1214,10 +1415,7 @@ $(".taskSaveBtn").on('click', 'button', function(e){
 	var targetDate = $("#targetDate").val();
 	var content = $("#description").val();
 	var taskNo = $(e.target).next().children().val();
-	/*console.log("save시 task값"+ taskNo);*/
-	var teamNo = $("#teamNoHidden").val();
-	/*console.log("save시 team값"+ teamNo);*/
-	var userEmail = $("#taskuser").val();
+	var userEmail = $(".userEmail").val();
 	
 	$.ajax({
 		
@@ -1242,11 +1440,15 @@ $(".taskSaveBtn").on('click', 'button', function(e){
 				$(item).val("");
 			});
 			
-			/*console.log("팀넘버:"+teamNo);
-			console.log("이메일:"+userEmail);*/
-			/* 사실 팀 task를 읽어올 떄 userEmail은 필요없다. */
-			getTeamTask(teamNo, userEmail);
 			closeCardModal();
+			
+			/* 사실 팀 task를 읽어올 떄 userEmail은 필요없다. */
+			/* 상세페이지에서 save버튼 눌렀을 시 입력 했던 값 공백으로 치환 */
+			$("#taskTitle").val("");
+			$("#startDate").val("");
+			$("#targetDate").val("");
+			$("#description").val("");
+			$(".add_checkbox_wrap").remove();
 			
 		},
 		error: function(err){

@@ -1,8 +1,12 @@
 package com.weasy.user.board.service;
 
 import java.util.ArrayList;
+
+import org.springframework.web.bind.annotation.RequestBody;
+
 import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.ReplyVO;
+import com.weasy.user.command.TaskDetailVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.noticeListVO;
@@ -62,6 +66,13 @@ public interface BoardService {
 	public TaskVO putTask(int taskNo);
 	
 	public ArrayList<ReplyVO> putReply(int taskNo);
+	
+	//댓글 수정
+	public void updateReply(@RequestBody ReplyVO replyNo);
+	
+	//댓글 삭제
+	public void deleteReply(@RequestBody ReplyVO replyVo);
+	
 	//공지사항 리스트 가져오기
 	public ArrayList<noticeListVO> getNoticeList();
 	//공지사항 글 개수 
@@ -74,6 +85,20 @@ public interface BoardService {
 	
 	//task 할당자 변경
 	public int updateTaskUser(TaskVO taskVo);
+	//taskDetail (todo)테이블에 값 넣어주기
+	public void insertTodoList(TaskDetailVO tdVo);
+	
+	//taskDetail 업데이트 구문
+	public void updateTodoList(TaskDetailVO tdVo);
+	
+	//taskDetail 조회
+	public ArrayList<TaskDetailVO> putTaskDetail(TaskDetailVO tdVo);
+	
+	//진척률 업데이트
+	public void progressUpdate(TaskVO taskVo);
+	
+	//todo리스트 삭제
+	public void deletetodo(TaskDetailVO tdVo);
 	
 	//사용자 개개인에게 보여질 notice insert
 	public int insertUserNotice(noticeVO noticevo);

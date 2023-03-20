@@ -214,6 +214,10 @@ html {
 	color: #939393;
 }
 
+.comment_box{
+	width: 100%;
+}
+
 [data-fakenode] {
 	background-color: gray;
 }
