@@ -101,7 +101,6 @@ $(".listBox").on('click', 'article', function(e){
 	var taskNoHid = "";
 	
 	taskNoHid += '<input type="hidden" id="taskNo" name="taskNo" value="'+ taskNo +'">';
-	
 	$(".taskNoHid").html(taskNoHid);
 	
 	/* 상세페이지에 값을 전달 */
@@ -152,7 +151,6 @@ $(".listBox").on('click', 'article', function(e){
 		}
 	});
 	
-	var userEmail = $(".userEmail").val();
 	var teamNo= $("#teamNoHidden").val();
 	var taskNo = $("#taskNo").val();
 	
@@ -167,6 +165,7 @@ $(".listBox").on('click', 'article', function(e){
 function putReply(taskNo, teamNo){
 	
 	var replyList = "";
+	var userEmail = "";
 	
 	$.ajax({
 		
@@ -184,15 +183,43 @@ function putReply(taskNo, teamNo){
 				replyList += '<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">';
 				replyList += '</div>';
 				replyList += '<span class="comment_box">';
-				replyList += '<strong>' + result[i].userEmail + '</strong>';
-				replyList += '<button title="update" class="update_reply button-prevent reply_button" data-replyNo="'+ result[i].replyNo +'"><i class="bi bi-pencil-square"></i></button>'
-				replyList += '<button title="delete" class="delete_reply button-prevent reply_button" data-replyNo="'+ result[i].replyNo +'"><i class="bi bi-trash"></i></button>'	
+				replyList += '<strong class="emailCheck">' + result[i].userEmail + '</strong>';
+				replyList += '<button title="update" class="update_reply button-prevent reply_button'+ i +'" data-replyNo="'+ result[i].replyNo +'"><i class="bi bi-pencil-square"></i></button>'
+				replyList += '<button title="delete" class="delete_reply button-prevent reply_button'+ i +'" data-replyNo="'+ result[i].replyNo +'"><i class="bi bi-trash"></i></button>'	
 				replyList += '<br/>';
 				replyList += '<input class="comment_box" value="'+ result[i].comment +'"/>'; 
 				replyList +='</span>';
 				replyList += '</div>'; 
 			
 				$("#comment_list").html(replyList);
+				
+				userEmail = result[i].userEmail;
+				var taskNo = $("#taskNo").val();
+				
+				$.ajax({
+					url: "../get_email",
+					type: "post",
+					contentType: "application/json",
+					data: JSON.stringify({"userEmail": userEmail,
+										  "taskNo": taskNo}),
+					success: function(result){
+						
+						for(var i = 0; i < result.length; i++){
+							
+							if(result[i] == 0){
+								$(".reply_button"+i).hide();
+							}else{
+								$(".reply_button"+i).show()
+							}
+
+						}
+						
+					},
+					error: function(err){
+						alert("이메일 조회 실패!");
+					}
+				})
+				
 			}
 			
 		},
@@ -207,24 +234,22 @@ $("#comment_list").on("click", "button", function(e){
 	
 	e.preventDefault();
 	/* 삭제 후 다시 댓글 불러올 때 필요한 변수들 */
-	var userEmail = $(".userEmail").val();
 	var teamNo = $(".teamNo").val();
 	var taskNo = $("#taskNo").val();
 	
 	/* 댓글 수정버튼 */
-	if($(e.target).hasClass("update_reply")){
-		var replyNo = $(e.target).attr("data-replyNo");
-		var comment = $(e.target).prev().val();
+	if($(this).hasClass("update_reply")){
+		var replyNo = $(e.target).parent().attr("data-replyNo");
+		var comment = $(e.target).parent().next().next().next().val();
 		
 		$.ajax({
 			url: "../update_reply",
 			type: "post",
 			contentType: "application/json",
 			data: JSON.stringify({"replyNo": replyNo,
-								  "userEmail": userEmail,
 								  "comment": comment}),
 			success: function(result){
-				console.log(result);
+				
 				putReply(taskNo, teamNo);
 				
 			},
@@ -236,9 +261,9 @@ $("#comment_list").on("click", "button", function(e){
 	}
 	
 	/* 댓글 삭제버튼 */
-	if($(e.target).hasClass("delete_reply")){
+	if($(this).hasClass("delete_reply")){
 		
-		var replyNo = $(e.target).attr("data-replyNo");
+		var replyNo = $(e.target).parent().attr("data-replyNo");
 		
 		$.ajax({
 			url: "../delete_reply",
@@ -511,7 +536,7 @@ $("#checkbox_content").on('click', 'button', function(e){
 		var taskNo = $("#taskNo").val();
 		
 		$.ajax({
-			url: "../deletetodo",
+			url: "../delete_todo",
 			type: "post",
 			contentType: "application/json",
 			data: JSON.stringify({"taskDetailNo": taskDetailNo}),
@@ -1524,7 +1549,6 @@ $(document).ready(
 	        type: 'GET',
 			dataType: "json",
 	        success: function(result) {
-	            console.log(result);
 				
 				var noticeTag = '';
 				for(var i = 0; i < result.length; i++){
@@ -1537,7 +1561,6 @@ $(document).ready(
 				if(result.length != 0){
 					$("#userNoticeIcon").addClass("active");
 				}else{
-					console.log("메세지 없음");
 					$("#userNotice").html("메세지가 없습니다.");
 				}
 	        },

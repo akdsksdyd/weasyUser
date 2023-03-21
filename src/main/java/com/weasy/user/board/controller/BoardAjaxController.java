@@ -165,6 +165,29 @@ public class BoardAjaxController {
 		return boardService.putReply(replyVo.getTaskNo());
 	}
 	
+	//댓글 수정, 삭제 할 떄 필요한 email 얻어오기
+	@PostMapping("/get_email")
+	@ResponseBody
+	public List<Integer> getEmail(@RequestBody ReplyVO replyVo,
+						HttpSession session) {
+		
+		String emailCheck = session.getAttribute("Email").toString();
+		
+		ArrayList<String> list = boardService.getEmail(replyVo);
+		ArrayList<Integer> result = new ArrayList<>();
+		
+		for(int i = 0; i < list.size(); i++) {
+			
+			if(list.get(i).toString().equals(emailCheck)) {
+				result.add(1);
+			}else {
+				result.add(0);
+			}
+		}
+		
+		return result;
+	}
+	
 	//댓글 수정
 	@PostMapping("/update_reply")
 	@ResponseBody
@@ -269,8 +292,6 @@ public class BoardAjaxController {
 	@ResponseBody
 	public void updateTodoList(@RequestBody TaskDetailVO tdVo) {
 		
-		System.out.println("체크박스 클릭 후 :"+tdVo.toString());
-		
 		boardService.updateTodoList(tdVo);
 	}
 	
@@ -292,7 +313,7 @@ public class BoardAjaxController {
 	}
 	
 	//todo리스트 삭제
-	@PostMapping("/deletetodo")
+	@PostMapping("/delete_todo")
 	@ResponseBody
 	public void deleteTodo(@RequestBody TaskDetailVO tdVo) {
 		
