@@ -139,6 +139,13 @@ public class BoardServiceImpl implements BoardService{
 		boardMapper.deleteReply(replyVo);
 	}
 	
+	//댓글 수정, 삭제 시 작성자인지 아닌지 반환
+	@Override
+	public ArrayList<String> getEmail(ReplyVO replyVo) {
+		
+		return boardMapper.getEmail(replyVo);
+	}
+	
 	//공지사항 리스트 가져오기
 	@Override
 	public ArrayList<noticeListVO> getNoticeList() {

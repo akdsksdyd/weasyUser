@@ -80,6 +80,9 @@ public interface BoardMapper {
 	//댓글 삭제
 	public void deleteReply(@RequestBody ReplyVO replyVo);
 	
+	//댓글 수정, 삭제 시 작성자인지 아닌지 반환
+	public ArrayList<String> getEmail(ReplyVO replyVo);
+	
 	//공지사항 리스트 가져오기
 	public ArrayList<noticeListVO> getNoticeList();
 	//공지사항 게시글 수(페이징)

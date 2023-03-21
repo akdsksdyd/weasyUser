@@ -68,10 +68,13 @@ public interface BoardService {
 	public ArrayList<ReplyVO> putReply(int taskNo);
 	
 	//댓글 수정
-	public void updateReply(@RequestBody ReplyVO replyNo);
+	public void updateReply(ReplyVO replyNo);
 	
 	//댓글 삭제
-	public void deleteReply(@RequestBody ReplyVO replyVo);
+	public void deleteReply(ReplyVO replyVo);
+	
+	//댓글 수정, 삭제 시 작성자인지 아닌지 반환
+	public ArrayList<String> getEmail(ReplyVO replyVo);
 	
 	//공지사항 리스트 가져오기
 	public ArrayList<noticeListVO> getNoticeList();
