@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,9 +28,11 @@ import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskDetailVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
+import com.weasy.user.command.UserPageVO;
 import com.weasy.user.command.UserVO;
 import com.weasy.user.command.noticeListVO;
 import com.weasy.user.command.noticeVO;
+import com.weasy.user.util.UserCriteria;
 
 @RestController
 public class BoardAjaxController {
@@ -219,12 +222,30 @@ public class BoardAjaxController {
 	public void taskStatusChange(@RequestBody TaskVO taskVo) {
 		boardService.taskStatusChange(taskVo);
 	}
-	
+	private int valid_total = 0; 
+	private int valid_realend = 0;
 	//공지사항-리스트
-	@PostMapping("/getNoticeList")
-	public ArrayList<noticeListVO> getNoticeList(noticeListVO noticeVo){
-		return boardService.getNoticeList();
+	@GetMapping("/getNoticeList")
+	public ArrayList<noticeListVO> getNoticeList(UserCriteria user_criteria){
+		System.out.println("!!!!!!!!!!!"+user_criteria.getPage());
+		int ps  = new UserCriteria(user_criteria.getPage(), user_criteria.getAmount()).getPageStart();
+		if(ps > valid_total || ps < 0 || valid_realend == user_criteria.getPage()) {
+			return null;
+		}
+		return boardService.getNoticeList(user_criteria);
 	}
+	//페이지네이션 
+	@GetMapping("/user_pagenation")
+	public UserPageVO user_pagenation (UserCriteria user_criteria) {
+		//페이지네이션 클릭 시 토탈 값 구해오기
+		int total = boardService.getTotal(user_criteria);
+		UserPageVO pageVo = new UserPageVO(user_criteria, total);
+		valid_total = total; //페이지네이션 화살표 제한 걸어주기 위함
+		valid_realend = pageVo.getRealEnd();
+		
+		return pageVo;
+	}
+
 	//공지사항-상세페이지
 	@PostMapping("/getDetailNotice")
 	public ArrayList<noticeListVO> getDetailNotice(@RequestBody noticeListVO noticeVo){
@@ -232,8 +253,9 @@ public class BoardAjaxController {
 	}
 	//공지사항-검색기능
 	@PostMapping("/getSearchNotice")
-	public ArrayList<noticeListVO> getSearchNotice(@RequestBody noticeListVO noticeVo){
-		return boardService.getSearchNotice(noticeVo);
+	public ArrayList<noticeListVO> getSearchNotice(@RequestBody UserCriteria user_criteria){
+		
+		return boardService.getSearchNotice(user_criteria);
 	}
 	
 	//task card의 user 변경해주기

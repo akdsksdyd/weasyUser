@@ -2,59 +2,92 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="notice(container)">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap');
+	@import	url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap');
 </style>
 
-<!-- notice 페이지 -->
-<div class="container notice-font" id="mainBoardPage">
-	<div class="notice-container">
-		
-		<section class="notice" id="noticePage">
-		  <div class="page-title">
-		        <div class="container">
-		            <h3>공지사항</h3>
-		        </div>
-		    </div>
-		
-		    <!-- board seach area -->
-		    <div id="notice-search">
-		        <div class="container">
-		            <div class="search-window">
-				    	<form name="search-form-notice" autocomplete="off">
-		                    <div class="search-wrap">
-		                    	<select class="notice-option" id="notice-option">
-				                	<option value="all">전체</option>
-				                	<option value="title">제목</option>
-				                	<option value="content">내용</option>
-				            	</select>
-								<input id="search-keyword" type="text" name="" placeholder="검색어를 입력해주세요.">
-				            	<button type="button" onclick="getSearchList();" class="btn notice-btn-dark">검색</button>
-		                    </div>
-				        </form>
-		            </div>
-		        </div>
-		    </div>
-		   
-		  <!-- board list area -->
-		    <div id="board-list">
-		        <div class="container">
-		            <table class="board-table">
-		                <thead>
-		                <tr>
-		                    <th scope="col" class="th-num">번호</th>
-		                    <th scope="col" class="th-title">제목</th>
-		                    <th scope="col" class="th-date">등록일</th>
-		                </tr>
-		                </thead>
-		                <tbody id="ajaxNoticeList" >               
-		          			<!-- 여기들어옴 -->
-		                </tbody>
-		            </table>
-		        </div>
-		    </div>
-		
-		</section>
+	<!-- notice 페이지 -->
+	<div class="container notice-font" id="mainBoardPage">
+		<div class="notice-container">
+
+			<section class="notice" id="noticePage">
+				<div class="page-title">
+					<div class="container">
+						<h3>공지사항</h3>
+					</div>
+				</div>
+
+				<!-- board seach area -->
+				<div id="notice-search">
+					<div class="container">
+						<div class="search-window">
+							<form name="search-form-notice" autocomplete="off">
+								<div class="search-wrap">
+									<select class="notice-option" id="notice-option">
+										<option value="all">전체</option>
+										<option value="title">제목</option>
+										<option value="content">내용</option>
+									</select> <input id="search-keyword" type="search" name="" placeholder="검색어를 입력해주세요.">
+									<button type="button" onclick="getSearchList();" class="btn notice-btn-dark">검색</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<!-- notice list area -->
+				<div class="container">
+					<table class="notice-table">
+						<thead>
+							<tr class="notice-table-tr">
+								<th scope="col" class="th-num">번호</th>
+								<th scope="col" class="th-title">제목</th>
+								<th scope="col" class="th-date">등록일</th>
+							</tr>
+						</thead>
+						<tbody id="ajaxNoticeList">
+							<!-- 여기들어옴 -->
+						</tbody>
+					</table>
+				</div>
+
+				<!-- pagination -->
+				<div class="page">
+					<ul id="user_pagination">
+						<!-- <li>
+							<a th:href="@{productList(page=1, amount=${pageVO.amount}, startDate=${pageVO.cri.startDate}, endDate=${pageVO.cri.endDate}, searchName=${pageVO.cri.searchName}, searchContent=${pageVO.cri.searchContent}, searchPrice=${pageVO.cri.searchPrice} )}">
+								<i class="bi bi-chevron-double-left"></i>
+							</a>
+						</li>
+						<li style="margin-right:5px" th:if="${pageVO.prev}">
+							<a th:href="@{productList(page=${pageVO.start-1}, amount=${pageVO.amount}, startDate=${pageVO.cri.startDate}, endDate=${pageVO.cri.endDate}, searchName=${pageVO.cri.searchName}, searchContent=${pageVO.cri.searchContent}, searchPrice=${pageVO.cri.searchPrice})}">
+								<i class="bi bi-chevron-left"></i>
+							</a>
+						</li>
+						<th:block th:each="page : ${pageVO.pageList}">
+							<li th:class="${page==pageVO.page ? 'on' : ''}">
+								<a th:href="@{productList(page=${page}, amount=${pageVO.amount}, startDate=${pageVO.cri.startDate}, endDate=${pageVO.cri.endDate}, searchName=${pageVO.cri.searchName}, searchContent=${pageVO.cri.searchContent}, searchPrice=${pageVO.cri.searchPrice} )}">[[${page}]]</a>
+							</li>
+						</th:block>
+						<li style="margin-left:5px" th:if="${pageVO.next}">
+							<a th:href="@{productList(page=${pageVO.end+1}, amount=${pageVO.amount}, startDate=${pageVO.cri.startDate}, endDate=${pageVO.cri.endDate}, searchName=${pageVO.cri.searchName}, searchContent=${pageVO.cri.searchContent}, searchPrice=${pageVO.cri.searchPrice} )}">
+								<i class="bi bi-chevron-right"></i>
+							</a>
+						</li>
+						<li>
+							<a th:href="@{productList(page=${pageVO.realEnd}, amount=${pageVO.amount}, startDate=${pageVO.cri.startDate}, endDate=${pageVO.cri.endDate}, searchName=${pageVO.cri.searchName}, searchContent=${pageVO.cri.searchContent}, searchPrice=${pageVO.cri.searchPrice} )}">
+								<i class="bi bi-chevron-double-right"></i>
+							</a>
+						</li> -->
+					</ul>
+				</div>
+				<!-- //pagination -->
+			
+			</section>
+		</div>
 	</div>
-</div>
+	<script th:inline="javascript">
+		
+		
+	</script>
 
 </th:block>

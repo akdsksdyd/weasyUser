@@ -78,10 +78,10 @@ public class BoardController {
 	
 
 	
-	@GetMapping("/index")
+	@GetMapping("/page")
 	public String index() {
 		
-		return "board/index";
+		return "";
 	}
 			
 }

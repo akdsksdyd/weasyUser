@@ -22,6 +22,11 @@ public class noticeListVO { //공지사항 리스트 VO
 	
 	private String searchType;
 	private String keyword;
+	
+//	private int total;
+//	private int pageStart;
+	
+
 
 }
 //noticeNo   INT primary key auto_increment,

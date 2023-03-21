@@ -32,11 +32,13 @@ import com.google.gson.JsonParser;
 import com.weasy.user.command.UserLogVO;
 import com.weasy.user.command.UserVO;
 import com.weasy.user.service.UserService;
-import com.weasy.user.service.UserSha256;
+import com.weasy.user.util.UserSha256;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
+	//쿠키유지시간
+	final static int SETMAXAGE = 300;
 	
 	//서비스 연결
 	@Autowired
@@ -125,7 +127,7 @@ public class UserController {
 		//쿠키 생성
 		if(request.getParameter("rememberId") != null) {
 			Cookie cookie = new Cookie("lastlogin", result.getUserEmail());
-			cookie.setMaxAge(300); //테스트를 위해 5분으로 설정, 추후에 시간 변경
+			cookie.setMaxAge(SETMAXAGE); //테스트를 위해 5분으로 설정, 추후에 시간 변경
 			response.addCookie(cookie);
 		}
 		

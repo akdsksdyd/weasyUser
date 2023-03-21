@@ -141,6 +141,20 @@ html {
 	justify-content: space-between;
 }
 
+.main{
+	padding-top: 50px;
+}
+.btn-outline-primary{
+	width: 129px;
+    font-size: 15px;
+}
+.addTask{
+	width: 328px;
+}
+.main-title{
+	margin-bottom: 31px;
+}
+
 /* 보드 리스트 css */
 
 /* 추가 버튼 디자인 */
@@ -440,7 +454,7 @@ section.notice {
 }
 
 .page-title {
-	margin-bottom: 60px;
+  	margin-bottom: 40px;
 }
 
 .page-title h3 {
@@ -451,8 +465,10 @@ section.notice {
 }
 
 #notice-search .search-window {
-	padding: 15px 0;
-	background-color: #0251cb;
+  	padding: 15px 0;
+  	background-color: #0251cb;
+  	border-radius: 3px;
+  	margin-bottom: 20px;
 }
 
 #notice-search .search-window .search-wrap {
@@ -464,12 +480,12 @@ section.notice {
 }
 
 #notice-search .search-window .search-wrap input {
-	height: 40px;
-	width: 100%;
-	font-size: 14px;
-	padding: 7px 14px;
-	border: 1px solid #ccc;
-	border-radius: 0;
+  	height: 40px;
+  	width: 100%;
+  	font-size: 14px;
+  	padding: 7px 14px;
+  	border: 0;
+  	border-radius: 3px 0px 0px 3px;
 }
 
 #notice-search .search-window .search-wrap input:focus {
@@ -479,69 +495,66 @@ section.notice {
 }
 
 #notice-search .search-window .search-wrap .btn {
-	position: absolute;
-	right: -28px;
-	top: 0px;
-	bottom: 0;
-	width: 108px;
-	padding: 0;
-	font-size: 16px;
-	height: 40px;
+  	position: absolute;
+    right: -20px;
+    top: 0px;
+    bottom: 0;
+    width: 100px;
+    padding: 0;
+    font-size: 16px;
+    height: 40px;
+    border-radius: 0px 3px 3px 0px;
 }
 
-.board-table {
-	font-size: 13px;
-	width: 100%;
-	border-top: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	border-collapse: collapse;
-	border-spacing: 0;
+.notice-table {
+  	font-size: 13px;
+  	width: 100%;
+  	border-collapse: collapse;
+  	border-spacing: 0;
 }
 
-.board-table a {
-	color: #333;
-	display: inline-block;
-	line-height: 1.4;
-	word-break: break-all;
-	vertical-align: middle;
+.notice-table a {
+  	color: #333;
+  	display: inline-block;
+  	line-height: 1.4;
+  	word-break: break-all;
+  	vertical-align: middle;
+}
+.notice-table a:hover {
+  	text-decoration: underline;
+}
+.notice-table th {
+  	text-align: center;
 }
 
-.board-table a:hover {
-	text-decoration: underline;
+.notice-table .th-num {
+  	width: 100px;
+  	text-align: center;
 }
 
-.board-table th {
-	text-align: center;
+.notice-table .th-date {
+  	width: 200px;
 }
 
-.board-table .th-num {
-	width: 100px;
-	text-align: center;
+.notice-table th, .notice-table td {
+  	padding: 11px 0;
+  	margin: 50px;
 }
 
-.board-table .th-date {
-	width: 200px;
+.notice-table tbody td {
+  	border-top: 1px solid rgb(172, 172, 172); 
+  	text-align: center;
 }
 
-.board-table th, .board-table td {
-	padding: 14px 0;
-	margin: 50px;
+.notice-table tbody th {
+  	padding-left: 28px;
+  	padding-right: 14px;
+  	border-top: 1px solid rgb(172, 172, 172);
+  	text-align: left;
 }
 
-.board-table tbody td {
-	border-top: 1px solid #e7e7e7;
-	text-align: center;
-}
-
-.board-table tbody th {
-	padding-left: 28px;
-	padding-right: 14px;
-	border-top: 1px solid #e7e7e7;
-	text-align: left;
-}
-
-.board-table tbody th p {
-	display: none;
+.notice-table tbody th p{
+  	display: none;
 }
 
 .notice-btn-dark {
@@ -549,7 +562,6 @@ section.notice {
 	color: #fff;
 	border-radius: 0;
 }
-
 .notice-btn-dark:hover, .btn-dark:focus {
 	background: #373737;
 	border-color: #373737;
@@ -575,7 +587,7 @@ section.notice {
 }
 
 .search-wrap {
-	diplay: flex;
+	display: flex;
 	justify-content: center;
 	align-items: center;
 }
@@ -649,13 +661,16 @@ section.notice {
 /* 옵션태그 */
 #notice-search .search-window .search-wrap .notice-option {
 	position: absolute;
-	left: -5px;
-	top: 0px;
-	bottom: 0;
-	width: 75px;
-	padding: 0;
-	font-size: 16px;
-	height: 40px;
+   	left: -5px;
+    top: 0px;
+    bottom: 0;
+    width: 75px;
+    padding: 0;
+    font-size: 15px;
+    height: 40px;
+    text-align: center;
+    border-radius: 3px;
+    border: none;
 }
 
 /* notice 알림 컬러 추가 - 기존에 info(파랑) & danger(빨강) 존재 */
@@ -688,6 +703,26 @@ section.notice {
 #userNotice .grey {
 	color: #a0a3bd;
 	background-color: rgba(160, 163, 189, 0.3);
+ 
 }
+.notice-table-tr{
+	font-size: 15px;	
+	border-top: 2px solid #505050; 
+	border-bottom: 2px solid #505050; 
+}
+
+.notice-table-tr>th{
+	padding: 7px;
+}
+/* 페이지네이션 */
+.page{padding:30px 0 20px 0;position:relative;}
+.page ul{text-align:center;}
+.page ul li{display:inline;  padding:0px!important;}
+.page ul li a{display:inline-block; zoom:1;*display:inline; width: 35px; height: 35px; line-height: 35px; color:#777777; border:1px solid #dddddd;transition:all 0.25s ease-in-out;-webkit-transition:all 0.25s ease-in-out;font-size:15px;}
+.page ul li a:hover, .page ul li.on a{display:inline-block;zoom:1;*display:inline; border:1px solid #7866c9;background:#fff;color:#7866c9;}
+.page ul li a i{color:#777777;}
+.page ul li a:hover i{color:#7866c9;}
+
+
 
 

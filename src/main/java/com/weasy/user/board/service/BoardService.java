@@ -9,9 +9,11 @@ import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskDetailVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
+import com.weasy.user.command.UserPageVO;
 import com.weasy.user.command.noticeListVO;
 import com.weasy.user.command.noticeVO;
-import com.weasy.user.util.Criteria;
+
+import com.weasy.user.util.UserCriteria;
 
 public interface BoardService {
 	
@@ -77,13 +79,19 @@ public interface BoardService {
 	public ArrayList<String> getEmail(ReplyVO replyVo);
 	
 	//공지사항 리스트 가져오기
-	public ArrayList<noticeListVO> getNoticeList();
+	/**
+	 * 공지사항 목록 가져오기
+	 * 페이지 네이션 기능 추가
+	 * @param user_criteria
+	 * @return ArrayList<noticeListVO>
+	 */
+	public ArrayList<noticeListVO> getNoticeList(UserCriteria user_criteria);
 	//공지사항 글 개수 
-	public int getTotal(Criteria cri);
+	public int getTotal(UserCriteria cri);
 	//공지사항 상세페이지 가져오기
 	public ArrayList<noticeListVO> getDetailNotice(noticeListVO noticeVo);
 	//공지사항 검색
-	public ArrayList<noticeListVO> getSearchNotice(noticeListVO noticeVo);
+	public ArrayList<noticeListVO> getSearchNotice(UserCriteria user_criteria);
 	public void taskStatusChange(TaskVO taskVo);
 	
 	//task 할당자 변경
