@@ -182,35 +182,34 @@
   	
   	<!-- 공지사항 리스트 -->
   	<select id="getNoticeList" resultType="noticeListVO">
-		SELECT noticeNo, noticeTitle, noticeContent, DATE_FORMAT(noticeRegdate, '%Y-%m-%d')as noticeRegdate , noticeLevel FROM noticeList order by noticeLevel desc, noticeRegdate desc
+		SELECT noticeNo, noticeTitle, noticeContent, DATE_FORMAT(noticeRegdate, '%Y-%m-%d')as noticeRegdate , noticeLevel 
+		FROM noticeList 
+		ORDER BY noticeLevel desc, noticeRegdate desc
+		LIMIT #{pageStart},#{amount}
   	</select>
-  	  	  	
-  
+  	
   	<!-- 공지사항 전체 페이지 수 -->
   	<select id="getTotal" resultType="int">
-        select count(*) as total from noticeList 
-        
-	   <!-- 	
-   		<if test="cri.startDate != null and cri.startDate != '' ">
-        <![CDATA[and date_format(prod_enddate, '%Y-%m-%d') >= date_format(#{cri.startDate}, '%Y-%m-%d')]]>
-        </if>
-
-        <if test="cri.endDate != null and cri.endDate != '' ">
-        <![CDATA[and date_format(prod_enddate, '%Y-%m-%d') <= date_format(#{cri.endDate}, '%Y-%m-%d')]]>
-        </if>
-        
-        <if test="cri.searchName != null and cri.searchName != '' ">
-        and prod_name like concat('%', #{cri.searchName}, '%')
-        </if>
-        <if test="cri.searchContent != null and cri.searchContent != '' ">
-        and prod_content like concat('%', #{cri.searchContent}, '%')
-        </if>
-         -->
+        <choose>
+  			<when test="searchType != null and searchType.equals('all')">
+  				 SELECT count(*) AS total FROM noticeList 
+  				 WHERE noticeTitle LIKE CONCAT('%',#{keyword},'%') OR noticeContent LIKE CONCAT('%',#{keyword},'%') 
+  			</when>
+	  		<when test="searchType != null and searchType.equals('title')">
+	  			 select count(*) as total from noticeList 
+	  			 WHERE noticeTitle  LIKE CONCAT('%',#{keyword},'%')
+	  		</when>
+	  		<when test="searchType != null and searchType.equals('content')">
+	  			 select count(*) as total from noticeList 
+	  			 WHERE noticeContent LIKE CONCAT('%',#{keyword},'%')
+	  		</when>
+  		</choose>
         
      </select>
   	<!-- 공지사항 상세페이지 가져오기 -->
   	<select id="getDetailNotice" resultType="noticeListVO">
-  		SELECT noticeNo, noticeTitle, noticeContent, DATE_FORMAT(noticeRegdate, '%Y-%m-%d')as noticeRegdate FROM noticeList where noticeNo = #{noticeNo}
+  		SELECT noticeNo, noticeTitle, noticeContent, DATE_FORMAT(noticeRegdate, '%Y-%m-%d')as noticeRegdate 
+  		FROM noticeList WHERE noticeNo = #{noticeNo};
   	</select>
   	
   	<!-- 공지사항 검색 -->
@@ -218,13 +217,16 @@
   		SELECT noticeNo, noticeTitle, noticeContent, DATE_FORMAT(noticeRegdate, '%Y-%m-%d')as noticeRegdate , noticeLevel 
   		FROM noticeList 
   		<choose>
+  			<when test="searchType != null and searchType.equals('all')">
+  				WHERE noticeTitle LIKE CONCAT('%',#{keyword},'%') OR noticeContent LIKE CONCAT('%',#{keyword},'%') 
+  				ORDER BY noticeLevel DESC, noticeNo DESC 
+  				LIMIT #{pageStart},#{amount}
+  			</when>
 	  		<when test="searchType != null and searchType.equals('title')">
-	  			WHERE noticeTitle  LIKE CONCAT('%',#{keyword},'%') order by noticeLevel desc, noticeNo desc
+	  			WHERE noticeTitle  LIKE CONCAT('%',#{keyword},'%') ORDER BY noticeLevel DESC, noticeNo DESC LIMIT #{pageStart},#{amount} 
 	  		</when>
-  		</choose>
-  		<choose>
 	  		<when test="searchType != null and searchType.equals('content')">
-	  			WHERE noticeContent LIKE CONCAT('%',#{keyword},'%') order by noticeLevel desc, noticeNo desc
+	  			WHERE noticeContent LIKE CONCAT('%',#{keyword},'%') ORDER BY noticeLevel DESC, noticeNo DESC LIMIT #{pageStart},#{amount}
 	  		</when>
   		</choose>
   	</select>

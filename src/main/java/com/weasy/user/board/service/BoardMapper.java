@@ -6,12 +6,13 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.weasy.user.util.Criteria;
+import com.weasy.user.util.UserCriteria;
 import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskDetailVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
+import com.weasy.user.command.UserPageVO;
 import com.weasy.user.command.noticeListVO;
 import com.weasy.user.command.noticeVO;
 
@@ -84,13 +85,13 @@ public interface BoardMapper {
 	public ArrayList<String> getEmail(ReplyVO replyVo);
 	
 	//공지사항 리스트 가져오기
-	public ArrayList<noticeListVO> getNoticeList();
+	public ArrayList<noticeListVO> getNoticeList(UserCriteria user_criteria);
 	//공지사항 게시글 수(페이징)
-	public int getTotal(Criteria cri); //전체게시글 수 
+	public int getTotal(UserCriteria cri); //전체게시글 수 
 	//공지사항 상세페이지 가져오기
 	public ArrayList<noticeListVO> getDetailNotice(noticeListVO noticeVo);
 	//공지사항 검색
-	public ArrayList<noticeListVO> getSearchNotice(noticeListVO noticeVo);
+	public ArrayList<noticeListVO> getSearchNotice(UserCriteria user_criteria);
 	public void taskStatusChange(TaskVO taskVo);
 	
 	//task 할당자 변경

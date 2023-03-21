@@ -12,9 +12,10 @@ import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskDetailVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
+import com.weasy.user.command.UserPageVO;
 import com.weasy.user.command.noticeListVO;
 import com.weasy.user.command.noticeVO;
-import com.weasy.user.util.Criteria;
+import com.weasy.user.util.UserCriteria;
 
 @Service("boardService")
 public class BoardServiceImpl implements BoardService{
@@ -146,11 +147,6 @@ public class BoardServiceImpl implements BoardService{
 		return boardMapper.getEmail(replyVo);
 	}
 	
-	//공지사항 리스트 가져오기
-	@Override
-	public ArrayList<noticeListVO> getNoticeList() {
-		return boardMapper.getNoticeList();
-	}
 	
 	@Override
 	public int closeTeamStatus(int teamNo) {
@@ -162,9 +158,16 @@ public class BoardServiceImpl implements BoardService{
 	public void taskStatusChange(TaskVO taskVo) {
 		boardMapper.taskStatusChange(taskVo);
 	}
+	//공지사항 리스트 가져오기
+	@Override
+	public ArrayList<noticeListVO> getNoticeList(UserCriteria user_criteria) {
+		UserPageVO vo = new UserPageVO();
+		
+		return boardMapper.getNoticeList(user_criteria);
+	}
 	//공지사항 글 개수 
 	@Override
-	public int getTotal(Criteria cri) {
+	public int getTotal(UserCriteria cri) {
 		return boardMapper.getTotal(cri);
 	}
 	//공지사항 상세페이지
@@ -174,8 +177,9 @@ public class BoardServiceImpl implements BoardService{
 	}
 	//공지사항 검색
 	@Override
-	public ArrayList<noticeListVO> getSearchNotice(noticeListVO noticeVo) {
-		return boardMapper.getSearchNotice(noticeVo);
+	public ArrayList<noticeListVO> getSearchNotice(UserCriteria user_criteria) {
+		new UserCriteria();
+		return boardMapper.getSearchNotice(user_criteria);
 	}
 	
 	@Override

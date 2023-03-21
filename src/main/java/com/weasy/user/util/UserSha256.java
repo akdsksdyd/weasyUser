@@ -1,4 +1,4 @@
-package com.weasy.user.service;
+package com.weasy.user.util;
 
 import java.security.MessageDigest;
 
