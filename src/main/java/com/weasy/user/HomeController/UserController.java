@@ -148,7 +148,6 @@ public class UserController {
 		return "redirect:/user/signin";
 	}
 
-
 	//검색어로 회원 검색
 	@ResponseBody
 	@PostMapping("/searchUserList")
@@ -171,4 +170,5 @@ public class UserController {
 		
 		return userService.searchTaskUser(teamNo, keyword);
 	}
+	
 }

@@ -46,5 +46,19 @@
 		WHERE (a.userEmail like concat('%', #{keyword}, '%') or u.nickName like concat('%', #{keyword}, '%')) 
 		and a.teamNo=#{teamNo}
 	</select>
+	
+	<!-- 회원정보 가지고 오기 -->
+	<select id="getUserInfo" resultType="UserVO">
+		select userEmail, userPw, userName, nickname, permission from users where userEmail=#{email};
+	</select>
+	
+	<!--  -->
+	<update id="updateUser" parameterType="UserVO">
+		update users set userName=#{userName}, nickname=#{nickname}
+		<if test="userPw != '' and userPw != null">
+			, userPw=#{userPw}
+		</if>
+		where userEmail=#{userEmail};
+	</update>
 
   </mapper>

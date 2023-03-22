@@ -22,4 +22,8 @@ public interface UserService {
 	public int addLoginDate(String email);
 	//검색키워드로 팀내의 직원찾기
 	public List<UserVO> searchTaskUser(int teamNo, String keyword);
+	//회원정보 가지고오기
+	public UserVO getUserInfo(String email);
+	//유저 정보 수정
+	public int updateUser(UserVO userVo);
 }

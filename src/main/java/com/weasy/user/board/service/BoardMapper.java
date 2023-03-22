@@ -13,6 +13,7 @@ import com.weasy.user.command.TaskDetailVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.UserPageVO;
+import com.weasy.user.command.UserVO;
 import com.weasy.user.command.noticeListVO;
 import com.weasy.user.command.noticeVO;
 
@@ -120,15 +121,5 @@ public interface BoardMapper {
 	
 	//todo리스트 삭제
 	public void deletetodo(TaskDetailVO tdVo);
+	
 }
-
-
-
-
-
-
-
-
-
-
-
