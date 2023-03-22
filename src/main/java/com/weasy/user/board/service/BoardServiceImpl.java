@@ -67,8 +67,8 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	@Override
-	public int getTeamNo(String teamName) {
-		return boardMapper.getTeamNo(teamName);
+	public int getTeamNo(TeamVO vo) {
+		return boardMapper.getTeamNo(vo);
 	}
 	
 	@Override
