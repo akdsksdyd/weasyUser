@@ -585,7 +585,7 @@ $("#checkbox_content").on('click', 'button', function(e){
 		
 		$.ajax({
 	
-			url: "../insertTodoList",
+			url: "../insert_todo",
 			type: "post",
 			contentType: "application/json",
 			data: JSON.stringify({"taskNo": taskNo,
@@ -594,8 +594,12 @@ $("#checkbox_content").on('click', 'button', function(e){
 								  "status": checkValue}),
 			success: function(result){
 				
-				$("#checkboxSave").text("UPDATE");
-				$("#checkboxSave").attr("id", "checkboxUpdate");
+				$(e.target).text("UPDATE");
+				$(e.target).attr("id", "checkboxUpdate");
+				
+				//$(".add_checkbox_wrap").remove();
+				
+				//putTaskDetail(taskNo);
 				progressUpdate(taskNo);
 					
 			},
@@ -628,9 +632,6 @@ $("#checkbox_content").on('click', 'button', function(e){
 								  "status": checkValue}),
 			success: function(result){
 				
-				$(".input_box").val();
-				
-				putTaskDetail(taskNo);
 				progressUpdate(taskNo);
 				
 			},
