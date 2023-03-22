@@ -302,7 +302,7 @@ public class BoardAjaxController {
 	}
 	
 	//taskDetail (todo)테이블에 값 넣어주기
-	@PostMapping("/insertTodoList")
+	@PostMapping("/insert_todo")
 	@ResponseBody
 	public void insertTodoList(@RequestBody TaskDetailVO tdVo) {
 		
