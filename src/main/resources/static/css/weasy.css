@@ -3,8 +3,9 @@
 }
 
 .logo {
-  background-image: url(../img/png/weasylogo.png);
-  
+  background-image: url(../img/png/mainlogo.png);
+  background-size: 49px 49px;
+  border-radius: 15px;
 }
 
 html {
@@ -714,6 +715,7 @@ section.notice {
 .notice-table-tr>th{
 	padding: 7px;
 }
+
 /* 페이지네이션 */
 .page{padding:30px 0 20px 0;position:relative;}
 .page ul{text-align:center;}
@@ -723,6 +725,8 @@ section.notice {
 .page ul li a i{color:#777777;}
 .page ul li a:hover i{color:#7866c9;}
 
-
-
+/* profile update */
+#changePw{
+	display: none;
+}
 

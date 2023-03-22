@@ -806,8 +806,6 @@ function getTeamTask(teamNo, userEmail){
 			$("#teamProjectBoard").css("display","block");
 			$("#noticePage").css("display","none");
 			
-			/*pollTeamTask();*/
-			
 			/* 요청으로 받아온 리스트 들을 화면에 task 단게에 맞게 뿌려준다. */
 			for(var i = 0; i < result.length; i++){
 				/* todo에 넣을것 */
@@ -1626,31 +1624,31 @@ $("#userNotice").on('click', 'li', function(e){
 	    data:JSON.stringify({"noticeNo": noticeNo}),
 		contentType:"application/json; charset=utf-8",
 	    success: function(result) {
-			console.log(result);
 	    },
 	    error: function(){
 		},
     });
 })
 
-/**
- * polling ajax를 사용하여 특정 초마다 user의 notice를 읽어온다.
- */
-/*
-$(document).ready(
-	(function pollTask() {
-		setInterval(
-			printtemano()
-			,500
-		);
-	})
-);
-*/
-$(document).ready(function(){
-    setInterval(printtemano(),5000);
-});
+/* 비밀번호 수정하기 */
+$("#changePwActive").click(function(e){
+   e.preventDefault();
+   
+   if($("#changePw").css("display") == "none"){
+	   $("#changePw").css("display", "flex");
+	   $("#changePw input").removeAttr("disabled");
+	   
+   }else if($("#changePw").css("display") == "flex"){
+	   $("#changePw").css("display", "none");
+	   $("#changePw input").attr("disabled", "disabled");
+   }
+})
 
-function printtemano(){
-	console.log("팀넘버");
-	console.log($(".teamNo").val());
+function validateCheck(){
+	//유효성 검사 실패시 비밀번호 창을 열어주고 profile 화면을 그려주도록 해주었다.
+	if($(".valid-pw").html() != '' && $(".valid-pw").html() != null){
+		$("#changePw").css("display", "flex");
+		$("#changePw input").removeAttr("disabled");
+	}
 }
+

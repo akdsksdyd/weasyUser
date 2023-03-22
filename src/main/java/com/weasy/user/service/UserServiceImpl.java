@@ -54,4 +54,16 @@ public class UserServiceImpl implements UserService {
 	public List<UserVO> searchTaskUser(int teamNo, String keyword) {
 		return userMapper.searchTaskUser(teamNo, keyword);
 	}
+	
+	//유저 정보 가지고 오기
+	@Override
+	public UserVO getUserInfo(String email) {
+		return userMapper.getUserInfo(email);
+	}
+	
+	//유저 정보 업데이트
+	@Override
+	public int updateUser(UserVO userVo) {
+		return userMapper.updateUser(userVo);
+	}
 }
