@@ -31,7 +31,7 @@ public interface BoardMapper {
 	//user가 속한 팀 리스트와 권한을 함께 가지고 온다.
 	public ArrayList<TeamVO> getTeamListWithRole(String user_id);
 	
-	public int getTeamNo(String teamName);
+	public int getTeamNo(TeamVO vo);
 	
 	//선택한 팀 정보 읽어오기
 	public TeamVO getTeamInfo(TeamVO vo);

@@ -71,7 +71,7 @@ public class BoardController {
 			/* 기존에 없는 팀이면 insertTeam & teamLeader에 권한 insert */
 			result = boardService.insertTeam(vo);
 			
-			int teamNo = boardService.getTeamNo(vo.getTeamName());
+			int teamNo = boardService.getTeamNo(vo);
 			//해당 팀no로 지정한 teamLeader 권한 주기
 			AuthorityVO authVO = AuthorityVO.builder().userEmail(vo.getUserEmail())
 								 .teamNo(teamNo)

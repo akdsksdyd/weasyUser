@@ -77,7 +77,14 @@
   	</select>
   	
   	<select id="getTeamNo" resultType="int">
-  		select teamNo, userEmail from TEAM where teamName = #{teamName}
+  		select teamNo, userEmail from TEAM 
+  		where teamName = #{teamName} 
+  		and teamGoal = #{teamGoal} 
+  		and teamRegdate = #{teamRegdate}
+  		and endDate = #{endDate}
+  		and userEmail = #{userEmail}
+  		and teamStatus = 'Y'
+  		order by teamNo desc limit 1
   	</select>
   	
   	<select id="getTeamMember" resultType="AuthorityVO">
@@ -307,17 +314,3 @@
   	</delete>
   	
   </mapper>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
