@@ -187,7 +187,7 @@ function putReply(taskNo, teamNo){
 				replyList += '<button title="update" class="update_reply button-prevent reply_button'+ i +'" data-replyNo="'+ result[i].replyNo +'"><i class="bi bi-pencil-square"></i></button>'
 				replyList += '<button title="delete" class="delete_reply button-prevent reply_button'+ i +'" data-replyNo="'+ result[i].replyNo +'"><i class="bi bi-trash"></i></button>'	
 				replyList += '<br/>';
-				replyList += '<input class="comment_box" value="'+ result[i].comment +'"/>'; 
+				replyList += '<input type="text" class="comment_box" value="'+ result[i].comment +'"/>'; 
 				replyList +='</span>';
 				replyList += '</div>'; 
 			
@@ -502,6 +502,7 @@ function closeCardModal(){
 	var userEmail = $(".userEmail").val();
 	getTeamTask(teamNo, userEmail);
 	$(".add_checkbox_wrap").remove();
+	$("#comment_list").empty();
 }
 
 /* task card의 description 글자 크기만큼 자동 늘리기 */
@@ -543,6 +544,7 @@ $("#checkbox_content").on('click', 'button', function(e){
 			success: function(result){
 				$(e.target).closest(".card_content").remove();
 				progressUpdate(taskNo);
+				putTaskDetail(taskNo);
 				getTeamTask(teamNo, userEmail);
 			},
 			error: function(err){
@@ -597,9 +599,9 @@ $("#checkbox_content").on('click', 'button', function(e){
 				$(e.target).text("UPDATE");
 				$(e.target).attr("id", "checkboxUpdate");
 				
-				//$(".add_checkbox_wrap").remove();
+				$(".add_checkbox_wrap").remove();
 				
-				//putTaskDetail(taskNo);
+				putTaskDetail(taskNo);
 				progressUpdate(taskNo);
 					
 			},
@@ -654,7 +656,7 @@ function progressUpdate(taskNo){
 		success: result => {
 		},
 		error: err => {
-			alert("진척률 업데이트 실패 !");
+			console.log("모든 todo삭제");
 		}
 	})
 	
@@ -662,13 +664,12 @@ function progressUpdate(taskNo){
 
 /* task card 모달창에서 댓글 등록하기 버튼 눌렀을 때 동작 */
 /* 댓글 추가 버튼 누르면 댓글 업로드 */
-$("#commentBtn").click(function(){
+$("#commentBtn").click(function(e){
 	
 	var teamNo= $(".teamNo").val();
 	var taskNo= $("#taskNo").val();
 	
 	var write_comment = $(".comment_box>textarea").val(); 
-	var comment = '';
 	
 	$.ajax({
 		url: "../insertReply",
@@ -689,6 +690,20 @@ $("#commentBtn").click(function(){
 	})	
 	
 });
+
+/* 인풋태그에 엔터키 먹는 현상 방지 */
+$(document).on("keydown", 'input[type="text"]', function(e) {
+  if (e.keyCode === 13) {
+    e.preventDefault();
+  }
+});
+
+/* 댓글 작성 후 엔터키를 눌러도 댓글이 들어 갈 수 있게 했다. */
+$(".replyTextBox").keyup(function(e){
+	if(e.keyCode == 13){
+		$("#commentBtn").click();
+	}
+})
 
 /* board side bar 클릭시 메인 보드 보여주고 */
 $("#mainBoardSideBar").click(function(e){
@@ -1487,6 +1502,7 @@ $(".taskSaveBtn").on('click', 'button', function(e){
 			$("#targetDate").val("");
 			$("#description").val("");
 			$(".add_checkbox_wrap").remove();
+			$("#comment_list").empty();
 			
 		},
 		error: function(err){

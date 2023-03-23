@@ -40,16 +40,6 @@ public class BoardAjaxController {
 	@Autowired
 	BoardService boardService;
 	
-	//teamNo, userEmail 가져오기
-	@PostMapping("/getTeamNo")
-	@ResponseBody
-	public ResponseEntity<List<TaskVO>> getTeamNo(@RequestBody TaskVO vo,
-								  				  Model model) {
-		
-		return new ResponseEntity<>(boardService.getTaskList(vo), HttpStatus.OK);
-//		return null;
-	}
-	
 	@PostMapping("/getTeamInfo")
 	@ResponseBody
 	public TeamVO getTeamInfo(@RequestBody TeamVO vo) {
