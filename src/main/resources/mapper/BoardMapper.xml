@@ -300,12 +300,12 @@
   	<update id="progressUpdate" parameterType="TaskVO">
   	
   		<selectKey keyProperty="progressRate" resultType="int" order="BEFORE">
-  			select round(count(case when status = 2 then 1 end)/count(*)*100,0) as progressRate
+  			select ifnull(round(count(case when status = 2 then 1 end)/count(*)*100,0), 0) as progressRate
        		from taskdetail where taskNo = #{taskNo}
   		</selectKey>
   		
-  		update task set progressRate = #{progressRate} where taskNo = #{taskNo}
-  	
+		  	update task set progressRate = #{progressRate} where taskNo = #{taskNo}
+		  		
   	</update>
   	
   	<!-- todo리스트 삭제 -->
