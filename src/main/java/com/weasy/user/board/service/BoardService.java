@@ -78,21 +78,39 @@ public interface BoardService {
 	//댓글 수정, 삭제 시 작성자인지 아닌지 반환
 	public ArrayList<String> getEmail(ReplyVO replyVo);
 	
-	//공지사항 리스트 가져오기
+	public void taskStatusChange(TaskVO taskVo);
 	/**
-	 * 공지사항 목록 가져오기
-	 * 페이지 네이션 기능 추가
+	 * 공지사항 데이터 목록 가져오기
 	 * @param user_criteria
 	 * @return ArrayList<noticeListVO>
 	 */
 	public ArrayList<noticeListVO> getNoticeList(UserCriteria user_criteria);
-	//공지사항 글 개수 
+	/**
+	 * 공지사항 데이터 개수 가져오기/페이제네이션 기능 구현
+	 * @param cri 검색키워드, 검색타입
+	 * @return int 총 데이터 개수
+	 */
 	public int getTotal(UserCriteria cri);
-	//공지사항 상세페이지 가져오기
+	/**
+	 * 클릭한 목록의 공지사항 상세페이지 
+	 * @param noticeVo 
+	 * @return ArrayList<noticeListVO> 공지사항 데이터
+	 */
 	public ArrayList<noticeListVO> getDetailNotice(noticeListVO noticeVo);
-	//공지사항 검색
+	/**
+	 * 공지사항 페이지 검색 기능 
+	 * 검색된 공지사항 배열로 가져오기 
+	 * @param user_criteria 검색키워드/검색타입
+	 * @return ArrayList<noticeListVO>
+	 */
 	public ArrayList<noticeListVO> getSearchNotice(UserCriteria user_criteria);
-	public void taskStatusChange(TaskVO taskVo);
+	/**
+	 * 공지사항 이미지 출력
+	 * 
+	 * @param notice_vo 클릭한 공지사항 번호
+	 * @return ArrayList<noticeListVO>
+	 */
+	public ArrayList<noticeListVO> getNoticeImg(noticeListVO notice_vo);
 	
 	//task 할당자 변경
 	public int updateTaskUser(TaskVO taskVo);
@@ -121,7 +139,6 @@ public interface BoardService {
 	public int updateUserNoticeChecked(noticeVO noticevo);
 	
 }
-
 
 
 

@@ -162,7 +162,6 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public ArrayList<noticeListVO> getNoticeList(UserCriteria user_criteria) {
 		UserPageVO vo = new UserPageVO();
-		
 		return boardMapper.getNoticeList(user_criteria);
 	}
 	//공지사항 글 개수 
@@ -180,6 +179,11 @@ public class BoardServiceImpl implements BoardService{
 	public ArrayList<noticeListVO> getSearchNotice(UserCriteria user_criteria) {
 		new UserCriteria();
 		return boardMapper.getSearchNotice(user_criteria);
+	}
+	//공지사항 이미지
+	@Override
+	public ArrayList<noticeListVO> getNoticeImg(noticeListVO notice_vo) {
+		return boardMapper.getNoticeImg(notice_vo);
 	}
 	
 	@Override

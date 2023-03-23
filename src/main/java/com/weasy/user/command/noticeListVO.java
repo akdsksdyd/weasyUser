@@ -20,12 +20,12 @@ public class noticeListVO { //공지사항 리스트 VO
 	private String noticeLevel;
 	private String userEmail;
 	
+	//검색
 	private String searchType;
 	private String keyword;
 	
-//	private int total;
-//	private int pageStart;
-	
+	//첨부파일
+	private String filePath;
 
 
 }

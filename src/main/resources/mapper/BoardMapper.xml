@@ -238,6 +238,11 @@
   		</choose>
   	</select>
   	
+  	<!-- 공지사항 이미지 가져오기 -->
+  	<select id="getNoticeImg" resultType="noticeListVO">
+  		SELECT filePath FROM noticeupload WHERE noticeNo = #{noticeNo}
+  	</select>
+  	
   	<!-- task상태(todo/doing/done) 변경 update -->
   	<update id="taskStatusChange" parameterType="taskVO">
   		update task set status = #{status} where taskNo = #{taskNo}

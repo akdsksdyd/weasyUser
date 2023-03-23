@@ -3,9 +3,9 @@
 }
 
 .logo {
-  background-image: url(../img/png/mainlogo.png);
-  background-size: 49px 49px;
-  border-radius: 15px;
+	background-image: url(../img/png/mainlogo.png);
+	background-size: 49px 49px;
+	border-radius: 15px;
 }
 
 html {
@@ -142,17 +142,20 @@ html {
 	justify-content: space-between;
 }
 
-.main{
+.main {
 	padding-top: 50px;
 }
-.btn-outline-primary{
+
+.btn-outline-primary {
 	width: 129px;
-    font-size: 15px;
+	font-size: 15px;
 }
-.addTask{
+
+.addTask {
 	width: 328px;
 }
-.main-title{
+
+.main-title {
 	margin-bottom: 31px;
 }
 
@@ -234,7 +237,7 @@ html {
 	color: #939393;
 }
 
-.comment_box{
+.comment_box {
 	width: 100%;
 }
 
@@ -247,6 +250,7 @@ html {
 	line-height: 1.42;
 	color: #171717;
 	margin-bottom: 20px;
+	margin-top: 30px;
 }
 
 .workspaceBtn {
@@ -455,7 +459,7 @@ section.notice {
 }
 
 .page-title {
-  	margin-bottom: 40px;
+	margin-bottom: 40px;
 }
 
 .page-title h3 {
@@ -466,10 +470,10 @@ section.notice {
 }
 
 #notice-search .search-window {
-  	padding: 15px 0;
-  	background-color: #0251cb;
-  	border-radius: 3px;
-  	margin-bottom: 20px;
+	padding: 15px 0;
+	background-color: #0251cb;
+	border-radius: 3px;
+	margin-bottom: 20px;
 }
 
 #notice-search .search-window .search-wrap {
@@ -481,12 +485,12 @@ section.notice {
 }
 
 #notice-search .search-window .search-wrap input {
-  	height: 40px;
-  	width: 100%;
-  	font-size: 14px;
-  	padding: 7px 14px;
-  	border: 0;
-  	border-radius: 3px 0px 0px 3px;
+	height: 40px;
+	width: 100%;
+	font-size: 14px;
+	padding: 7px 14px;
+	border: 0;
+	border-radius: 3px 0px 0px 3px;
 }
 
 #notice-search .search-window .search-wrap input:focus {
@@ -496,66 +500,68 @@ section.notice {
 }
 
 #notice-search .search-window .search-wrap .btn {
-  	position: absolute;
-    right: -20px;
-    top: 0px;
-    bottom: 0;
-    width: 100px;
-    padding: 0;
-    font-size: 16px;
-    height: 40px;
-    border-radius: 0px 3px 3px 0px;
+	position: absolute;
+	right: -20px;
+	top: 0px;
+	bottom: 0;
+	width: 100px;
+	padding: 0;
+	font-size: 16px;
+	height: 40px;
+	border-radius: 0px 3px 3px 0px;
 }
 
 .notice-table {
-  	font-size: 13px;
-  	width: 100%;
-  	border-collapse: collapse;
-  	border-spacing: 0;
+	font-size: 13px;
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
 .notice-table a {
-  	color: #333;
-  	display: inline-block;
-  	line-height: 1.4;
-  	word-break: break-all;
-  	vertical-align: middle;
+	color: #333;
+	display: inline-block;
+	line-height: 1.4;
+	word-break: break-all;
+	vertical-align: middle;
 }
+
 .notice-table a:hover {
-  	text-decoration: underline;
+	text-decoration: underline;
 }
+
 .notice-table th {
-  	text-align: center;
+	text-align: center;
 }
 
 .notice-table .th-num {
-  	width: 100px;
-  	text-align: center;
+	width: 100px;
+	text-align: center;
 }
 
 .notice-table .th-date {
-  	width: 200px;
+	width: 200px;
 }
 
 .notice-table th, .notice-table td {
-  	padding: 11px 0;
-  	margin: 50px;
+	padding: 11px 0;
+	margin: 50px;
 }
 
 .notice-table tbody td {
-  	border-top: 1px solid rgb(172, 172, 172); 
-  	text-align: center;
+	border-top: 1px solid rgb(172, 172, 172);
+	text-align: center;
 }
 
 .notice-table tbody th {
-  	padding-left: 28px;
-  	padding-right: 14px;
-  	border-top: 1px solid rgb(172, 172, 172);
-  	text-align: left;
+	padding-left: 28px;
+	padding-right: 14px;
+	border-top: 1px solid rgb(172, 172, 172);
+	text-align: left;
 }
 
-.notice-table tbody th p{
-  	display: none;
+.notice-table tbody th p {
+	display: none;
 }
 
 .notice-btn-dark {
@@ -563,6 +569,7 @@ section.notice {
 	color: #fff;
 	border-radius: 0;
 }
+
 .notice-btn-dark:hover, .btn-dark:focus {
 	background: #373737;
 	border-color: #373737;
@@ -662,21 +669,20 @@ section.notice {
 /* 옵션태그 */
 #notice-search .search-window .search-wrap .notice-option {
 	position: absolute;
-   	left: -5px;
-    top: 0px;
-    bottom: 0;
-    width: 75px;
-    padding: 0;
-    font-size: 15px;
-    height: 40px;
-    text-align: center;
-    border-radius: 3px;
-    border: none;
+	left: -5px;
+	top: 0px;
+	bottom: 0;
+	width: 75px;
+	padding: 0;
+	font-size: 15px;
+	height: 40px;
+	text-align: center;
+	border-radius: 3px;
+	border: none;
 }
 
 /* notice 알림 컬러 추가 - 기존에 info(파랑) & danger(빨강) 존재 */
-
-#userNotice .notice_horizontal{
+#userNotice .notice_horizontal {
 	display: flex;
 	justify-content: space-between;
 }
@@ -687,10 +693,10 @@ section.notice {
 }
 
 #userNotice .info {
-  background-color: rgba(88, 135, 255, 0.3);
-  color: #5887ff;
+	background-color: rgba(88, 135, 255, 0.3);
+	color: #5887ff;
 }
-  
+
 #userNotice .success {
 	color: #6aa84f;
 	background-color: rgba(106, 168, 79, 0.3);
@@ -704,29 +710,66 @@ section.notice {
 #userNotice .grey {
 	color: #a0a3bd;
 	background-color: rgba(160, 163, 189, 0.3);
- 
-}
-.notice-table-tr{
-	font-size: 15px;	
-	border-top: 2px solid #505050; 
-	border-bottom: 2px solid #505050; 
 }
 
-.notice-table-tr>th{
+.notice-table-tr {
+	font-size: 15px;
+	border-top: 2px solid #505050;
+	border-bottom: 2px solid #505050;
+}
+
+.notice-table-tr>th {
 	padding: 7px;
 }
 
 /* 페이지네이션 */
-.page{padding:30px 0 20px 0;position:relative;}
-.page ul{text-align:center;}
-.page ul li{display:inline;  padding:0px!important;}
-.page ul li a{display:inline-block; zoom:1;*display:inline; width: 35px; height: 35px; line-height: 35px; color:#777777; border:1px solid #dddddd;transition:all 0.25s ease-in-out;-webkit-transition:all 0.25s ease-in-out;font-size:15px;}
-.page ul li a:hover, .page ul li.on a{display:inline-block;zoom:1;*display:inline; border:1px solid #7866c9;background:#fff;color:#7866c9;}
-.page ul li a i{color:#777777;}
-.page ul li a:hover i{color:#7866c9;}
+.page {
+	padding: 30px 0 20px 0;
+	position: relative;
+}
+
+.page ul {
+	text-align: center;
+}
+
+.page ul li {
+	display: inline;
+	padding: 0px !important;
+}
+
+.page ul li a {
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+	width: 35px;
+	height: 35px;
+	line-height: 35px;
+	color: #777777;
+	border: 1px solid #dddddd;
+	transition: all 0.25s ease-in-out;
+	-webkit-transition: all 0.25s ease-in-out;
+	font-size: 15px;
+}
+
+.page ul li a:hover, .page ul li.on a {
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+	border: 1px solid #7866c9;
+	background: #fff;
+	color: #7866c9;
+}
+
+.page ul li a i {
+	color: #777777;
+}
+
+.page ul li a:hover i {
+	color: #7866c9;
+}
 
 /* profile update */
-#changePw{
+#changePw {
 	display: none;
 }
 

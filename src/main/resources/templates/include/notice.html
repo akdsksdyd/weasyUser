@@ -45,7 +45,7 @@
 							</tr>
 						</thead>
 						<tbody id="ajaxNoticeList">
-							<!-- 여기들어옴 -->
+							<!-- 공지사항 여기들어옴 -->
 						</tbody>
 					</table>
 				</div>
@@ -53,31 +53,7 @@
 				<!-- pagination -->
 				<div class="page">
 					<ul id="user_pagination">
-						<!-- <li>
-							<a th:href="@{productList(page=1, amount=${pageVO.amount}, startDate=${pageVO.cri.startDate}, endDate=${pageVO.cri.endDate}, searchName=${pageVO.cri.searchName}, searchContent=${pageVO.cri.searchContent}, searchPrice=${pageVO.cri.searchPrice} )}">
-								<i class="bi bi-chevron-double-left"></i>
-							</a>
-						</li>
-						<li style="margin-right:5px" th:if="${pageVO.prev}">
-							<a th:href="@{productList(page=${pageVO.start-1}, amount=${pageVO.amount}, startDate=${pageVO.cri.startDate}, endDate=${pageVO.cri.endDate}, searchName=${pageVO.cri.searchName}, searchContent=${pageVO.cri.searchContent}, searchPrice=${pageVO.cri.searchPrice})}">
-								<i class="bi bi-chevron-left"></i>
-							</a>
-						</li>
-						<th:block th:each="page : ${pageVO.pageList}">
-							<li th:class="${page==pageVO.page ? 'on' : ''}">
-								<a th:href="@{productList(page=${page}, amount=${pageVO.amount}, startDate=${pageVO.cri.startDate}, endDate=${pageVO.cri.endDate}, searchName=${pageVO.cri.searchName}, searchContent=${pageVO.cri.searchContent}, searchPrice=${pageVO.cri.searchPrice} )}">[[${page}]]</a>
-							</li>
-						</th:block>
-						<li style="margin-left:5px" th:if="${pageVO.next}">
-							<a th:href="@{productList(page=${pageVO.end+1}, amount=${pageVO.amount}, startDate=${pageVO.cri.startDate}, endDate=${pageVO.cri.endDate}, searchName=${pageVO.cri.searchName}, searchContent=${pageVO.cri.searchContent}, searchPrice=${pageVO.cri.searchPrice} )}">
-								<i class="bi bi-chevron-right"></i>
-							</a>
-						</li>
-						<li>
-							<a th:href="@{productList(page=${pageVO.realEnd}, amount=${pageVO.amount}, startDate=${pageVO.cri.startDate}, endDate=${pageVO.cri.endDate}, searchName=${pageVO.cri.searchName}, searchContent=${pageVO.cri.searchContent}, searchPrice=${pageVO.cri.searchPrice} )}">
-								<i class="bi bi-chevron-double-right"></i>
-							</a>
-						</li> -->
+						<!-- 페이지네이션 여기들어옴 -->
 					</ul>
 				</div>
 				<!-- //pagination -->

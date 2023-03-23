@@ -93,6 +93,9 @@ public interface BoardMapper {
 	public ArrayList<noticeListVO> getDetailNotice(noticeListVO noticeVo);
 	//공지사항 검색
 	public ArrayList<noticeListVO> getSearchNotice(UserCriteria user_criteria);
+	//공지사항 이미지 가져오기
+	public ArrayList<noticeListVO> getNoticeImg(noticeListVO notice_vo);
+	
 	public void taskStatusChange(TaskVO taskVo);
 	
 	//task 할당자 변경
