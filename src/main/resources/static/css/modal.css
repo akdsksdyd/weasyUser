@@ -543,7 +543,6 @@
 }
 
 /* 공지사항 모달 */
-
 hr{
 	width: 930px;
 }
@@ -594,9 +593,20 @@ hr{
 	background-image: url(../img/svg/Bulk/volume-2.svg);
 	background-repeat: no-repeat;
 	background-position: center;
+	background-size: 21px;
 }
 
 .option{
 	display: inline-block;
 }
 
+.img_test{
+	padding: 50px;
+}
+
+/* css추가 수정 */
+.task_title{ margin: 0px 0px 25px 0px;}
+.card_member{ margin-bottom: 30px;}
+.cardmodal_body{
+	width: 900px;
+}

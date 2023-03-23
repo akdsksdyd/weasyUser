@@ -4,12 +4,14 @@
 let searchType = $("#notice-option option:selected").val();
 let keyword = $("#search-keyword").val();
 
+//사이드 바에서 공지사항 클릭 시, 공지사항 목록&페이지네이션 가져오기  
 $(".noticeSidebar").click(function(){
-	/*모달창 키기*/
+	
 	$("#teamProjectBoard").css("display","none");
 	$("#mainBoardPage").css("display","none");
 	$("#noticePage").css("display","block");
 	
+	//
 	$("#notice-option").val('all');
 	$("#search-keyword").val('');
 	
@@ -17,10 +19,9 @@ $(".noticeSidebar").click(function(){
 	keyword = '';
 	
 	
-	
-	//공지사항 목록가져오는 함수
+	//공지사항 목록
 	$.ajax({			
-		url: "../getNoticeList",
+		url: "../get_notice_list",
 		type: "get",
 		contentType: "application/json",
 		success:ajaxNoticeList,
@@ -28,13 +29,16 @@ $(".noticeSidebar").click(function(){
 			alert("조회에 실패했습니다.")
 		}
 	});
-	/*페이지네이션*/
+	//페이지네이션
 	notice_pagination();
 
 })
 
 
-//공지사항 목록 함수
+/**
+ * @function DB에서 가져온 공지사항 목록을 화면에 띄우는 함수
+ * @returns html 목록태그
+ */
 function ajaxNoticeList(data){
   	var html=""; 		
   	$.each(data, (index, obj)=>{ 
@@ -55,7 +59,9 @@ function ajaxNoticeList(data){
   	})  		
   	$("#ajaxNoticeList").html(html);
 } 
-/*페이지네이션 화면에 뿌리기 */
+/**
+ * @function 화면에 페이지네이션 뿌리는 함수 
+ */
 function notice_pagination(){
 	
 	$.ajax({			
@@ -104,11 +110,14 @@ function notice_pagination(){
 	
 }
 
-/*페이지네이션 클릭 시 실행되는 함수*/
+/**
+ *페이지네이션 클릭 시 실행되는 함수
+ * @returns ajaxNoticeList()
+ */
 function get_pagination(page){
 	
 	$.ajax({
-		url: "../getNoticeList",
+		url: "../get_notice_list",
 		data: {'page':page, 'searchType':searchType, 'keyword':keyword},
 		type: 'get',
 		async: 'true',
@@ -132,16 +141,20 @@ function get_pagination(page){
 
 }
 
-/**** 공지사항 검색 ****/
+/**
+ * 검색 버튼 클릭 시, 실행되는 함수/
+ * 공지사항 목록과 페이지네이션 가져오는 함수가 실행된다
+ * 
+ */
 function getSearchList(){
-	console.log("검색어값: "+ $("#search-keyword").val());
-	console.log("옵션 값2: "+ $("#notice-option option:selected").val());
+	//검색어값: $("#search-keyword").val()
+	//옵션 값2: $("#notice-option option:selected").val()
 	
 	 searchType = $("#notice-option option:selected").val();
 	 keyword = $("#search-keyword").val();
 	
 	$.ajax({
-		url : "../getSearchNotice",
+		url : "../get_search_notice",
 		data : JSON.stringify({'searchType':searchType, 'keyword':keyword}),
 		type: 'post',
 		contentType: "application/json",
@@ -160,11 +173,6 @@ function getSearchList(){
 
 
 
-
-
-
-
-
 /**** 공지사항 상세페이지 ****/
 $("#ajaxNoticeList").on('click', "th", function(e){
 	$("#noticeModal").css("display", "flex");
@@ -174,7 +182,7 @@ $("#ajaxNoticeList").on('click', "th", function(e){
 	var noticeNo = Number($(e.target).attr('value'));
 	//상세페이지 가져오는 함수
 	$.ajax({
-		url: "../getDetailNotice",
+		url: "../get_detail_notice",
 		data: JSON.stringify({'noticeNo':noticeNo}),
 		type: "post",
 		contentType: "application/json",
@@ -183,10 +191,31 @@ $("#ajaxNoticeList").on('click', "th", function(e){
 			alert("조회에 실패했습니다.")
 		}
 	});
+	
+	$.ajax({
+		url: "../get_notice_img",
+		data: {'noticeNo':noticeNo},
+		type: "get",
+		contentType: "application/json",
+		success: function(result){
+			
+			var html = "";
+			for(var i=0; i<result.length; i++){
+				html += "<li><img alt='첨부이미지' class='img_test' src='"+ result[i].filePath +"'></li>"
+			}
+			$(".get_notice_img").html(html);
+		}, 
+		error: function(err){
+			alert("첨부파일 조회에 실패했습니다.");
+		}
+	})
+	
 })
 
 
-//공지사항 상세페이지 함수
+/**
+ * 공지사항 상세페이지(모달) 띄우기
+ */
 function noticeDetailHtml(data){
   	var html=""; 		
   	$.each(data, (index, obj)=>{
@@ -200,28 +229,14 @@ function noticeDetailHtml(data){
   	$("#noticeDetailHtml").html(html);
 } 
 
-
-/*모달창 끄기*/
+/**
+ * 모달창 끄기 기능
+ */
 function closeNoticeModal() {
 	$("#noticeModal").css("display", "none");
 	$("html").css("overflow", "auto");
 }
 
-/*function getSearchList(){
-	$.ajax({
-		url : "../getSearchNotice",
-		type: 'get',
-		data : $("form[name=search-form-notice]").serialize(),
-		success : function(result){
-			
-			console.log("성공이닷!!!!!!!!");
-			
-			//테이블 초기화
-			$('.board-table > tbody').empty();
-			ajaxHtml(result);
-		}
-	})
-}*/
 
 
 

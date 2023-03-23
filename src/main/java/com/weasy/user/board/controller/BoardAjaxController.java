@@ -212,39 +212,73 @@ public class BoardAjaxController {
 	public void taskStatusChange(@RequestBody TaskVO taskVo) {
 		boardService.taskStatusChange(taskVo);
 	}
-	private int valid_total = 0; 
+	
+	private int validTotal = 0; 
 	private int valid_realend = 0;
-	//공지사항-리스트
-	@GetMapping("/getNoticeList")
+	
+	/**
+	 * 공지사항 데이터 가져오기 
+	 * 
+	 * @param user_criteria
+	 * @return
+	 */
+	@GetMapping("/get_notice_list")
 	public ArrayList<noticeListVO> getNoticeList(UserCriteria user_criteria){
-		System.out.println("!!!!!!!!!!!"+user_criteria.getPage());
-		int ps  = new UserCriteria(user_criteria.getPage(), user_criteria.getAmount()).getPageStart();
-		if(ps > valid_total || ps < 0 || valid_realend == user_criteria.getPage()) {
+		int pageStart  = new UserCriteria(user_criteria.getPage(), user_criteria.getAmount()).getPageStart();
+		if(pageStart > validTotal || pageStart < 0 || valid_realend == user_criteria.getPage()) {
 			return null;
 		}
 		return boardService.getNoticeList(user_criteria);
 	}
-	//페이지네이션 
+	
+	/**
+	 * 페이지네이션 개수 계산 
+	 * 화면에 페이지네이션을 뿌려준다
+	 *  
+	 * @param user_criteria
+	 * @return UserPageVO 페이지계산vo
+	 */
 	@GetMapping("/user_pagenation")
 	public UserPageVO user_pagenation (UserCriteria user_criteria) {
 		//페이지네이션 클릭 시 토탈 값 구해오기
 		int total = boardService.getTotal(user_criteria);
 		UserPageVO pageVo = new UserPageVO(user_criteria, total);
-		valid_total = total; //페이지네이션 화살표 제한 걸어주기 위함
+		validTotal = total; //페이지네이션 화살표 제한 걸어주기 위함
 		valid_realend = pageVo.getRealEnd();
 		
 		return pageVo;
 	}
 
-	//공지사항-상세페이지
-	@PostMapping("/getDetailNotice")
+	/**
+	 * noticeNo가 일치한 공지사항의 상세페이지를 띄운다
+	 * 
+	 * @param noticeVo
+	 * @return ArrayList<noticeListVO>
+	 */
+	@PostMapping("/get_detail_notice")
 	public ArrayList<noticeListVO> getDetailNotice(@RequestBody noticeListVO noticeVo){
+	
+		
 		return boardService.getDetailNotice(noticeVo);
 	}
-	//공지사항-검색기능
-	@PostMapping("/getSearchNotice")
+	/**
+	 * 공지사항 이미지 가져오기
+	 * @param notice_vo
+	 * @return 
+	 */
+	@GetMapping("/get_notice_img")
+	public ArrayList<noticeListVO> getNoticeImg(noticeListVO notice_vo){
+		return boardService.getNoticeImg(notice_vo);
+	}
+	
+	/**
+	 * 검색된 공지사항의 데이터를 가져옴 
+	 * 
+	 * @param user_criteria 검색어-keyword 검색타입-searchType
+	 * @return  ArrayList<noticeListVO>
+	 */
+	@PostMapping("/get_search_notice")
 	public ArrayList<noticeListVO> getSearchNotice(@RequestBody UserCriteria user_criteria){
-		
 		return boardService.getSearchNotice(user_criteria);
 	}
 	
