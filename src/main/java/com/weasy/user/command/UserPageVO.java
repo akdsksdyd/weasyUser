@@ -12,7 +12,7 @@ public class UserPageVO {
 	//페이지네이션을 계산하는 클래스
 		
 	//페이지네이션 개수
-	final static int PAGE_COUNT = 10;
+	final static int PAGE_COUNT = 3;
 	
 	//페이지네이션을 계산하는 클래스
 	private int start; //첫패이지번호
@@ -63,12 +63,7 @@ public class UserPageVO {
 		//데이터가 141개라면 -> 1~10 end=10번, realEnd=15, 이때 true
 		this.next = this.realEnd > this.end;
 
-		//화면에서 반복시킬 페이지데이터 
-		this.pageList = new ArrayList<>();
-		for(int i = this.start; i <= this.end; i++) {
-			pageList.add(i);
-		}
-
+	
 
 
 	}

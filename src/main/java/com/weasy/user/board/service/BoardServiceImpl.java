@@ -177,7 +177,7 @@ public class BoardServiceImpl implements BoardService{
 	//공지사항 검색
 	@Override
 	public ArrayList<noticeListVO> getSearchNotice(UserCriteria user_criteria) {
-		new UserCriteria();
+//		new UserCriteria();
 		return boardMapper.getSearchNotice(user_criteria);
 	}
 	//공지사항 이미지

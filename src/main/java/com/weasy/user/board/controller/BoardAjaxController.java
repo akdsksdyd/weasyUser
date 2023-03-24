@@ -243,6 +243,9 @@ public class BoardAjaxController {
 		//페이지네이션 클릭 시 토탈 값 구해오기
 		int total = boardService.getTotal(user_criteria);
 		UserPageVO pageVo = new UserPageVO(user_criteria, total);
+		if(pageVo.getEnd() == pageVo.getRealEnd()){
+			
+		}
 		validTotal = total; //페이지네이션 화살표 제한 걸어주기 위함
 		valid_realend = pageVo.getRealEnd();
 		
@@ -279,6 +282,7 @@ public class BoardAjaxController {
 	 */
 	@PostMapping("/get_search_notice")
 	public ArrayList<noticeListVO> getSearchNotice(@RequestBody UserCriteria user_criteria){
+		System.out.println("!!!!!!!!!!!!!서치타입"+user_criteria.getPage());
 		return boardService.getSearchNotice(user_criteria);
 	}
 	
