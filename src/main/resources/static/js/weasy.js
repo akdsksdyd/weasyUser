@@ -1,3 +1,6 @@
+/* websocket.js 를 가져와서 사용한다. */
+document.write('<script src="./websocket.js"></script>');
+
 "use strict";
 /* 로그인창에서 쿠키값이 있으면 이메일에 띄우기(내가 만든 쿠키~~) */
 $(document).ready(function(){	
@@ -27,7 +30,7 @@ $(".teamTask").click(function(e){
 	$(".addTaskValue").html(taskValue);
 	
 	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
-	getTeamTask(teamNo, userEmail);
+	getTeamTask(teamNo);
 });
 
 /* task card 추가 function */
@@ -53,10 +56,11 @@ $(".addTaskBtn").click(function(e){
 		type: "post",
 		contentType: "application/json",
 		success: function(result){
+			//board reload위해 websocket날림
+			wSocket.send("board");
 			
 			/* 해당 페이지 reload*/	
-			getTeamTask(teamNoValue, emailValue);
-
+			getTeamTask(teamNoValue);
 			$("#taskText").val("");
 				
 		},
@@ -249,6 +253,8 @@ $("#comment_list").on("click", "button", function(e){
 			data: JSON.stringify({"replyNo": replyNo,
 								  "comment": comment}),
 			success: function(result){
+				//board 변경사항 감지 - websocket요청
+				wSocket.send("board");
 				
 				putReply(taskNo, teamNo);
 				
@@ -271,7 +277,8 @@ $("#comment_list").on("click", "button", function(e){
 			contentType: "application/json",
 			data: JSON.stringify({"replyNo": replyNo}),
 			success: function(result){
-				
+				//board 변경사항 감지 - websocket요청
+				wSocket.send("board");
 				putReply(taskNo, teamNo);
 				
 			},
@@ -350,6 +357,9 @@ $(".searchTaskMember .search-list").on('click', 'li', function(e){
 		data: JSON.stringify({"userEmail": email, "teamNo": teamNo, "taskNo": taskNo}),
 		contentType: "application/json",
 		success: function(result){
+			//board reload위해 websocket날림
+			wSocket.send("board");
+			
 			if(confirm(email + "에게 업무가 할당되었습니다.\n" + email + "에게 notice를 보낼까요?")){
 				var msg = "[" + $("#taskTitle").val() + "] 업무가 할당되었습니다.";
 				insertUserNotice(email, msg, 1);
@@ -381,6 +391,9 @@ function insertUserNotice(email, msg, status){
 		data: JSON.stringify({"userEmail": email, "message": msg, "msgStatus": status}),
 		contentType: "application/json",
 		success: function(result){
+			//notice reload위해 websocket날림
+			wSocket.send("notice");
+			
 			console.log(result);
 		},
 		error: function(err){
@@ -470,7 +483,6 @@ $("#detailContentBox").on("click", "input", function(e){
 								  "status": checkValue,
 								  "taskNo": taskNo}),
 			success: function(result){
-				
 				progressUpdate(taskNo);
 				
 			},
@@ -500,7 +512,7 @@ function closeCardModal(){
 	});
 	var teamNo = $("#teamNoHidden").val();
 	var userEmail = $(".userEmail").val();
-	getTeamTask(teamNo, userEmail);
+	getTeamTask(teamNo);
 	$(".add_checkbox_wrap").remove();
 	$("#comment_list").empty();
 }
@@ -545,7 +557,7 @@ $("#checkbox_content").on('click', 'button', function(e){
 				$(e.target).closest(".card_content").remove();
 				progressUpdate(taskNo);
 				putTaskDetail(taskNo);
-				getTeamTask(teamNo, userEmail);
+				getTeamTask(teamNo);
 			},
 			error: function(err){
 				alert("todo리스트 삭제에 실패 했습니다.");
@@ -595,7 +607,8 @@ $("#checkbox_content").on('click', 'button', function(e){
 								  "taskDetail": taskDetail,
 								  "status": checkValue}),
 			success: function(result){
-				
+				//board 변경사항 감지 - websocket요청
+				wSocket.send("board");
 				$(e.target).text("UPDATE");
 				$(e.target).attr("id", "checkboxUpdate");
 				
@@ -633,7 +646,6 @@ $("#checkbox_content").on('click', 'button', function(e){
 								  "taskDetail": taskDetail,
 								  "status": checkValue}),
 			success: function(result){
-				
 				progressUpdate(taskNo);
 				
 			},
@@ -654,6 +666,8 @@ function progressUpdate(taskNo){
 		contentType: "application/json",
 		data: JSON.stringify({"taskNo": taskNo}),
 		success: result => {
+			//board 변경사항 감지 - websocket요청
+			wSocket.send("board");
 		},
 		error: err => {
 			console.log("모든 todo삭제");
@@ -679,6 +693,8 @@ $("#commentBtn").click(function(e){
 							  "comment": write_comment}),
 		contentType: "application/json",
 		success: function(result){
+			//board 변경사항 감지 - websocket요청
+			wSocket.send("board");
 			
 			putReply(taskNo, teamNo);
 			$(".comment_box>textarea").val("");
@@ -743,7 +759,7 @@ $(".cat-sub-menu").on('click', 'button', function(e){
 	getAuthority(teamNo, userEmail);
 		
 	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
-	getTeamTask(teamNo, userEmail);
+	getTeamTask(teamNo);
 })
 
 function getAuthority(teamNo, userEmail){
@@ -805,7 +821,7 @@ function getAuthority(teamNo, userEmail){
 			});
 }
 
-function getTeamTask(teamNo, userEmail){
+function getTeamTask(teamNo){
 	var todo_task = "";
 	var doing_task = "";
 	var done_task = "";
@@ -814,7 +830,7 @@ function getTeamTask(teamNo, userEmail){
 	$.ajax({
 		url: "../getTeamTask",
 		type: "post",
-		data: JSON.stringify({"teamNo": teamNo, "userEmail": userEmail}), //데이터
+		data: JSON.stringify({"teamNo": teamNo}), //데이터
 		contentType: "application/json", //보내는 데이터 타입
 		success: function(result){
 			$("#mainBoardPage").css("display","none");
@@ -993,8 +1009,8 @@ $("#selectCheck").change(function(e){
 		data: JSON.stringify({"taskNo": taskNo,
 							  "status": status}),
 		success: function(result) {
-			
-			getTeamTask(teamNo, userEmail);
+			wSocket.send("board");
+			getTeamTask(teamNo);
 			closeCardModal();
 			
 		},
@@ -1090,7 +1106,7 @@ $("#mainBoardPage").on('click', 'article', function(e){
 	getAuthority(teamNo, userEmail);
 	
 	/* 클릭한 메뉴 teamNo로 보드 task 조회*/
-	getTeamTask(teamNo, userEmail);
+	getTeamTask(teamNo);
 })
 
 /* sideMenubar에서 team의 ...버튼 클릭시 */
@@ -1171,6 +1187,7 @@ $('menuitem').on('click', function(e){
 				data:JSON.stringify({"teamNo": teamNo}),
 				contentType:"application/json; charset=utf-8",
 				success:function(result){
+					wSocket.send("team");
 					alert("삭제되었습니다.")
 					location.href="/board/board";
 				},
@@ -1411,6 +1428,7 @@ $("#add_team_modal").on('click', 'button', function(e){
 		msg += "초대되었습니다.";
 		
 		if(checkAuthority(email, teamNo) == 0){
+			wSocket.send("team");
 			if(confirm(email + "에게 초대 메세지를 보내시겠습니까?")){
 				insertUserNotice(email, msg, 0);
 			}
@@ -1458,9 +1476,10 @@ function checkAuthority(email, teamNo){
 
 /* task 상세 페이지에서 제일 하단부에 있는 save버튼을 눌렀을 시 task테이블 update */
 $(".taskSaveBtn").on('click', 'button', function(e){
-	
 	/* 부모태그에 기능을 줘서 cancle 을 눌렀을 떄 같이 먹는 거 방지. */
 	if($(this).hasClass("cancle"))return;
+	
+	wSocket.send("board");
 	
 	/* task upate될 정보들 */
 	var taskTitle = $("#taskTitle").val();
@@ -1553,39 +1572,29 @@ $(".searchTeamLeaderList").on('click', 'li', function(e){
 	$(".searchTeamLeader").val(email)
 })
 
-/**
- * polling ajax를 사용하여 특정 초마다 user의 notice를 읽어온다.
- */
-$(document).ready(
-	(function pollUserNotice() {
-	/*이메일은 컨트롤러에서 session email 사용*/
-	    $.ajax({
-	        url: '../getUserNotice',
-	        type: 'GET',
-			dataType: "json",
-	        success: function(result) {
-				
-				var noticeTag = '';
-				for(var i = 0; i < result.length; i++){
-					noticeTag += makeUserNotice(result[i]);				
-				}
-	            
-	            $("#userNotice").html(noticeTag);
-	            
-	            /* msg가 있다면 icon에 active class 추가 */
-				if(result.length != 0){
-					$("#userNoticeIcon").addClass("active");
-				}else{
-					$("#userNotice").html("메세지가 없습니다.");
-				}
-	        },
-	        error: function(){
-			},
-	        timeout: 10000, //5초
-	        complete: setTimeout(function() { pollUserNotice(); }, 6000)
-	    })
-	})()
-)
+function userNotice(){
+	$.ajax({
+		url: '../getUserNotice',
+		type: 'GET',
+		dataType: "json",
+		success: function(result) {
+			var noticeTag = '';
+			for(var i = 0; i < result.length; i++){
+				noticeTag += makeUserNotice(result[i]);				
+			}
+		            
+			$("#userNotice").html(noticeTag);
+	        /* msg가 있다면 icon에 active class 추가 */
+			if(result.length != 0){
+				$("#userNoticeIcon").addClass("active");
+			}else{
+				$("#userNotice").html("메세지가 없습니다.");
+			}
+		},
+		error: function(){
+		}
+	})
+}
 
 /* notice에 뿌려줄 메세지 tag 만들기 */
 function makeUserNotice(notice){
@@ -1667,4 +1676,3 @@ function validateCheck(){
 		$("#changePw input").removeAttr("disabled");
 	}
 }
-
