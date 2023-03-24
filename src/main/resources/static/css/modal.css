@@ -303,7 +303,7 @@
 	font-size: 14px;
 	font-weight: bolder;
 	padding-top: 5px;
-	margin-left: 5px;
+	margin-left: 21px;
 	font-family: sans-serif;
 }
 
@@ -606,7 +606,21 @@ hr{
 
 /* css추가 수정 */
 .task_title{ margin: 0px 0px 25px 0px;}
-.card_member{ margin-bottom: 30px;}
-.cardmodal_body{
-	width: 900px;
-}
+.card_member{ margin-bottom: 30px; justify-content: space-between;}
+.cardmodal_body{ width: 900px;}
+.profile_box{ width: 68px; height: 55px; margin: 0px 15px 0px 40px;}
+.comment_space{ margin-bottom: 18px;}
+.email_check{margin-right: 10px; }
+.update_reply, .delete_reply{ margin-right: 5px;}
+.comment_icon {margin-right: 15px;}
+.input_comment {margin-top: 16pxs;}
+.profile{height: 106%;}
+.todo_chart{width: 600px;}
+.todo_chart_wraper{padding: 0px 0px 3px 30px;}
+.task_space{margin-top: 21px; }
+.task_space_check{margin-top: 40px;}
+#description{padding: 10px;}
+.detail-icon{margin-right: 10px;}
+.add_checkbox_wrap, .filebox {padding: 0px 0px 3px 30px;}
+.textarea_wrap{width: 794px; margin: 0px 0px 3px 30px;}
+.hey{margin-top: 18px;s}

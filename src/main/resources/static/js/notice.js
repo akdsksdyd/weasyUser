@@ -1,17 +1,18 @@
 "use strict";
-/**** 공지사항 목록 ****/
-//사이드바에서 공지사항 클릭 시, 공지사항목록이 보임
 let searchType = $("#notice-option option:selected").val();
 let keyword = $("#search-keyword").val();
-
-//사이드 바에서 공지사항 클릭 시, 공지사항 목록&페이지네이션 가져오기  
+let prev = false; 
+let check_page = 1;
+/**** 공지사항 목록 ****/
+//사이드바에서 공지사항 클릭 시, 공지사항목록이 보임
 $(".noticeSidebar").click(function(){
-	
+	check_page =1;
 	$("#teamProjectBoard").css("display","none");
 	$("#mainBoardPage").css("display","none");
 	$("#noticePage").css("display","block");
 	
-	//
+	
+	
 	$("#notice-option").val('all');
 	$("#search-keyword").val('');
 	
@@ -21,8 +22,9 @@ $(".noticeSidebar").click(function(){
 	
 	//공지사항 목록
 	$.ajax({			
-		url: "../get_notice_list",
-		type: "get",
+		url: "../get_search_notice",
+		data: JSON.stringify({'searchType': 'all', 'keyword':''}),
+		type: "post",
 		contentType: "application/json",
 		success:ajaxNoticeList,
 		error: function(err){
@@ -30,7 +32,7 @@ $(".noticeSidebar").click(function(){
 		}
 	});
 	//페이지네이션
-	notice_pagination();
+	notice_pagination(check_page);
 
 })
 
@@ -62,41 +64,43 @@ function ajaxNoticeList(data){
 /**
  * @function 화면에 페이지네이션 뿌리는 함수 
  */
-function notice_pagination(){
+let start = 0;
+let check_realEnd;
+function notice_pagination(check_page){
 	
 	$.ajax({			
 		url: "../user_pagenation",
-		data:{'searchType':searchType, 'keyword':keyword},
+		data:{'page':check_page, 'searchType':searchType, 'keyword':keyword},
 		type: "get",
 		contentType: "application/json",
 		success: function(result){
-			let amount = Number(result.amount);
-			let start = Number(result.start);
 			let end = Number(result.end);
-			let realEnd = Number(result.realEnd);
-			let prev_page = start-1;
+			let prev_page = result.start-1;
 			let next_page = end+1;
-			//console.log("이전페이지로 "+prev_page);
-			//console.log("다음페이지로 "+next_page);
+			console.log("이전페이지 "+prev_page);
+			console.log("start " + result.start);
+			console.log("end: " + end);
+			console.log("realEnd: " + result.realEnd);
+			start = result.start;
+			check_realEnd = result.realEnd; 
 			var html ="";
 			/*맨앞으로 */
-			html+="<li><a href='#' onclick='get_pagination(page=1, amount="+amount+")'>";
+			html+="<li><a href='#' onclick='get_pagination(page=1)'>";
 			html+="<i class='bi bi-chevron-double-left'></i></a></li>";	
 			/*이전*/
-			html+="<li><a href='#' onclick='get_pagination(page="+prev_page+", amount="+amount+")'>";
-			html+="<i class='bi bi-chevron-left'></i></a></li>";	
-			
-			for(var i=result.start; i<=result.end; i++){
+				html+="<li><a href='#' onclick='get_pagination(page="+prev_page+")'>";
+				html+="<i class='bi bi-chevron-left'></i></a></li>";	
+			for(var i=start; i<=result.end; i++){
 				html+="<li class=''>";
-				html+="<a href='#' onclick='get_pagination("+ i +", amount="+amount+")'>"+i+"</a>";
+				html+="<a href='#' onclick='get_pagination("+ i +")'>"+i+"</a>";
 				html+="</li>";
 			}
 		  	
 		  	/*다음*/
-		  	html+="<li><a href='#' onclick='get_pagination(page="+next_page+", amount="+amount+")'>";
+		  	html+="<li><a href='#' onclick='get_pagination(page="+next_page+")'>";
 			html+="<i class='bi bi-chevron-right'></i></a></li>";	
 			/*맨뒤로*/
-			html+="<li><a href='#' onclick='get_pagination(page="+realEnd+", amount="+amount+")'>";
+			html+="<li><a href='#' onclick='get_pagination(page="+result.realEnd+")'>";
 			html+="<i class='bi bi-chevron-double-right'></i></a></li>";
 		  	
 			$("#user_pagination").html(html);
@@ -116,26 +120,36 @@ function notice_pagination(){
  */
 function get_pagination(page){
 	
-	$.ajax({
-		url: "../get_notice_list",
-		data: {'page':page, 'searchType':searchType, 'keyword':keyword},
-		type: 'get',
-		async: 'true',
-		contentType: "application/json",
-		success: function(data){
-			//페이지네이션 화살표 제한 걸어주기
-			if(data == ""){
-				alert("페이지가 없습니다");
-			}else {
-				//테이블 초기화
-				$('.board-table > tbody').empty();
-				ajaxNoticeList(data);
-			}			
-		},
-		error: function(err){
-			alert("페이지 에러")
-		}
-	})
+	check_page = page;
+	console.log("화살표 오류 확인: "+check_page);
+	if(check_page == 0){
+		alert("첫 페이지입니다");
+		return false;
+	} else if(check_page > check_realEnd){
+		alert("마지막 페이지입니다");
+		return false;
+	}else {
+		//목록 가져옴
+		$.ajax({
+			url: "../get_search_notice",
+			data: JSON.stringify({'page':check_page, 'searchType':searchType, 'keyword':keyword}),
+			type: 'post',
+			async: 'true',
+			contentType: "application/json",
+			success: function(data){
+					//테이블 초기화
+					$('.board-table > tbody').empty();
+					ajaxNoticeList(data);
+					notice_pagination(check_page);
+							
+			},
+			error: function(err){
+				alert("페이지 에러")
+			}
+		})
+		
+	}
+	
 	
 
 

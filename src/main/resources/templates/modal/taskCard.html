@@ -17,34 +17,40 @@
 			
 			<!-- 2. member -->
 			<div class="card_content card_member">
-				<!--  
-				<i data-feather="users" class="detail-icon"></i>
-				<button type="button" class="button-prevent" title="add Member" id="addTaskMember">
-					<i data-feather="plus-square" class="detail-icon"></i>
-				</button>
-				-->
-				
 				<button type="button" class="button-prevent addMember">
 					<i data-feather="user" class="addMember"></i>
 					<i id="plusBtn" data-feather="plus-square" class="hiddenBtn addMember"></i>
 					<span id="taskuser" class="addMember"></span>
 				</button>
-				
+				<!-- 업무 상태 체크 -->
+				<div id="statusContent">
+					<strong>State</strong>
+					<select id="selectCheck">
+						<option value="0">To Do				
+						<option value="1">Doing				
+						<option value="2">Done	
+					</select>
+					<span id="hiddenStatus"></span>
+				</div>
 			</div>
 			
 			<!-- 3. date 설정 -->
 			<i data-feather="calendar" class="detail-icon"></i>
 			<strong>Date</strong>
 			<div class="card_date">
+				<div>
 				<button type="button" class="button-prevent button-eventnone">start Date</button>
 				<input class="inputbox" type="text" id="startDate"></input>
+				</div>
 				<!-- db에서 endDate입니다.(참고) -->
+				<div>
 				<button type="button" class="button-prevent button-eventnone">due Date</button>
 				<input class="inputbox" type="text" id="targetDate"></input>
+				</div>
 			</div>
 			
 			<!-- 4. 업무 내용 -->
-			<div class="card_content">
+			<div class="card_content task_space">
 				<i data-feather="menu" class="detail-icon"></i>
 				<strong>Description</strong>
 				<!-- <button type="button" class="modal_btn cancle hidden" id="description_edit">EDIT</button> -->
@@ -52,12 +58,13 @@
 			<div id="description_content">
 				<!-- 쓴 description 내용이 들어간다. -->
 			</div>
-			<textarea class="hidden_scroll textbox" id="description" onkeyup="resize()" onkeydown="resize()"></textarea>
-			<!-- <button type="button" class="modal_btn cancle" id="description_cancle">CANCLE</button>
-			<button type="button" class="modal_btn save" id="description_save">SAVE</button> -->
-			
+			<div class="textarea_wrap">
+				<textarea class="hidden_scroll textbox" id="description" onkeyup="resize()" onkeydown="resize()"></textarea>
+				<!-- <button type="button" class="modal_btn cancle" id="description_cancle">CANCLE</button>
+				<button type="button" class="modal_btn save" id="description_save">SAVE</button> -->
+			</div>
 			<!-- 5. 파일 업로드 -->
-			<div class="card_content">
+			<div class="card_content task_space">
 				<i data-feather="file" class="detail-icon"></i>
 				<strong>Attachments</strong>
 			</div>
@@ -68,7 +75,7 @@
         		<input calss="modal_btn save" type="submit" value="파일업로드"></input>
     		</form> 
     		-->
-			<div class="card_content filebox">
+			<div class="card_content filebox ">
 				<input class="upload-name" value="첨부파일" placeholder="첨부파일">
 				<label for="file" class="save fileboxBtn" >파일찾기</label>
 				<input class="save fileboxBtn" type="file" id="file" style="display:none;">
@@ -76,7 +83,8 @@
 			</div>
 			
 			<!-- 6. 체크 박스 -->
-			<div class="card_content">
+			<div class="card_content task_space_check">
+				<i data-feather="check-square" class="detail-icon"></i>
 				<strong>CheckBox</strong>
 				<!-- <button class="button-prevent pl10" title="add CheckBox" id="card_checkbox">
 					<i data-feather="plus-square"></i>
@@ -85,9 +93,11 @@
 			<!-- 체크박스 컨텐츠 -->
 			<div id="checkbox_content">
 				<div class="checkbox_box">
-					<div class="card_content">
+					<div class="card_content todo_chart_wraper">
 						<span class="pr10">0%</span>
+						<div class="todo_chart">
 						<progress class="progressbar" value="0" max="100"></progress>
+						</div>
 						<button type="button" class="checkbox_btn save add_checkbox">ADD ITEM</button>
 						<!-- taskDetail 들어가는 태그 -->
 					</div>
@@ -95,27 +105,18 @@
 				</div>
 			</div>
 			
-			<!-- 업무 상태 체크 -->
-			<div id="statusContent">
-				<strong>State</strong>
-				<select id="selectCheck">
-					<option value="0">To Do				
-					<option value="1">Doing				
-					<option value="2">Done	
-				</select>
-				<span id="hiddenStatus"></span>
-			</div>
+		
 			
 			<!-- 7. 댓글(1단) -->
-			<div class="card_content">
+			<div class="card_content hey">
 				<i data-feather="message-circle" class="detail-icon"></i>
 				<strong>Comment</strong>
 			</div>
 			<div id="comment_list">
-				<div class="card_content">
+				<div class="card_content"  >
 				</div>
 			</div>
-			<div class="comment_box card_content">
+			<div class="comment_box card_content input_comment" >
           		<div class="profile_box">
             		<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">
           		</div>
