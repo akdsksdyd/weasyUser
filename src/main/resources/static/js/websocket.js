@@ -4,7 +4,7 @@ document.write('<script src="./weasy.js"></script>');
 var wSocket;
 
 function init() {
-	wSocket = new WebSocket("ws://127.0.0.1:8585/realTimeCheck");
+	wSocket = new WebSocket("ws://"+window.location.host+"/realTimeCheck");
 	wSocket.onopen = function(e) {
 		onOpen(e)
 	};
@@ -59,8 +59,10 @@ function onMessage(e) {
 	
 	//team 변경 사항 감지
 	if(e.data == "team"){
-		console.log("팀변경");
 		setTimeout(function() {
+			
+			loadMainBoard();
+			
 			$.ajax({
 				url: '../reloadTeamList',
 			    type: 'POST',

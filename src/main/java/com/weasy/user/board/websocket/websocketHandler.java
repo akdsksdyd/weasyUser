@@ -36,7 +36,6 @@ public class websocketHandler extends TextWebSocketHandler{
      */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-    	System.out.println("!!!!!!!!!!!websocket 동작 처리!!!!!!!!!!!!!");
         String id = session.getId();  //메시지를 보낸 아이디
         CLIENTS.entrySet().forEach( arg->{
             if(!arg.getKey().equals(id)) {  //같은 아이디가 아니면 메시지를 전달합니다.
