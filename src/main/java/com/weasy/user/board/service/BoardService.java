@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.weasy.user.command.AuthorityVO;
+import com.weasy.user.command.CalendarVO;
 import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskDetailVO;
 import com.weasy.user.command.TaskVO;
@@ -137,6 +138,12 @@ public interface BoardService {
 	
 	//확인된 notice의 checked상태 변경
 	public int updateUserNoticeChecked(noticeVO noticevo);
+	
+	// 캘린더 데이터
+	public ArrayList<CalendarVO> getCalendarData(String userEmail);
+	   
+	// 특정팀 캘린더 데이터
+	public ArrayList<CalendarVO> getCalendarTeamData(String teamName);
 	
 }
 

@@ -1,9 +1,11 @@
 package com.weasy.user.board.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.JsonParser;
 import com.weasy.user.board.service.BoardService;
 import com.weasy.user.command.AuthorityVO;
+import com.weasy.user.command.CalendarVO;
 import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskDetailVO;
 import com.weasy.user.command.TaskVO;
@@ -375,4 +379,36 @@ public class BoardAjaxController {
 		String user_id = (String)session.getAttribute("Email");
 		return boardService.getTeamListWithRole(user_id);
 	}
+	
+	// 캘린더 데이터 가져오기
+	   @GetMapping("/getCalendarData")
+	   public Map<String, Object> getCalendarData(HttpServletRequest request) {
+	      
+	      String userEmail = request.getSession().getAttribute("Email").toString();
+	      
+	      // 팀 목록 가져오기
+	      ArrayList<TeamVO> teamList = boardService.getTeamListWithRole(userEmail);
+	      System.out.println(teamList.toString());
+	      
+	      // 한 팀의 캘린더 데이터 가져오기
+	      ArrayList<CalendarVO> taskList = boardService.getCalendarData(userEmail);
+	      
+	      Map<String, Object> map = new HashMap<>();
+	      map.put("teamList", teamList);
+	      map.put("taskList", taskList);
+	      
+	      return map;
+	   }
+	   
+	   // 특정 팀의 캘린더 데이터 가져오기
+	   @GetMapping("/getCalendarTeamData/{teamName}")
+	   public ArrayList<CalendarVO> getCalendarTeamData(@PathVariable("teamName") String teamName) {
+	      
+	      ArrayList<CalendarVO> list = boardService.getCalendarTeamData(teamName);
+	      System.out.println(list.toString());
+	      
+	      return list;
+	   }
+	
+	
 }

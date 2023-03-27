@@ -3,7 +3,9 @@ package com.weasy.user.board.controller;
 import java.net.http.WebSocket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -130,4 +132,6 @@ public class BoardController {
 		
 		return "redirect:/board/board";
 	}
+	
+	
 }
