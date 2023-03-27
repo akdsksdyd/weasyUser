@@ -457,8 +457,27 @@ function putTaskDetail(taskNo){
 			alert("todo리스트 조회 실패 !");
 		}	
 	})
-
 }
+
+/*  */
+$("#detailContentBox").on('click', 'input[type="checkbox"]', function(){
+	var taskNo = $("#taskNo").val();
+	/* 시간을 좀 두고 ... progressbar update시켜준다. */
+	setTimeout(function() {
+		$.ajax({
+			url: "../putTask",
+			type: "post",
+			contentType: "application/json",
+			data: JSON.stringify({"taskNo": taskNo}),
+			success: function(result){
+				$(".pr10").html(result.progressRate + "%");
+				$(".progressbar").val(result.progressRate);
+			},
+			error: function(err){
+			}
+		});
+	}, 100);
+})
 
 $("#detailContentBox").on("click", "input", function(e){
 	
@@ -1676,3 +1695,4 @@ function validateCheck(){
 		$("#changePw input").removeAttr("disabled");
 	}
 }
+
