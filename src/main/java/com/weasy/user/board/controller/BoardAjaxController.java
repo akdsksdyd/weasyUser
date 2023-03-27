@@ -369,4 +369,10 @@ public class BoardAjaxController {
 		
 		boardService.deletetodo(tdVo);
 	}
+	
+	@PostMapping("/reloadTeamList")
+	public ArrayList<TeamVO> deleteTodo(HttpSession session) {
+		String user_id = (String)session.getAttribute("Email");
+		return boardService.getTeamListWithRole(user_id);
+	}
 }

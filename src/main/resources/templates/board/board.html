@@ -29,6 +29,9 @@
   <script src="/js/jquery-1.12.1.min.js"></script>
   <script src="/js/jquery-ui.min.js"></script>
   
+  <!-- websocekt연결 -->
+  <script src="/js/websocket.js"></script>
+  
 <!-- 팀/프로젝트 추가 date -->
 <script>
 	$(function() {
@@ -252,7 +255,7 @@
             		</a>
             	</li>
           		<li>
-          			<a class="danger" href="/user/logOut">
+          			<a class="danger" onclick="LogOut()">
               			<i data-feather="log-out" aria-hidden="true"></i>
               			<span>Log out</span>
             		</a>
@@ -300,7 +303,12 @@
 	
 	/* 화면이 로드 되는 제일 마지막에 내가 속한 팀리스트를 가지고와서 workspace에 뿌려준다. */
 	loadMainBoard();
-	pollUserNotice();
+	userNotice();
+	
+	function LogOut(){
+		doClose();
+		location.href = "/user/logOut";
+	}
 </script>
 
 </body>

@@ -1,5 +1,6 @@
 package com.weasy.user.board.controller;
 
+import java.net.http.WebSocket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.weasy.user.board.service.BoardService;
+import com.weasy.user.board.websocket.websocketHandler;
 import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
@@ -128,5 +130,4 @@ public class BoardController {
 		
 		return "redirect:/board/board";
 	}
-	
 }
