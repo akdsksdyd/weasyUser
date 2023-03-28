@@ -82,9 +82,6 @@ public class UserController {
 			return "user/signup";
 		}
 		
-			System.out.println("성별:"+userVo.getGender());
-			
-		
 			//비밀번호 암호화
 			String encryptPassword = UserSha256.encrypt(userVo.getUserPw());
 			userVo.setUserPw(encryptPassword);
