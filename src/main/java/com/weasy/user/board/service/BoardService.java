@@ -1,11 +1,14 @@
 package com.weasy.user.board.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.weasy.user.command.AuthorityVO;
 import com.weasy.user.command.CalendarVO;
+import com.weasy.user.command.ReplyUploadVO;
 import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskDetailVO;
 import com.weasy.user.command.TaskVO;
@@ -144,6 +147,11 @@ public interface BoardService {
 	   
 	// 특정팀 캘린더 데이터
 	public ArrayList<CalendarVO> getCalendarTeamData(String teamName);
+	//파일 등록
+	public void fileRegist(ReplyUploadVO ruVo);
+	
+	//파일이름 불러오는 구문
+	public ArrayList<ReplyUploadVO> putUpload(ReplyUploadVO ruVo);
 	
 }
 

@@ -24,8 +24,6 @@ $(".teamTask").click(function(e){
 	/* 팀보드의 addTask버튼부분에 hidden 태그로 팀no 추가 */
 	var taskValue = "";
 	taskValue += '<input type="hidden" id="teamNo" name="teamNo" value="'+ teamNo +'">';
-	taskValue += '<input type="hidden" id="userEmail" name="userEmail" value="'+ userEmail +'">';
-	/*console.log("hidden태그의 teamNo: "+teamNo);*/
 	taskValue += '<input type="hidden" class="userEmail" name="userEmail" value="'+ userEmail +'">';
 	$(".addTaskValue").html(taskValue);
 	
@@ -44,8 +42,7 @@ $(".addTaskBtn").click(function(e){
 
 	var teamNoValue = $(e.target.nextElementSibling.firstChild).val();
 	var emailValue = $(e.target.nextElementSibling.lastChild).val();
-	var teamNoValue = $(e.target.nextElementSibling.firstChild).val();
-	var emailValue = $(e.target.nextElementSibling.lastChild).val();
+	console.log(emailValue);
 
 	e.preventDefault();
 		
@@ -103,6 +100,7 @@ $(".listBox").on('click', 'article', function(e){
 	/* taskNo을 히든태그로 숨겨서 전달하기 위한 구문 */
 	var taskNo = $(e.target).closest('article').attr("data-taskno");
 	var taskNoHid = "";
+	var upload = "";
 	
 	taskNoHid += '<input type="hidden" id="taskNo" name="taskNo" value="'+ taskNo +'">';
 	$(".taskNoHid").html(taskNoHid);
@@ -115,6 +113,10 @@ $(".listBox").on('click', 'article', function(e){
 		contentType: "application/json",
 		data: JSON.stringify({"taskNo": taskNo}),
 		success: function(result){
+			
+			upload += '<input type="hidden" value="'+ result.taskNo +'"/>';
+			$(".uploadTaskNo").html(upload);
+			
 			$("#taskTitle").val(result.title);
 			if(result.startDate != null){
 				$("#startDate").val(result.startDate.substring(0, 11));
@@ -158,10 +160,33 @@ $(".listBox").on('click', 'article', function(e){
 	var teamNo= $("#teamNoHidden").val();
 	var taskNo = $("#taskNo").val();
 	
+	/* 댓글 가져오는 구문 */
 	putReply(taskNo, teamNo);
 	
+	/* todo리스트 가져오는 구문 */
 	putTaskDetail(taskNo);
 	$("add_checkbox_wrap").remove();
+	
+	var putUpload = "";
+	/* 파일 가져오는 구문 */
+	$.ajax({
+		url: "../put_upload",
+		type: "post",
+		contentType: "application/json",
+		data: JSON.stringify({taskNo: taskNo}),
+		success: function(result){
+			
+			for(var i = 0; i < result.length; i++){
+				putUpload += '<a href="../download/'+ result[i].filePath + '/' + result[i].uuid + '/' + result[i].fileName + '">'+ result[i].fileName +'</a><br/>';
+			}
+			
+			$(".putUpload").html(putUpload);
+			
+		},
+		error: function(err){
+			console.log("파일 조회 실패");
+		}
+	})	
 	
 });
 
@@ -1066,7 +1091,7 @@ function loadMainBoard(){
 					
 					//member
 					if(result[i].role == 0){ 
-						workspace_member += '<div class="col-md-6 col-xl-3 workspace" data-teamNo='+result[i].teamNo+'>';
+						workspace_member += '<div class="col-md-6 col-xl-3 workspace" data-teamNo='+result[i].teamNo+' data-userEmail='+ result[i].userEmail +'>';
 						workspace_member += '<article class="stat-cards-item workspaceBtn" type="button">';
 						workspace_member += '<div class="stat-cards-info">';
 						workspace_member += '<p class="stat-cards-info__num">'+result[i].teamName+'</p>';
@@ -1078,7 +1103,7 @@ function loadMainBoard(){
 					}
 					//observer
 					else {
-						workspace_observer += '<div class="col-md-6 col-xl-3 workspace" data-teamNo='+result[i].teamNo+'>';
+						workspace_observer += '<div class="col-md-6 col-xl-3 workspace" data-teamNo='+result[i].teamNo+' data-userEmail='+ result[i].userEmail +'>';
 						workspace_observer += '<article class="stat-cards-item workspaceBtn" type="button">';
 						workspace_observer += '<div class="stat-cards-info">';
 						workspace_observer += '<p class="stat-cards-info__num">'+result[i].teamName+'</p>';
@@ -1105,7 +1130,9 @@ $("#mainBoardPage").on('click', 'article', function(e){
 
 	var teamNo = $(e.target).closest(".workspace").attr("data-teamNo");
 	var teamName = $(e.target).closest(".stat-cards-info").children(".stat-cards-info__num").html();
-	var userEmail = $(".userEmail").val();
+	var userEmail = $(e.target).closest(".workspace").attr("data-userEmail");
+	console.log(userEmail);
+	console.log(teamNo);
 	/* 만약 제일 바깥 div를 눌러서 teamName이 undefined라면 다시 teamName을 구한다.*/
 	if(teamName == undefined){
 		teamName = $(e.target).children().children(".stat-cards-info__num").html();
@@ -1698,3 +1725,62 @@ function validateCheck(){
 	}
 }
 
+/* 파일 업로드 구문 */
+$(".fileRegistBtn").click(function(e){
+	e.preventDefault();
+	console.dir($("#file"));
+	var fileName = $("#file").val();
+	var taskNo = $(e.target).next().children().val();
+	console.log(fileName);
+	console.log(taskNo);
+	
+      var form = $("#fileUploadForm")[0];
+      console.log(form);
+      const data = new FormData(form);
+      data.append('taskNo', taskNo);
+	
+	$.ajax({
+		type: 'POST',
+        enctype: 'multipart/form-data',
+        url: '../file_regist',
+        data: data,
+        processData: false,
+        contentType: false,
+        cache: false,
+        timeout: 600000,
+        success: function (data) {
+            console.log('SUCCESS : ', data);
+            
+            $("#file").val("");
+            $(".upload-name").val("");
+            
+            var putUpload = "";
+			/* 파일 가져오는 구문 */
+			setTimeout(function(){
+				$.ajax({
+					url: "../put_upload",
+					type: "post",
+					contentType: "application/json",
+					data: JSON.stringify({taskNo: taskNo}),
+					success: function(result){
+				
+						for(var i = 0; i < result.length; i++){
+							putUpload += '<a href="../download/'+ result[i].filePath + '/' + result[i].uuid + '/' + result[i].fileName + '">'+ result[i].fileName +'</a><br/>';
+						}
+				
+						$(".putUpload").html(putUpload);
+				
+					},
+					error: function(err){
+						console.log("파일 조회 실패");
+					}
+				})
+			}, 100);
+            
+        },
+        error: function (e) {
+            console.log('ERROR : ', e);
+        }
+	})
+	
+})

@@ -157,7 +157,7 @@
   	</insert>
   	
   	<select id="putTask" resultType="TaskVO">
-  		select userEmail, title, content, startDate, progressRate, targetDate, status
+  		select userEmail, title, content, startDate, progressRate, targetDate, status, taskNo
   		from TASK
   		where taskNo = #{taskNo}
   	</select>
@@ -343,5 +343,29 @@
          inner join (select teamName, teamNo from team where teamName = #{teamName} and teamStatus = 'Y') b
          on  a.teamNo = b.teamNo;
      </select>
+  	<insert id="fileRegist" parameterType="ReplyUploadVO">
+  		
+  		<selectKey keyProperty="userEmail" resultType="ReplyUploadVO" order="BEFORE">
+  			select userEmail from task where taskNo = #{taskNo}
+  		</selectKey>
+  		
+  		insert into upload (taskNo,
+  							fileName,
+  							filePath,
+  							userEmail,
+  							UUID)
+  					values (#{taskNo},
+  							#{fileName},
+  							#{filePath},
+  							#{userEmail},
+  							#{UUID})
+  		
+  	</insert>
+  	
+  	<select id="putUpload" resultType="ReplyUploadVO">
+  	
+  		select * from upload where taskNo = #{taskNo}
+  	
+  	</select>
   	
   </mapper>
