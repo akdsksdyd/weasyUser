@@ -11,14 +11,12 @@
   						  endDate, 
   						  teamName, 
   						  teamGoal, 
-  						  userEmail,
-  						  teamStatus)
+  						  userEmail)
   					values(#{teamRegdate},
   						   #{endDate},
   						   #{teamName},
   						   #{teamGoal},
-  						   #{userEmail},
-  						   #{teamStatus})
+  						   #{userEmail})
   	</insert>	
   	
   	<update id="updateTeam" parameterType="TeamVO">
