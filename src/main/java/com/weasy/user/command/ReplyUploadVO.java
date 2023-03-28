@@ -16,7 +16,7 @@ public class ReplyUploadVO { //댓글 업로드 VO
 	private int teamNo;
 	private String userEmail;
 	private String fileName;
-	private String fileNath;
+	private String filePath;
 	private String UUID;
 
 }

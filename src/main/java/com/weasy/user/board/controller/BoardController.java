@@ -4,6 +4,7 @@ import java.net.http.WebSocket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,11 +19,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.weasy.user.board.service.BoardService;
 import com.weasy.user.board.websocket.websocketHandler;
 import com.weasy.user.command.AuthorityVO;
+import com.weasy.user.command.ReplyUploadVO;
 import com.weasy.user.command.TaskVO;
 import com.weasy.user.command.TeamVO;
 import com.weasy.user.command.UserVO;
@@ -43,14 +47,13 @@ public class BoardController {
 	@GetMapping("/board")
 	public String board(Model model,
 						HttpSession session,
-						UserVO userVo,
-						TaskVO taskVo) {
+						UserVO userVo) {
 
 		String user_id = (String)session.getAttribute("Email");
 		ArrayList<TeamVO> teamList = boardService.getTeamListWithRole(user_id);
 		model.addAttribute("teamList", teamList);
-		ArrayList<TaskVO> taskList = boardService.getTaskList(taskVo);
-		model.addAttribute("taskList", taskList);
+		
+		System.out.println(userVo.toString());
 		
 		return "board/board";
 	}
@@ -132,6 +135,5 @@ public class BoardController {
 		
 		return "redirect:/board/board";
 	}
-	
 	
 }

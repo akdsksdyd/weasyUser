@@ -7,7 +7,6 @@
 			<div class="close_btn close-area" onclick="closeCardModal()">X</div>
 		</div>
 	
-		<form autocomplete="off">
 		<div class="m_body">
 			<!-- 1. task title -->
 			<div class="card_content task_title">
@@ -68,6 +67,7 @@
 				<i data-feather="file" class="detail-icon"></i>
 				<strong>Attachments</strong>
 			</div>
+			<div class="putUpload"></div>
 			<!--
 	 		<form action="uploadFile" method="post" enctype="multipart/form-data">
         		<input type="file" id="input-file" style="display:none;"/>
@@ -75,12 +75,15 @@
         		<input calss="modal_btn save" type="submit" value="파일업로드"></input>
     		</form> 
     		-->
-			<div class="card_content filebox ">
-				<input class="upload-name" value="첨부파일" placeholder="첨부파일">
-				<label for="file" class="save fileboxBtn" >파일찾기</label>
-				<input class="save fileboxBtn" type="file" id="file" style="display:none;">
-				<button class="save fileboxBtn" type="submit" >업로드</button> 
-			</div>
+    		<form action="file_regist" enctype="multipart/form-data" id="fileUploadForm" method="post">
+				<div class="card_content filebox">
+					<input class="upload-name" value="첨부파일" placeholder="첨부파일">
+					<label for="file" class="save fileboxBtn" >파일찾기</label>
+					<input class="save fileboxBtn" type="file" id="file" style="display:none;" name="file">
+					<button class="save fileboxBtn fileRegistBtn" type="submit" >업로드</button>
+					<div class="uploadTaskNo"></div>
+				</div>
+    		</form>
 			
 			<!-- 6. 체크 박스 -->
 			<div class="card_content task_space_check">
@@ -124,7 +127,6 @@
         		<button id="commentBtn" type="button" title="write comment"><i class="bi bi-chat-square-quote-fill comment_icon"></i></button>
 			</div>
 		</div>
-		</form>
 	
 		<div class="m_footer taskSaveBtn">
 			<button type="button" class="modal_btn cancle" onclick="closeCardModal()">CANCLE</button>
