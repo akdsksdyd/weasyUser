@@ -466,7 +466,7 @@ function putTaskDetail(taskNo){
 					}
 					addcheckbox += '	<input type="text" class="input_box input-prevent taskDetailNo" value="'+ result[i].taskDetail +'" data-detailNo="'+ result[i].taskDetailNo +'"/>';
 					addcheckbox += '	<button type="button" class="checkbox_btn save" id="checkboxUpdate">UPDATE</button>';
-					addcheckbox += '	<button type="button" class="checkbox_btn cancle delete_checkbox">DELETE</button>';
+					addcheckbox += '	<button type="button" class="checkbox_btn cancel delete_checkbox">DELETE</button>';
 					addcheckbox += '</div>';
 					
 					
@@ -616,7 +616,7 @@ $("#checkbox_content").on('click', 'button', function(e){
 		addcheckbox += '	<input type="checkbox" class="checkValue">';
 		addcheckbox += '	<input type="text" class="input_box input-prevent"/>';
 		addcheckbox += '	<button type="button" class="checkbox_btn save" id="checkboxSave">SAVE</button>';
-		addcheckbox += '	<button type="button" class="checkbox_btn cancle delete_checkbox">DELETE</button>';
+		addcheckbox += '	<button type="button" class="checkbox_btn cancel delete_checkbox">DELETE</button>';
 		addcheckbox += '</div>';
 		
 		$(e.target).closest(".checkbox_box").append(addcheckbox);
@@ -750,7 +750,7 @@ $("#commentBtn").click(function(e){
 });
 
 /* 인풋태그에 엔터키 먹는 현상 방지 */
-$(document).on("keydown", 'input[type="text"]', function(e) {
+$(document).on("keydown", 'input', function(e) {
   if (e.keyCode === 13) {
     e.preventDefault();
   }
@@ -1548,8 +1548,8 @@ function checkAuthority(email, teamNo){
 
 /* task 상세 페이지에서 제일 하단부에 있는 save버튼을 눌렀을 시 task테이블 update */
 $(".taskSaveBtn").on('click', 'button', function(e){
-	/* 부모태그에 기능을 줘서 cancle 을 눌렀을 떄 같이 먹는 거 방지. */
-	if($(this).hasClass("cancle"))return;
+	/* 부모태그에 기능을 줘서 cancel 을 눌렀을 떄 같이 먹는 거 방지. */
+	if($(this).hasClass("cancel"))return;
 	
 	wSocket.send("board");
 	
@@ -1752,13 +1752,16 @@ function validateCheck(){
 /* 파일 업로드 구문 */
 $(".fileRegistBtn").click(function(e){
 	e.preventDefault();
-	console.dir($("#file"));
-	var fileName = $("#file").val();
 	var taskNo = $(e.target).next().children().val();
 	
       var form = $("#fileUploadForm")[0];
       const data = new FormData(form);
       data.append('taskNo', taskNo);
+	
+	if($(".upload-name").val() == '' || $(".upload-name").val() == '첨부파일'){
+		alert("파일을 선택 해 주세요.");
+		return;
+	}
 	
 	$.ajax({
 		type: 'POST',
