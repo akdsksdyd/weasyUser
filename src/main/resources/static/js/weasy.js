@@ -1036,7 +1036,6 @@ function fileCount(taskNo){
 		data: JSON.stringify({taskNo: taskNo}),
 		async: false,
 		success: function(file){
-			console.log(file);
 			count = file.length;
 		},
 		error: function(err){
@@ -1061,7 +1060,7 @@ function findNickname(email){
 		}, 
 		error: function(){
 			nickname = "";
-		}		
+		}
 	})
 	return nickname;
 }
@@ -1815,7 +1814,6 @@ $(".fileRegistBtn").click(function(e){
 
 /* 사용자의 프로필 */
 function loadProfile(){
-	
 	$.ajax({
 		url:"../user/getUserInfo",
 		type:"post",
@@ -1827,9 +1825,8 @@ function loadProfile(){
 			$("#taskcard-userprofile").attr("src", profileLink);
 		}, 
 		error: function(){
-		}		
+		}
 	})
-	
 }
 
 

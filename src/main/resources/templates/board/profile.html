@@ -1,1 +1,98 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Weasy | Sign In</title><!-- Favicon --><link rel="shortcut icon" href="/img/svg/logo.svg" type="image/x-icon"><!-- Custom styles --><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/css/weasy.css"><!-- 제이쿼리 --><script src="../js/jquery-1.12.1.min.js"></script><script src="../js/jquery-ui.min.js"></script></head><body>	<!-- body -->	<main class="page-center">		<!-- 상단글 -->		<article class="sign-up">			<h1 class="sign-up__title">Your Profile</h1>			<p class="sign-up__subtitle">change your information</p>			<!-- 정보 수정 Form -->			<form class="sign-up-form form" action="updateUser" method="post">				<!-- email 보여주기 -->				<label class="form-label-wrapper">					<p class="form-label">Email</p> 					<input class="form-input" type="email" name="userEmail" th:value="${uservo != null ? uservo.userEmail : ''}" placeholder="Enter your email" readonly>				</label>				<!-- 이름 수정 -->				<label class="form-label-wrapper">					<p class="form-label">update Name</p>					<input class="form-input" type="text" name="userName" th:value="${uservo != null ? uservo.userName : ''}" placeholder="Enter your Name" required> 					<span class="valid-name userWarningCss">[[${valid_userName}]]</span>				</label>				<!-- pw 수정 -->				<button type="button" class="form-btn primary-default-btn transparent-btn rememId" id="changePwActive">비밀번호 수정하기</button>				<label class="form-label-wrapper" id="changePw">					<p class="form-label">update Password</p>					<input class="form-input" type="password" name="userPw" th:value="${uservo != null ? uservo.userPw : ''}" placeholder="Enter your password" required disabled>					<span class="valid-pw userWarningCss">[[${valid_userPw}]]</span>				</label>				<!-- 닉네임 수정 -->				<label class="form-label-wrapper">					<p class="form-label">update NickName</p>					<input class="form-input" type="text" name="nickname" th:value="${uservo != null ? uservo.nickname : ''}" placeholder="Enter your Nickname" required>					<span class="valid-nickname userWarningCss">[[${valid_nickname}]]</span>				</label>				<button class="form-btn primary-default-btn transparent-btn rememId">Update Your Information</button>				<!-- 회원가입 -->				<label class="form-label-wrapper"> <a class="signup_a"					href="/board/board">cancle</a>				</label> <label class="form-label-wrapper failMessage"> <span>[[${failMessage}]]</span>				</label>			</form>		</article>	</main>	<!-- Icons library -->	<script src="plugins/feather.min.js"></script>	<!-- Custom scripts -->	<script src="/js/script.js"></script>	<script src="/js/weasy.js"></script></body><script>	validateCheck();</script></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weasy | Sign In</title>
+<!-- Favicon -->
+<link rel="shortcut icon" href="/img/svg/logo.svg" type="image/x-icon">
+<!-- Custom styles -->
+<link rel="stylesheet" href="/css/style.min.css">
+<link rel="stylesheet" href="/css/weasy.css">
+<!-- 제이쿼리 -->
+<script src="../js/jquery-1.12.1.min.js"></script>
+<script src="../js/jquery-ui.min.js"></script>
+</head>
+<body>
+	<!-- body -->
+	<main class="page-center">
+		<!-- 상단글 -->
+		<article class="sign-up">
+			<h1 class="sign-up__title">Your Profile</h1>
+			<p class="sign-up__subtitle">change your information</p>
+			<!-- 정보 수정 Form -->
+			<form class="sign-up-form form" action="updateUser" method="post">
+				<!-- 프로필 사진 선택 -->
+				<input type="radio" name=profile value="pro1.png" th:checked="${uservo.profile eq 'pro1.png'}">
+				<img alt=""src="/img/avatar/pro1.png" class="profile_signup">
+				
+				<input type="radio" name=profile value="pro2.png" th:checked="${uservo.profile eq 'pro2.png'}">
+				<img alt="" src="/img/avatar/pro2.png" class="profile_signup">
+				
+				<input type="radio" name=profile value="pro3.png" th:checked="${uservo.profile eq 'pro3.png'}">
+				<img alt="" src="/img/avatar/pro3.png" class="profile_signup"> 
+				
+				<input type="radio" name=profile value="pro4.png" th:checked="${uservo.profile eq 'pro4.png'}">
+				<img alt="" src="/img/avatar/pro4.png" class="profile_signup">
+				
+				<input type="radio" name=profile value="pro5.png" th:checked="${uservo.profile eq 'pro5.png'}">
+				<img alt="" src="/img/avatar/pro5.png" class="profile_signup">
+				
+				<input type="radio" name=profile value="pro6.png" th:checked="${uservo.profile eq 'pro6.png'}">
+				<img alt="" src="/img/avatar/pro6.png" class="profile_signup">
+				
+				<!-- email 보여주기 -->
+				<label class="form-label-wrapper">
+					<p class="form-label">Email</p> 
+					<input class="form-input" type="email" name="userEmail" th:value="${uservo != null ? uservo.userEmail : ''}" placeholder="Enter your email" readonly>
+				</label>
+				
+				<!-- 이름 수정 -->
+				<label class="form-label-wrapper">
+					<p class="form-label">update Name</p>
+					<input class="form-input" type="text" name="userName" th:value="${uservo != null ? uservo.userName : ''}" placeholder="Enter your Name" required>
+					<span class="valid-name userWarningCss">[[${valid_userName}]]</span>
+				</label>
+				
+				<!-- pw 수정 -->
+				<button type="button" class="form-btn primary-default-btn transparent-btn rememId" id="changePwActive">비밀번호 수정하기</button>
+				<label class="form-label-wrapper" id="changePw">
+					<p class="form-label">update Password</p>
+					<input class="form-input" type="password" name="userPw" th:value="${uservo != null ? uservo.userPw : ''}" placeholder="Enter your password" required disabled>
+					<span class="valid-pw userWarningCss">[[${valid_userPw}]]</span>
+				</label>
+				
+				<!-- 닉네임 수정 -->
+				<label class="form-label-wrapper">
+					<p class="form-label">update NickName</p>
+					<input class="form-input" type="text" name="nickname" th:value="${uservo != null ? uservo.nickname : ''}" placeholder="Enter your Nickname" required>
+					<span class="valid-nickname userWarningCss">[[${valid_nickname}]]</span>
+				</label>
+				
+				<button class="form-btn primary-default-btn transparent-btn rememId">Update Your Information</button>
+				
+				<!-- 회원가입 -->
+				<label class="form-label-wrapper"> 
+					<a class="signup_a" href="/board/board">cancle</a>
+				</label> 
+				<label class="form-label-wrapper failMessage"> 
+					<span>[[${failMessage}]]</span>
+				</label>
+			</form>
+		</article>
+	</main>
+</body>
+
+<!-- Icons library -->
+<script src="plugins/feather.min.js"></script>
+
+<!-- Custom scripts -->
+<script src="/js/script.js"></script>
+<script src="/js/weasy.js"></script>
+
+<script>    
+validateCheck();
+</script>
+
+</html>
