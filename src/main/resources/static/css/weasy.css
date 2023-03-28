@@ -53,11 +53,11 @@ html {
 }
 
 .up {
-	margin-bottom: 35px;
+	margin-bottom: 21px;
 }
 
 .form-label {
-	font-size: 15px;
+	font-size: 16px;
 }
 
 .bell {
@@ -89,6 +89,9 @@ html {
 /* 성별체크박스 css */
 .gender-box {
 	text-align: center;
+	display: flex;
+	justify-content: space-around;
+	margin-bottom: 5px;
 }
 
 .gender-label {
@@ -783,6 +786,7 @@ section.notice {
 input[type=radio] {
     width: 15px;
     height: 15px;
+    margin-right: 3px;
 }
 .profile_signup{
 	width: 55px;
@@ -800,3 +804,13 @@ input[type=radio] {
 	margin-bottom: 20px;
 	color: #212529;
 }	
+.profile_signup{
+	margin-right: 12px;
+}
+.profile-box{
+	display: flex;
+	align-items: center;
+	margin-bottom: 5px;
+}
+.form-input{ margin-bottom: 8px; }
+.loginBtn{margin-top: 40px;}

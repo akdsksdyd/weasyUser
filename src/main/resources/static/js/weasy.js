@@ -501,7 +501,7 @@ $("#detailContentBox").on('click', 'input[type="checkbox"]', function(){
 			error: function(err){
 			}
 		});
-	}, 100);
+	}, 400);
 })
 
 $("#detailContentBox").on("click", "input", function(e){
