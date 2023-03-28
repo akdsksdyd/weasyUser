@@ -52,8 +52,9 @@ function ajaxNoticeList(data){
   	  		  html+="</tr>";
 			  
 		  }else {
+			  var pageNo = (check_page-1) * 10;
 			  html+="<tr>";
-  	  		  html+="<td>"+(index+1)+"</td>";
+  	  		  html+="<td>"+(pageNo + (index+1))+"</td>";
   	  		  html+="<th class='th-title' value="+obj.noticeNo+">"+obj.noticeTitle+"</th>";
   	  		  html+="<td>"+obj.noticeRegdate+"</td>";
   	  		  html+="</tr>"; 
