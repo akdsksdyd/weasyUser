@@ -39,5 +39,7 @@ public class UserVO { //유저 VO
 	
 	private String check_id;
 	private String check_pw;
+	
+	private String profile;
 
 }

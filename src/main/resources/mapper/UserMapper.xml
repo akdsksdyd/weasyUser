@@ -7,8 +7,8 @@
 	
 	<!-- 회원가입 -->
 	<insert id="userSignup" parameterType="UserVO">
-		INSERT INTO users (userName, userEmail, userPw, phoneNum, gender, birth, nickname ) 
-		VALUES ( #{userName}, #{userEmail}, #{userPw}, #{phoneNum}, #{gender}, #{birth}, #{nickname});
+		INSERT INTO users (userName, userEmail, userPw, phoneNum, gender, birth, nickname, profile ) 
+		VALUES ( #{userName}, #{userEmail}, #{userPw}, #{phoneNum}, #{gender}, #{birth}, #{nickname}, #{profile});
 	</insert>
 	
 	<!-- 이메일 중복확인 -->
