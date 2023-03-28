@@ -19,6 +19,7 @@ public class ReplyVO { //댓글 VO
 	private String userEmail;
 	private Timestamp replyDate;
 	private String comment;
+	private String profile;
 	
 }
 //replyNo  	int PRIMARY KEY auto_increment,

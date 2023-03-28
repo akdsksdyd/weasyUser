@@ -49,7 +49,7 @@
 	
 	<!-- 회원정보 가지고 오기 -->
 	<select id="getUserInfo" resultType="UserVO">
-		select userEmail, userPw, userName, nickname, permission from users where userEmail=#{email};
+		select userEmail, userPw, userName, nickname, permission, profile from users where userEmail=#{email};
 	</select>
 	
 	<!--  -->
