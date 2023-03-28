@@ -22,10 +22,14 @@ $("#calendarSidebar").click(function(){
 			//console.log(res);
 			//console.log(res.teamList[0].teamName);
 			
+			var str = '';
+			
 			// 팀 리스트에 삽입
 			res.teamList.forEach(team => {
-				$('.realTeamList').append('<div class="getTeam">🔹'+ team.teamName +'</div>')
+				str += '<div class="getTeam">🔹'+ team.teamName +'</div>';
 			});
+			
+			$('.realTeamList').html(str);
 			
 			// 달력 데이터 삽입
 			var arr = [];
