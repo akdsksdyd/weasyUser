@@ -168,4 +168,11 @@ public class UserController {
 		return userService.searchTaskUser(teamNo, keyword);
 	}
 	
+	@ResponseBody
+	@PostMapping("/getUserInfo")
+	public UserVO getUserInfo(HttpSession session) {
+		String userEmail = (String)session.getAttribute("Email");
+		return userService.getUserInfo(userEmail);
+	}
+	
 }

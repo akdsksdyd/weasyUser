@@ -9,7 +9,6 @@ $(document).ready(function(){
 	if(document.cookie.replace("lastlogin=", "") !== ""){
 		$('input:checkbox[name="rememberId"]').attr("checked", true);
 	}
-	
 })
 
 
@@ -209,7 +208,7 @@ function putReply(taskNo, teamNo){
 				
 				replyList += '<div class="card_content comment_space">'; 
 				replyList += '<div class="profile_box">';
-				replyList += '<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">';
+				replyList += '<img class="profile" src="/img/avatar/'+ result[i].profile +'" alt="User name">';
 				replyList += '</div>';
 				replyList += '<span class="comment_box">';
 				replyList += '<strong class="email_check">' + result[i].userEmail + '</strong>';
@@ -975,6 +974,10 @@ function makeDetail(task){
 		var target_date = date.getFullYear( )+ '/' + (date.getMonth()+1) + '/' + date.getDate();
 		detail += target_date;
 		detail += '</span>';
+	}
+	
+	/* 닉네임이나 날짜가 하나라도 있다면 줄바꿈 추가 */
+	if(detail != ''){
 		detail += '<br/>';
 	}
 	
@@ -992,7 +995,13 @@ function makeDetail(task){
 		detail += task.progressRate + '%';
 	}
 
-	/* 첨부파일 갯수 아직 미완..*/
+	/* 첨부파일 개수 */
+	var countFile = fileCount(task.taskNo);
+	if(countFile != 0){
+		detail += '<i class="bi bi-paperclip"></i>';
+		detail += countFile;
+		detail += '  ';
+	}
 	
 	return detail;
 }
@@ -1009,6 +1018,26 @@ function replyCount(taskNo){
 		async: false,
 		success: function(reply){
 			count = reply.length;
+		},
+		error: function(err){
+			count = 0;
+		}
+	});
+	return count;
+}
+
+/* task card에 달린 첨부파일의 갯수를 가져온다 */
+function fileCount(taskNo){
+	var count;
+	$.ajax({
+		url: "../put_upload",
+		type: "post",
+		contentType: "application/json",
+		data: JSON.stringify({taskNo: taskNo}),
+		async: false,
+		success: function(file){
+			console.log(file);
+			count = file.length;
 		},
 		error: function(err){
 			count = 0;
@@ -1782,5 +1811,25 @@ $(".fileRegistBtn").click(function(e){
             console.log('ERROR : ', e);
         }
 	})
-	
 })
+
+/* 사용자의 프로필 */
+function loadProfile(){
+	
+	$.ajax({
+		url:"../user/getUserInfo",
+		type:"post",
+		contentType:"application/json; charset=utf-8",
+		success:function(result){
+			console.log(result);
+			profileLink = "/img/avatar/"+result.profile;
+			$("#header-userprofile").attr("src", profileLink);
+			$("#taskcard-userprofile").attr("src", profileLink);
+		}, 
+		error: function(){
+		}		
+	})
+	
+}
+
+

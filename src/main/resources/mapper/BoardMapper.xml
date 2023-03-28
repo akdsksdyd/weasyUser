@@ -163,7 +163,10 @@
   	</select>
   	
   	<select id="putReply" resultType="ReplyVO">
-  		select userEmail, replyNo, taskNo, comment from REPLY where taskNo = #{taskNo}
+  		select r.userEmail, r.replyNo, r.taskNo,  r.comment, u.profile from REPLY r
+		left join users u
+		on r.userEmail = u.userEmail
+		where taskNo=#{taskNo}
   	</select>
   	
   	<!-- 댓글 수정 -->

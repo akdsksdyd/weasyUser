@@ -257,7 +257,9 @@
         	<button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
           		<span class="sr-only">My profile</span>
           		<span class="nav-user-img">
-            		<picture><source srcset="/img/avatar/avatar-illustrated-02.webp" type="image/webp"><img src="/img/avatar/avatar-illustrated-02.png" alt="User name"></picture>
+            		<picture>
+            			<img id="header-userprofile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">
+            		</picture>
           		</span>
         	</button>
         	<ul class="users-item-dropdown nav-user-dropdown dropdown">
@@ -317,6 +319,7 @@
 	}
 	
 	/* 화면이 로드 되는 제일 마지막에 내가 속한 팀리스트를 가지고와서 workspace에 뿌려준다. */
+	loadProfile();
 	loadMainBoard();
 	userNotice();
 	
