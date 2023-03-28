@@ -176,6 +176,7 @@ $(".listBox").on('click', 'article', function(e){
 		success: function(result){
 			
 			for(var i = 0; i < result.length; i++){
+				putUpload += '<i class="bi bi-arrow-down-circle-fill uploadIcon"></i>';
 				putUpload += '<a href="../download/'+ result[i].filePath + '/' + result[i].uuid + '/' + result[i].fileName + '">'+ result[i].fileName +'</a><br/>';
 			}
 			
@@ -1793,7 +1794,8 @@ $(".fileRegistBtn").click(function(e){
 					success: function(result){
 				
 						for(var i = 0; i < result.length; i++){
-							putUpload += '<a href="../download/'+ result[i].filePath + '/' + result[i].uuid + '/' + result[i].fileName + '">'+ result[i].fileName +'</a><br/>';
+							putUpload += '<i class="bi bi-arrow-down-circle-fill uploadIcon"></i>';
+							putUpload += '<a href="../download/'+ result[i].filePath + '/' + result[i].uuid + '/' + result[i].fileName + '">'+ result[i].fileName +'</a></br>';
 						}
 				
 						$(".putUpload").html(putUpload);
