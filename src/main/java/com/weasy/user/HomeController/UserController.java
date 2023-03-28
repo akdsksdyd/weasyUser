@@ -115,7 +115,7 @@ public class UserController {
 			return "redirect:/user/signin";
 			
 		} else if(userService.permissionId(userVo) != 0){ //승인 안됨
-			String failMessage = "계정이 승인되지 않았습니다. 잠시만 기다료~~";
+			String failMessage = "계정이 승인되지 않았습니다. 관리자에게 문의 부탁드립니다.";
 			ra.addFlashAttribute("failMessage", failMessage);
 			return "redirect:/user/signin";
 		}

@@ -41,7 +41,6 @@ $(".addTaskBtn").click(function(e){
 
 	var teamNoValue = $(e.target.nextElementSibling.firstChild).val();
 	var emailValue = $(e.target.nextElementSibling.lastChild).val();
-	console.log(emailValue);
 
 	e.preventDefault();
 		
@@ -419,7 +418,6 @@ function insertUserNotice(email, msg, status){
 			//notice reload위해 websocket날림
 			wSocket.send("notice");
 			
-			console.log(result);
 		},
 		error: function(err){
 		}
@@ -1160,8 +1158,6 @@ $("#mainBoardPage").on('click', 'article', function(e){
 	var teamNo = $(e.target).closest(".workspace").attr("data-teamNo");
 	var teamName = $(e.target).closest(".stat-cards-info").children(".stat-cards-info__num").html();
 	var userEmail = $(e.target).closest(".workspace").attr("data-userEmail");
-	console.log(userEmail);
-	console.log(teamNo);
 	/* 만약 제일 바깥 div를 눌러서 teamName이 undefined라면 다시 teamName을 구한다.*/
 	if(teamName == undefined){
 		teamName = $(e.target).children().children(".stat-cards-info__num").html();
@@ -1484,7 +1480,6 @@ $("#add_team_modal").on('click', 'button', function(e){
 		contentType:"application/json; charset=utf-8",
 		async: false,
 		success:function(result){
-			console.log(result);
 			teamName = result.teamName;
 		},
 		error: function(){
@@ -1760,11 +1755,8 @@ $(".fileRegistBtn").click(function(e){
 	console.dir($("#file"));
 	var fileName = $("#file").val();
 	var taskNo = $(e.target).next().children().val();
-	console.log(fileName);
-	console.log(taskNo);
 	
       var form = $("#fileUploadForm")[0];
-      console.log(form);
       const data = new FormData(form);
       data.append('taskNo', taskNo);
 	
@@ -1778,7 +1770,6 @@ $(".fileRegistBtn").click(function(e){
         cache: false,
         timeout: 600000,
         success: function (data) {
-            console.log('SUCCESS : ', data);
             
             $("#file").val("");
             $(".upload-name").val("");
@@ -1821,7 +1812,6 @@ function loadProfile(){
 		type:"post",
 		contentType:"application/json; charset=utf-8",
 		success:function(result){
-			console.log(result);
 			profileLink = "/img/avatar/"+result.profile;
 			$("#header-userprofile").attr("src", profileLink);
 			$("#taskcard-userprofile").attr("src", profileLink);
