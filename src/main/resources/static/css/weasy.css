@@ -787,4 +787,16 @@ input[type=radio] {
 .profile_signup{
 	width: 55px;
 	height: 55px;
+}
+
+.putUpload i{
+	margin: 0 5px 0 30px;
+	color: rgb(50, 77, 158);
+	font-size: 19px;
+}
+
+.putUpload a{
+	font-weight: 500;
+	margin-bottom: 20px;
+	color: #212529;
 }	
