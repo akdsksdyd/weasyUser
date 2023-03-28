@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.weasy.user.command.AuthorityVO;
+import com.weasy.user.command.CalendarVO;
 import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskDetailVO;
 import com.weasy.user.command.TaskVO;
@@ -177,7 +178,7 @@ public class BoardServiceImpl implements BoardService{
 	//공지사항 검색
 	@Override
 	public ArrayList<noticeListVO> getSearchNotice(UserCriteria user_criteria) {
-//		new UserCriteria();
+		new UserCriteria();
 		return boardMapper.getSearchNotice(user_criteria);
 	}
 	//공지사항 이미지
@@ -239,6 +240,18 @@ public class BoardServiceImpl implements BoardService{
 	public void deletetodo(TaskDetailVO tdVo) {
 		
 		boardMapper.deletetodo(tdVo);
+	}
+
+	@Override
+	public ArrayList<CalendarVO> getCalendarData(String userEmail) {
+		
+		return boardMapper.getCalendarData(userEmail);
+	}
+
+	@Override
+	public ArrayList<CalendarVO> getCalendarTeamData(String teamName) {
+		
+		return boardMapper.getCalendarTeamData(teamName);
 	}
 	
 }

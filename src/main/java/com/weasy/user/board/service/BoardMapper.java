@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.weasy.user.util.UserCriteria;
 import com.weasy.user.command.AuthorityVO;
+import com.weasy.user.command.CalendarVO;
 import com.weasy.user.command.ReplyVO;
 import com.weasy.user.command.TaskDetailVO;
 import com.weasy.user.command.TaskVO;
@@ -124,5 +125,11 @@ public interface BoardMapper {
 	
 	//todo리스트 삭제
 	public void deletetodo(TaskDetailVO tdVo);
+	
+	// 캘린더 데이터
+	public ArrayList<CalendarVO> getCalendarData(String userEmail);
+	   
+	// 특정팀 캘린더 데이터
+	public ArrayList<CalendarVO> getCalendarTeamData(String teamName);
 	
 }

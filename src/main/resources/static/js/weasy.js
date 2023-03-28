@@ -182,12 +182,12 @@ function putReply(taskNo, teamNo){
 			
 			for(var i = 0; i < result.length; i++){
 				
-				replyList += '<div class="card_content">'; 
+				replyList += '<div class="card_content comment_space">'; 
 				replyList += '<div class="profile_box">';
 				replyList += '<img class="profile" src="/img/avatar/avatar-illustrated-02.png" alt="User name">';
 				replyList += '</div>';
 				replyList += '<span class="comment_box">';
-				replyList += '<strong class="emailCheck">' + result[i].userEmail + '</strong>';
+				replyList += '<strong class="email_check">' + result[i].userEmail + '</strong>';
 				replyList += '<button title="update" class="update_reply button-prevent reply_button'+ i +'" data-replyNo="'+ result[i].replyNo +'"><i class="bi bi-pencil-square"></i></button>'
 				replyList += '<button title="delete" class="delete_reply button-prevent reply_button'+ i +'" data-replyNo="'+ result[i].replyNo +'"><i class="bi bi-trash"></i></button>'	
 				replyList += '<br/>';
@@ -746,6 +746,7 @@ $("#mainBoardSideBar").click(function(e){
 	$("#teamProjectBoard").css("display","none");
 	$("#mainBoardPage").css("display","block");
 	$("#noticePage").css("display","none");
+	$(".calendar-container").css("display","none");
 	
 })
 
@@ -855,6 +856,7 @@ function getTeamTask(teamNo){
 			$("#mainBoardPage").css("display","none");
 			$("#teamProjectBoard").css("display","block");
 			$("#noticePage").css("display","none");
+			$(".calendar-container").css("display","none");
 			
 			/* 요청으로 받아온 리스트 들을 화면에 task 단게에 맞게 뿌려준다. */
 			for(var i = 0; i < result.length; i++){

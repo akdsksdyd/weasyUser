@@ -172,17 +172,19 @@ $(document).ready(function(){
 				checkboxes[i].checked = true;
 			}
 		}
-		
-
-  
    })
    
+	   
+/*	$("input[name=profile]").on('click', function(){
+		console.log($("input[name=profile]:checked").val());
+	})
+   */
 }) //end
 
 
 
 
-
+	
 
 
 

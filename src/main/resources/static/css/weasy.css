@@ -773,3 +773,18 @@ section.notice {
 	display: none;
 }
 
+.top-text{ text-align: right; color: #a7a7a7; font-size: 12px; margin-top: 20px;}
+
+.addTask::placeholder{
+	color: #f3f3f3;
+	padding-left: 10px;
+}
+
+input[type=radio] {
+    width: 15px;
+    height: 15px;
+}
+.profile_signup{
+	width: 55px;
+	height: 55px;
+}	

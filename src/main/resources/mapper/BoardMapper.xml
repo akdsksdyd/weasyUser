@@ -318,4 +318,30 @@
   		delete from taskdetail where taskDetailNo = #{taskDetailNo}
   	</delete>
   	
+  	<!-- 캘린더 데이터 -->
+     <select id="getCalendarData" resultType="CalendarVO">
+        select c.teamNo, 
+              c.taskNo, 
+              d.teamName, 
+              c.title, 
+              date_format(c.startDate, '%Y-%m-%d') startDate, 
+              date_format(c.targetDate, '%Y-%m-%d') targetDate, 
+              c.realEndDate 
+         from task c
+         inner join (select a.teamNo, a.teamName, a.teamRegdate, a.endDate, b.userEmail 
+                     from (select * from team where teamStatus = 'Y') a
+                     inner join (select * from authority where userEmail = #{userEmail}) b
+                     on a.teamNo = b.teamNo
+                     order by b.teamNo
+                     limit 1) d
+         on c.teamNo = d.teamNo
+     </select>
+     
+     <select id="getCalendarTeamData" resultType="CalendarVO">
+        select a.taskNo, a.teamNo, a.title, a.startDate, a.targetDate 
+         from task a
+         inner join (select teamName, teamNo from team where teamName = #{teamName} and teamStatus = 'Y') b
+         on  a.teamNo = b.teamNo;
+     </select>
+  	
   </mapper>
