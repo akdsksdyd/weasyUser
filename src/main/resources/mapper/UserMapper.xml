@@ -54,7 +54,7 @@
 	
 	<!--  -->
 	<update id="updateUser" parameterType="UserVO">
-		update users set userName=#{userName}, nickname=#{nickname}
+		update users set userName=#{userName}, nickname=#{nickname}, profile=#{profile}
 		<if test="userPw != '' and userPw != null">
 			, userPw=#{userPw}
 		</if>
