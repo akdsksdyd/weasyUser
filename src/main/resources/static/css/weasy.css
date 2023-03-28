@@ -66,6 +66,12 @@ html {
 	height: 24px;
 }
 
+.calendar {
+	background-image: url(../img/svg/Bulk/Calendar.svg);
+	width: 24px;
+	height: 24px;
+}
+
 /* 이메일 중복 확인 버튼 */
 .doubleCheck_btn {
 	font-size: 15px;
