@@ -206,7 +206,7 @@
             		</a>
             	</li>
           		<li>
-          			<a class="danger" onclick="LogOut()">
+          			<a class="danger" onclick="LogOut()" style="cursor:pointer;">
               			<i data-feather="log-out" aria-hidden="true"></i>
               			<span>Log out</span>
             		</a>
@@ -238,29 +238,6 @@
 <!-- 팀 task 카드 -->
 <th:block th:replace="~{ ./modal/taskCard :: modal( ~{:: #card_modal} ) }"></th:block>
 <!-- 팀 task 카드 끝 -->
-
-
-
-
-
-
-<script th:inline="javascript">
-	var msg = JSON.parse('[[${msg}]]');
-	if(msg != null){
-		alert(msg);
-	}
-	
-	/* 화면이 로드 되는 제일 마지막에 내가 속한 팀리스트를 가지고와서 workspace에 뿌려준다. */
-	loadProfile();
-	loadMainBoard();
-	userNotice();
-	
-	function LogOut(){
-		doClose();
-		location.href = "/user/logOut";
-	}
-</script>
-
 
 <!-- 팀/프로젝트 추가 date -->
 	
@@ -296,8 +273,6 @@
 	
 
 <!-- 보드 리스트의 카드 date -->
-
-
 <script>
 	$(function() {
 		var dateFormat = "yy-mm-dd", from = $("#startDate").datepicker({
@@ -336,6 +311,22 @@
 <script src="/js/weasy.js"></script>
 <script src="/js/notice.js"></script>
 <script src="/js/calendar.js"></script>
+<script th:inline="javascript">
+	var msg = JSON.parse('[[${msg}]]');
+	if(msg != null){
+		alert(msg);
+	}
+	
+	/* 화면이 로드 되는 제일 마지막에 내가 속한 팀리스트를 가지고와서 workspace에 뿌려준다. */
+	loadProfile();
+	loadMainBoard();
+	userNotice();
+	
+	function LogOut(){
+		doClose();
+		location.href = "/user/logOut";
+	}
+</script>
 
 </body>
 </html>

@@ -26,7 +26,9 @@ $(".noticeSidebar").click(function(){
 		data: JSON.stringify({'searchType': 'all', 'keyword':''}),
 		type: "post",
 		contentType: "application/json",
-		success:ajaxNoticeList,
+		success: function(result){
+			ajaxNoticeList(result, check_page);
+		},
 		error: function(err){
 			alert("조회에 실패했습니다.")
 		}
@@ -41,7 +43,7 @@ $(".noticeSidebar").click(function(){
  * @function DB에서 가져온 공지사항 목록을 화면에 띄우는 함수
  * @returns html 목록태그
  */
-function ajaxNoticeList(data){
+function ajaxNoticeList(data, check_page){
   	var html=""; 		
   	$.each(data, (index, obj)=>{ 
 		  if(obj.noticeLevel == '1'){
@@ -140,7 +142,7 @@ function get_pagination(page){
 			success: function(data){
 					//테이블 초기화
 					$('.board-table > tbody').empty();
-					ajaxNoticeList(data);
+					ajaxNoticeList(data, check_page);
 					notice_pagination(check_page);
 							
 			},
@@ -164,9 +166,9 @@ function get_pagination(page){
 function getSearchList(){
 	//검색어값: $("#search-keyword").val()
 	//옵션 값2: $("#notice-option option:selected").val()
-	
-	 searchType = $("#notice-option option:selected").val();
-	 keyword = $("#search-keyword").val();
+	check_page = 1;
+	searchType = $("#notice-option option:selected").val();
+	keyword = $("#search-keyword").val();
 	
 	$.ajax({
 		url : "../get_search_notice",
@@ -176,7 +178,7 @@ function getSearchList(){
 		success: function(result){
 			//테이블 초기화
 			$('.board-table > tbody').empty();
-			ajaxNoticeList(result);
+			ajaxNoticeList(result, check_page);
 			notice_pagination();
 		},
 		error: function(err){
