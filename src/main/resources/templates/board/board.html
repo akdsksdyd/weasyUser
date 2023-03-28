@@ -33,75 +33,7 @@
   <!-- websocekt연결 -->
   <script src="/js/websocket.js"></script>
   
-  <!-- calendar -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
-  <link rel='stylesheet' media='print' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.print.min.css' />
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js'></script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js'></script>
   
-  
-<!-- 팀/프로젝트 추가 date -->
-<script>
-	$(function() {
-		var dateFormat = "yy-mm-dd", from = $("#teamRegDate").datepicker({
-			dateFormat : 'yy-mm-dd',
-			defaultDate : "+1w",
-			changeMonth : true,
-			numberOfMonths : 2
-		}).on("change", function() {
-			to.datepicker("option", "minDate", getDate(this));
-		}), to = $("#teamEndDate").datepicker({
-			dateFormat: 'yy-mm-dd',
-			defaultDate : "+1w",
-			changeMonth : true,
-			numberOfMonths : 2
-		}).on("change", function() {
-			from.datepicker("option", "maxDate", getDate(this));
-		});
-
-		function getDate(element) {
-			var date;
-			try {
-				date = $.datepicker.parseDate(dateFormat, element.value);
-			} catch (error) {
-				date = null;
-			}
-			return date;
-		}
-	});
-</script>
-
-<!-- 보드 리스트의 카드 date -->
-<script>
-	$(function() {
-		var dateFormat = "yy-mm-dd", from = $("#startDate").datepicker({
-			dateFormat : 'yy-mm-dd',
-			defaultDate : "+1w",
-			changeMonth : true,
-			numberOfMonths : 2
-		}).on("change", function() {
-			to.datepicker("option", "minDate", getDate(this));
-		}), to = $("#targetDate").datepicker({
-			dateFormat: 'yy-mm-dd',
-			defaultDate : "+1w",
-			changeMonth : true,
-			numberOfMonths : 2
-		}).on("change", function() {
-			from.datepicker("option", "maxDate", getDate(this));
-		});
-
-		function getDate(element) {
-			var date;
-			try {
-				date = $.datepicker.parseDate(dateFormat, element.value);
-			} catch (error) {
-				date = null;
-			}
-			return date;
-		}
-	});
-</script>
 </head>
 
 <body class>
@@ -303,14 +235,10 @@
 <th:block th:replace="~{ ./modal/taskCard :: modal( ~{:: #card_modal} ) }"></th:block>
 <!-- 팀 task 카드 끝 -->
 
-<!-- Icons library -->
-<script src="/plugins/feather.js"></script>
-<!-- Custom scripts -->
-<script src="/js/script.js"></script>
-<!-- weasy custom js -->
-<script src="/js/weasy.js"></script>
-<script src="/js/notice.js"></script>
-<script src="/js/calendar.js"></script>
+
+
+
+
 
 <script th:inline="javascript">
 	var msg = JSON.parse('[[${msg}]]');
@@ -328,6 +256,89 @@
 		location.href = "/user/logOut";
 	}
 </script>
+
+
+<!-- 팀/프로젝트 추가 date -->
+	
+	<script>
+	$(function() {
+		var dateFormat = "yy-mm-dd", from = $("#teamRegDate").datepicker({
+			dateFormat : 'yy-mm-dd',
+			defaultDate : "+1w",
+			changeMonth : true,
+			numberOfMonths : 2
+		}).on("change", function() {
+			to.datepicker("option", "minDate", getDate(this));
+		}), to = $("#teamEndDate").datepicker({
+			dateFormat: 'yy-mm-dd',
+			defaultDate : "+1w",
+			changeMonth : true,
+			numberOfMonths : 2
+		}).on("change", function() {
+			from.datepicker("option", "maxDate", getDate(this));
+		});
+
+		function getDate(element) {
+			var date;
+			try {
+				date = $.datepicker.parseDate(dateFormat, element.value);
+			} catch (error) {
+				date = null;
+			}
+			return date;
+		}
+	});
+</script>
+	
+
+<!-- 보드 리스트의 카드 date -->
+
+
+<script>
+	$(function() {
+		var dateFormat = "yy-mm-dd", from = $("#startDate").datepicker({
+			dateFormat : 'yy-mm-dd',
+			defaultDate : "+1w",
+			changeMonth : true,
+			numberOfMonths : 2
+		}).on("change", function() {
+			to.datepicker("option", "minDate", getDate(this));
+		}), to = $("#targetDate").datepicker({
+			dateFormat: 'yy-mm-dd',
+			defaultDate : "+1w",
+			changeMonth : true,
+			numberOfMonths : 2
+		}).on("change", function() {
+			from.datepicker("option", "maxDate", getDate(this));
+		});
+
+		function getDate(element) {
+			var date;
+			try {
+				date = $.datepicker.parseDate(dateFormat, element.value);
+			} catch (error) {
+				date = null;
+			}
+			return date;
+		}
+	});
+</script>
+
+	<!-- calendar -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
+  <link rel='stylesheet' media='print' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.print.min.css' />
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js'></script>
+
+
+<!-- Icons library -->
+<script src="/plugins/feather.js"></script>
+<!-- Custom scripts -->
+<script src="/js/script.js"></script>
+<!-- weasy custom js -->
+<script src="/js/weasy.js"></script>
+<script src="/js/notice.js"></script>
+<script src="/js/calendar.js"></script>
 
 </body>
 </html>

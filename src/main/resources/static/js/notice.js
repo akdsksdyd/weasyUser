@@ -10,7 +10,7 @@ $(".noticeSidebar").click(function(){
 	$("#teamProjectBoard").css("display","none");
 	$("#mainBoardPage").css("display","none");
 	$("#noticePage").css("display","block");
-	
+	$(".calendar-container").css("display","none");
 	
 	
 	$("#notice-option").val('all');
