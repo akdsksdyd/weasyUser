@@ -12,7 +12,7 @@ public class UserPageVO {
 	//페이지네이션을 계산하는 클래스
 		
 	//페이지네이션 개수
-	final static int PAGE_COUNT = 3;
+	final static int PAGE_COUNT = 10;
 	
 	//페이지네이션을 계산하는 클래스
 	private int start; //첫패이지번호
