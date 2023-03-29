@@ -667,7 +667,7 @@ section.notice {
 	color: #ABB2B9;
 	cursor: pointer;
 	transition: background .2s ease, color .2s ease;
-	width: 310px;
+	width: 300px;
 	text-align: center;
 }
 

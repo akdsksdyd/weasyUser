@@ -501,11 +501,11 @@
 	color: #ABB2B9;
 	cursor: pointer;
 	transition: background .2s ease, color .2s ease;
-	width: 340px;
+	width: 400px;
 }
 
 .deleteMember{
-	padding-left: 20px;
+	padding-left: 10px;
 	color : white;
 }
 
