@@ -38,7 +38,7 @@ import com.weasy.user.util.UserSha256;
 @RequestMapping("/user")
 public class UserController {
 	//쿠키유지시간
-	final static int SETMAXAGE = 300;
+	final static int SETMAXAGE = 3600;
 	
 	//서비스 연결
 	@Autowired
