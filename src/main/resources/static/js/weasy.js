@@ -1819,7 +1819,7 @@ $(".fileRegistBtn").click(function(e){
             
         },
         error: function (e) {
-            console.log('ERROR : ', e);
+            alert("파일 크기가 너무 큽니다 !");
         }
 	})
 })
