@@ -57,7 +57,7 @@ $("#calendarSidebar").click(function(){
 		          element.find('.fc-title').css('font-weight', '600');
 		          element.find('.fc-title').css('padding', '0 5px');
 		        }
-		    });	
+		    });
 			
 		},
 		error: (err) => {
