@@ -3,7 +3,6 @@ var colors = ['#86C8BC', '#FFD4B2', '#FFF6BD', '#CEEDC7', '#82AAE3', '#91D8E4', 
 
 // 캘린더 페이지 모달 키기
 $("#calendarSidebar").click(function(){
-	console.log('왓냐')
 	$("#teamProjectBoard").css("display","none");
 	$("#mainBoardPage").css("display","none");
 	$("#noticePage").css("display","none");
