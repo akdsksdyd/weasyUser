@@ -760,7 +760,7 @@ $("#commentBtn").click(function(e){
 			
 		},
 		error: function(err){
-			alert("댓글 입력 실패 !");
+			alert("댓글은 2000자 이내로 입력 가능합니다 !");
 		}
 	})	
 	
