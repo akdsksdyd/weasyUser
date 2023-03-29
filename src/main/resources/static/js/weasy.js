@@ -204,6 +204,10 @@ function putReply(taskNo, teamNo){
 							  teamNo: teamNo}),
 		success: function(result){
 			
+			if(result[i] == null || result[i] == undefined){
+				$("#comment_list").html("");
+			}
+			
 			for(var i = 0; i < result.length; i++){
 				
 				replyList += '<div class="card_content comment_space">'; 
@@ -446,7 +450,9 @@ $('html').click(function(e) {
 	}
 });
 function putTaskDetail(taskNo){
-		
+	
+	progressUpdate(taskNo);
+			
 	$.ajax({
 		url: "../put_taskdetail",
 		type: "post",
@@ -471,7 +477,6 @@ function putTaskDetail(taskNo){
 					
 					
 					$("#detailContentBox").html(addcheckbox);
-					progressUpdate(taskNo);
 					
 			}
 			
@@ -484,23 +489,31 @@ function putTaskDetail(taskNo){
 
 /*  */
 $("#detailContentBox").on('click', 'input[type="checkbox"]', function(){
-	var taskNo = $("#taskNo").val();
 	/* 시간을 좀 두고 ... progressbar update시켜준다. */
 	setTimeout(function() {
-		$.ajax({
-			url: "../putTask",
-			type: "post",
-			contentType: "application/json",
-			data: JSON.stringify({"taskNo": taskNo}),
-			success: function(result){
-				$(".pr10").html(result.progressRate + "%");
-				$(".progressbar").val(result.progressRate);
-			},
-			error: function(err){
-			}
-		});
-	}, 400);
-})
+		getProgressbar();
+	}, 200);
+});
+
+/* profressbar 가져오는 구문 */
+function getProgressbar(){
+	
+	var taskNo = $("#taskNo").val();
+	
+	$.ajax({
+		url: "../putTask",
+		type: "post",
+		contentType: "application/json",
+		data: JSON.stringify({"taskNo": taskNo}),
+		success: function(result){
+			$(".pr10").html(result.progressRate + "%");
+			$(".progressbar").val(result.progressRate);
+		},
+		error: function(err){
+		}
+	});
+	
+}
 
 $("#detailContentBox").on("click", "input", function(e){
 	
@@ -587,7 +600,6 @@ $("#checkbox_content").on('click', 'button', function(e){
 		
 		var taskDetailNo = $(e.target).prev().prev().attr("data-detailNo");
 		var teamNo = $("#teamNoHidden").val();
-		var userEmail = $(".userEmail").val();
 		var taskNo = $("#taskNo").val();
 		
 		$.ajax({
@@ -655,9 +667,9 @@ $("#checkbox_content").on('click', 'button', function(e){
 				$(e.target).attr("id", "checkboxUpdate");
 				
 				$(".add_checkbox_wrap").remove();
-				
-				putTaskDetail(taskNo);
 				progressUpdate(taskNo);
+				putTaskDetail(taskNo);
+				
 					
 			},
 			error: function(err){
@@ -665,6 +677,7 @@ $("#checkbox_content").on('click', 'button', function(e){
 			}	
 			
 		});
+				
 		
 	}
 	
@@ -688,6 +701,7 @@ $("#checkbox_content").on('click', 'button', function(e){
 								  "taskDetail": taskDetail,
 								  "status": checkValue}),
 			success: function(result){
+				
 				progressUpdate(taskNo);
 				
 			},
@@ -708,6 +722,9 @@ function progressUpdate(taskNo){
 		contentType: "application/json",
 		data: JSON.stringify({"taskNo": taskNo}),
 		success: result => {
+			
+			getProgressbar();
+			
 			//board 변경사항 감지 - websocket요청
 			wSocket.send("board");
 		},
@@ -1071,7 +1088,6 @@ $("#selectCheck").change(function(e){
 	
 	var status = $(e.target).val();
 	var taskNo = $("#taskNo").val();
-	var userEmail = $(".userEmail").val();
 	var teamNo = $("#teamNoHidden").val();
 	
 	$.ajax({
