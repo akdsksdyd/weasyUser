@@ -38,6 +38,7 @@ $(".noticeSidebar").click(function(){
 
 })
 
+const listLevel = 'a';
 
 /**
  * @function DB에서 가져온 공지사항 목록을 화면에 띄우는 함수
@@ -46,7 +47,8 @@ $(".noticeSidebar").click(function(){
 function ajaxNoticeList(data, check_page){
   	var html=""; 		
   	$.each(data, (index, obj)=>{ 
-		  if(obj.noticeLevel == '1'){
+		  console.log(obj.noticeLevel + index);
+		  if(obj.noticeLevel === listLevel){
 			  html+="<tr>";
   	  		  html+="<td class='upImg'></td>";
   	  		  html+="<th class='th-title' value="+obj.noticeNo+">"+obj.noticeTitle+"</th>";
