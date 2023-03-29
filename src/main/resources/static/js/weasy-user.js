@@ -70,9 +70,9 @@ $(document).ready(function(){
 	      	let userName = RegExp(/^[가-힣]{2,5}$/);
 	      	let userEmail = RegExp(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i);
 	      	let userPw = RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/);
-	      	let phoneNum = RegExp(/^[0-9]{3}-[0-9]{4}-[0-9]{4}/);
+	      	let phoneNum = RegExp(/^[0-9]{3}[0-9]{4}[0-9]{4}/);
 	      	let userBirth = RegExp(/^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/);
-		  	let nickname = RegExp(/^[ㄱ-ㅎ가-힣a-z0-9-_]{2,10}$/);
+		  	let nickname = RegExp(/^[ㄱ-ㅎ가-힣a-z0-9-_]{2,15}$/);
 		
 	      	let nameWarning = $(".valid-name");
 	      	let emailWarning = $(".valid-email");
@@ -88,7 +88,7 @@ $(document).ready(function(){
 	        	nameVal.focus();
 	        	return false;
 	      	} else if(userName.test(nameVal.val()) == false) {
-	         	nameWarning.html("이름은 한글로 입력해주세요.");
+	         	nameWarning.html("이름은 한글로 2-5자이내로 입력해주세요.");
 	         	nameVal.focus();
 	         	return false;
 	      	} else{ nameWarning.html("");}
@@ -132,24 +132,38 @@ $(document).ready(function(){
 	
 	
 	
-	      	/*휴대폰 공백 및 유효성 확인*/
-	      	if(!phoneNum .test(phoneVal.val())) {
-	         	phoneNumWarning.html("핸드폰 번호는 숫자로만 입력해주세요");
+	      	/*휴대폰유효성 확인*/
+	      	if (phoneVal.val() == "") {
+	         	phoneNumWarning.html("핸드폰 번호를 입력해주세요.");
 	         	phoneVal.focus();
 	         	return false;
-	         
-	      	} else {phoneNumWarning.html("");}
+	         	
+	      	} else if(!phoneNum.test(phoneVal.val())) {
+		          phoneNumWarning.html("핸드폰 번호는 -없이 입력해주세요");
+		          phoneVal.focus();
+		          return false;
+		         
+		    }else {
+				phoneNumWarning.html("");
+			} 
 	
+		     
+			
 	
 	
 	      	/*생일 공백 및 유효성 확인*/
-	        if(!userBirth.test(birthVal.val())) {
-	         	birthWarning.html("생년월일 형식에 올바르지 않습니다.");
+	      	if (birthVal.val() == "") {
+	         	birthWarning.html("생일을 입력해주세요.");
 	         	birthVal.focus();
 	         	return false;
 	         	
-	      	} else {birthWarning.html("");}
-	
+	      	}else if(!userBirth.test(birthVal.val())) {
+		         birthWarning.html("생년월일 형식에 올바르지 않습니다.");
+		         birthVal.focus();
+		         return false;
+		         	
+		      } else {birthWarning.html("");}
+			
 	
 	
 	      	/*닉네임 공백 및 유효성 확인*/
@@ -159,7 +173,7 @@ $(document).ready(function(){
 	         	return false;
 	         	
 	      	} else if(!nickname.test(nickNameVal.val())) {
-	         	nicknameWarning.html("닉네임을 2자이상, 10이하로 입력해주세요.");
+	         	nicknameWarning.html("닉네임을 2자이상, 10이하로 공백없이 입력해주세요.");
 	         	nickNameVal.focus();
 	         	return false;
 	         	
