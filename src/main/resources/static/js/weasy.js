@@ -1301,7 +1301,7 @@ function loadTeamMemeberState(teamNo){
 			for(var i = 0; i < result.length; i++){
 				memberState += '<li class="searchtitle selectUser">';
 				memberState += '<div>';
-				memberState += '<span>'+result[i].nickName+'</span>';
+				memberState += '<span>'+result[i].nickName+'  </span>';
 				memberState += '<span class="subtitle">'+result[i].userEmail+'</span>';
 				memberState += '</div>';
 				memberState += '<div>';
