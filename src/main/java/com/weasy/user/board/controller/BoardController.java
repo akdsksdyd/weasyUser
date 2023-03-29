@@ -109,7 +109,6 @@ public class BoardController {
 	public String updateUser(@Valid UserVO vo, Errors error, Model model) {
 		//유효성검사 
 		if(error.hasErrors()) {
-			
 			//에러 목록
 			List<FieldError> list =  error.getFieldErrors(); 
 				
