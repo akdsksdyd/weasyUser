@@ -188,14 +188,6 @@
   		select userEmail from reply where taskNo = #{taskNo}
   	</select>
   	
-  	<!-- 공지사항 리스트 -->
-  	<select id="getNoticeList" resultType="noticeListVO">
-		SELECT noticeNo, noticeTitle, noticeContent, DATE_FORMAT(noticeRegdate, '%Y-%m-%d')as noticeRegdate , noticeLevel 
-		FROM noticeList 
-		ORDER BY noticeLevel desc, noticeRegdate desc
-		LIMIT #{pageStart},#{amount}
-  	</select>
-  	
   	<!-- 공지사항 전체 페이지 수 -->
   	<select id="getTotal" resultType="int">
         <choose>
@@ -227,14 +219,14 @@
   		<choose>
   			<when test="searchType != null and searchType.equals('all')">
   				WHERE noticeTitle LIKE CONCAT('%',#{keyword},'%') OR noticeContent LIKE CONCAT('%',#{keyword},'%') 
-  				ORDER BY noticeLevel DESC, noticeNo DESC 
+  				ORDER BY noticeLevel, noticeNo DESC 
   				LIMIT #{pageStart},#{amount}
   			</when>
 	  		<when test="searchType != null and searchType.equals('title')">
-	  			WHERE noticeTitle  LIKE CONCAT('%',#{keyword},'%') ORDER BY noticeLevel DESC, noticeNo DESC LIMIT #{pageStart},#{amount} 
+	  			WHERE noticeTitle  LIKE CONCAT('%',#{keyword},'%') ORDER BY noticeLevel, noticeNo DESC LIMIT #{pageStart},#{amount} 
 	  		</when>
 	  		<when test="searchType != null and searchType.equals('content')">
-	  			WHERE noticeContent LIKE CONCAT('%',#{keyword},'%') ORDER BY noticeLevel DESC, noticeNo DESC LIMIT #{pageStart},#{amount}
+	  			WHERE noticeContent LIKE CONCAT('%',#{keyword},'%') ORDER BY noticeLevel, noticeNo DESC LIMIT #{pageStart},#{amount}
 	  		</when>
   		</choose>
   	</select>
