@@ -30,7 +30,7 @@
   	
   	<select id="getTeamList" resultType="TeamVO">
   		select teamNo, teamRegdate, endDate, teamName, teamGoal, userEmail, teamStatus 
-  		from TEAM where teamNo IN (select teamNo from authority where userEmail=#{userEmail}) and t.teamStatus = 'Y'
+  		from team where teamNo IN (select teamNo from authority where userEmail=#{userEmail}) and t.teamStatus = 'Y'
   		order by teamNo asc
   	</select>
   	
@@ -71,11 +71,11 @@
   	
   	<select id="getTaskList" resultType="TaskVO">
   		select taskNo, teamNo, userEmail, title, content, startDate, progressRate, targetDate, status 
-  		from TASK where teamNo = #{teamNo} order by taskNo desc
+  		from task where teamNo = #{teamNo} order by taskNo desc
   	</select>
   	
   	<select id="getTeamNo" resultType="int">
-  		select teamNo, userEmail from TEAM 
+  		select teamNo, userEmail from team 
   		where teamName = #{teamName} 
   		and teamGoal = #{teamGoal} 
   		and teamRegdate = #{teamRegdate}
@@ -143,7 +143,7 @@
   	
   	<insert id="insertReply" parameterType="ReplyVO">
   	
-  		insert into REPLY (taskNo,
+  		insert into reply (taskNo,
   						   teamNo,
   						   userEmail,
   						   comment)
@@ -156,12 +156,12 @@
   	
   	<select id="putTask" resultType="TaskVO">
   		select userEmail, title, content, startDate, progressRate, targetDate, status, taskNo
-  		from TASK
+  		from task
   		where taskNo = #{taskNo}
   	</select>
   	
   	<select id="putReply" resultType="ReplyVO">
-  		select r.userEmail, r.replyNo, r.taskNo,  r.comment, u.profile from REPLY r
+  		select r.userEmail, r.replyNo, r.taskNo,  r.comment, u.profile from reply r
 		left join users u
 		on r.userEmail = u.userEmail
 		where taskNo=#{taskNo}
@@ -192,15 +192,15 @@
   	<select id="getTotal" resultType="int">
         <choose>
   			<when test="searchType != null and searchType.equals('all')">
-  				 SELECT count(*) AS total FROM noticeList 
+  				 SELECT count(*) AS total FROM noticelist 
   				 WHERE noticeTitle LIKE CONCAT('%',#{keyword},'%') OR noticeContent LIKE CONCAT('%',#{keyword},'%') 
   			</when>
 	  		<when test="searchType != null and searchType.equals('title')">
-	  			 select count(*) as total from noticeList 
+	  			 select count(*) as total from noticelist 
 	  			 WHERE noticeTitle  LIKE CONCAT('%',#{keyword},'%')
 	  		</when>
 	  		<when test="searchType != null and searchType.equals('content')">
-	  			 select count(*) as total from noticeList 
+	  			 select count(*) as total from noticelist 
 	  			 WHERE noticeContent LIKE CONCAT('%',#{keyword},'%')
 	  		</when>
   		</choose>
@@ -209,13 +209,13 @@
   	<!-- 공지사항 상세페이지 가져오기 -->
   	<select id="getDetailNotice" resultType="noticeListVO">
   		SELECT noticeNo, noticeTitle, noticeContent, DATE_FORMAT(noticeRegdate, '%Y-%m-%d')as noticeRegdate 
-  		FROM noticeList WHERE noticeNo = #{noticeNo};
+  		FROM noticelist WHERE noticeNo = #{noticeNo};
   	</select>
   	
   	<!-- 공지사항 검색 -->
   	<select id="getSearchNotice" resultType="noticeListVO">
   		SELECT noticeNo, noticeTitle, noticeContent, DATE_FORMAT(noticeRegdate, '%Y-%m-%d')as noticeRegdate , noticeLevel 
-  		FROM noticeList 
+  		FROM noticelist 
   		<choose>
   			<when test="searchType != null and searchType.equals('all')">
   				WHERE noticeTitle LIKE CONCAT('%',#{keyword},'%') OR noticeContent LIKE CONCAT('%',#{keyword},'%') 
@@ -291,7 +291,7 @@
   	<!-- taskDetail 조회 -->
   	<select id="putTaskDetail" resultType="TaskDetailVO">
   	
-  		select taskDetailNo, taskNo, taskDetail, status from taskDetail where taskNo = #{taskNo}
+  		select taskDetailNo, taskNo, taskDetail, status from taskdetail where taskNo = #{taskNo}
   	
   	</select>
   	
